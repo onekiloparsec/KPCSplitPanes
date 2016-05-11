@@ -7,16 +7,69 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		9FDD22F31CE288060038EA59 /* PanesContainerViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9FDD22F21CE288060038EA59 /* PanesContainerViewController.swift */; };
+		9FDD22FB1CE2FA400038EA59 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9FDD22FA1CE2FA400038EA59 /* AppDelegate.swift */; };
+		9FDD22FD1CE2FA400038EA59 /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9FDD22FC1CE2FA400038EA59 /* ViewController.swift */; };
+		9FDD22FF1CE2FA400038EA59 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 9FDD22FE1CE2FA400038EA59 /* Assets.xcassets */; };
+		9FDD23021CE2FA400038EA59 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 9FDD23001CE2FA400038EA59 /* Main.storyboard */; };
+		9FDD23091CE2FAD60038EA59 /* KPCSplitPanes.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 9FFEB7B11CE2184F00F861D9 /* KPCSplitPanes.framework */; };
+		9FDD230B1CE2FAE80038EA59 /* KPCSplitPanes.framework in Copy Frameworks */ = {isa = PBXBuildFile; fileRef = 9FFEB7B11CE2184F00F861D9 /* KPCSplitPanes.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 		9FFEB7B51CE2184F00F861D9 /* KPCSplitPanes.h in Headers */ = {isa = PBXBuildFile; fileRef = 9FFEB7B41CE2184F00F861D9 /* KPCSplitPanes.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		9FFEB7BD1CE2186C00F861D9 /* PaneView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9FFEB7BC1CE2186C00F861D9 /* PaneView.swift */; };
+		9FFEB7BF1CE218AC00F861D9 /* PressureSplitView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9FFEB7BE1CE218AC00F861D9 /* PressureSplitView.swift */; };
 /* End PBXBuildFile section */
 
+/* Begin PBXContainerItemProxy section */
+		9FDD23071CE2FAD20038EA59 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 9FFEB7A81CE2184F00F861D9 /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = 9FFEB7B01CE2184F00F861D9;
+			remoteInfo = KPCSplitPanes;
+		};
+/* End PBXContainerItemProxy section */
+
+/* Begin PBXCopyFilesBuildPhase section */
+		9FDD230A1CE2FADB0038EA59 /* Copy Frameworks */ = {
+			isa = PBXCopyFilesBuildPhase;
+			buildActionMask = 2147483647;
+			dstPath = "";
+			dstSubfolderSpec = 10;
+			files = (
+				9FDD230B1CE2FAE80038EA59 /* KPCSplitPanes.framework in Copy Frameworks */,
+			);
+			name = "Copy Frameworks";
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXCopyFilesBuildPhase section */
+
 /* Begin PBXFileReference section */
+		9FDD22F21CE288060038EA59 /* PanesContainerViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PanesContainerViewController.swift; sourceTree = "<group>"; };
+		9FDD22F81CE2FA400038EA59 /* KPCSplitPanesDemo.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = KPCSplitPanesDemo.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		9FDD22FA1CE2FA400038EA59 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
+		9FDD22FC1CE2FA400038EA59 /* ViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ViewController.swift; sourceTree = "<group>"; };
+		9FDD22FE1CE2FA400038EA59 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
+		9FDD23011CE2FA400038EA59 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/Main.storyboard; sourceTree = "<group>"; };
+		9FDD23031CE2FA400038EA59 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		9FDD230D1CE2FBF50038EA59 /* KPCSplitPanes.podspec */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = KPCSplitPanes.podspec; sourceTree = "<group>"; };
+		9FDD230E1CE2FBF50038EA59 /* LICENSE */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = LICENSE; sourceTree = "<group>"; };
+		9FDD230F1CE2FBF50038EA59 /* README.md */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = net.daringfireball.markdown; path = README.md; sourceTree = "<group>"; };
 		9FFEB7B11CE2184F00F861D9 /* KPCSplitPanes.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = KPCSplitPanes.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		9FFEB7B41CE2184F00F861D9 /* KPCSplitPanes.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = KPCSplitPanes.h; sourceTree = "<group>"; };
-		9FFEB7B61CE2184F00F861D9 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		9FFEB7B61CE2184F00F861D9 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; name = Info.plist; path = KPCSplitPanes/Info.plist; sourceTree = "<group>"; };
+		9FFEB7BC1CE2186C00F861D9 /* PaneView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PaneView.swift; sourceTree = "<group>"; };
+		9FFEB7BE1CE218AC00F861D9 /* PressureSplitView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PressureSplitView.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
+		9FDD22F51CE2FA400038EA59 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				9FDD23091CE2FAD60038EA59 /* KPCSplitPanes.framework in Frameworks */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 		9FFEB7AD1CE2184F00F861D9 /* Frameworks */ = {
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
@@ -27,10 +80,35 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		9FDD22F91CE2FA400038EA59 /* KPCSplitPanesDemo */ = {
+			isa = PBXGroup;
+			children = (
+				9FDD22FA1CE2FA400038EA59 /* AppDelegate.swift */,
+				9FDD22FC1CE2FA400038EA59 /* ViewController.swift */,
+				9FDD22FE1CE2FA400038EA59 /* Assets.xcassets */,
+				9FDD23001CE2FA400038EA59 /* Main.storyboard */,
+				9FDD23031CE2FA400038EA59 /* Info.plist */,
+			);
+			path = KPCSplitPanesDemo;
+			sourceTree = "<group>";
+		};
+		9FDD230C1CE2FBE20038EA59 /* Supporting Files */ = {
+			isa = PBXGroup;
+			children = (
+				9FDD230D1CE2FBF50038EA59 /* KPCSplitPanes.podspec */,
+				9FDD230E1CE2FBF50038EA59 /* LICENSE */,
+				9FDD230F1CE2FBF50038EA59 /* README.md */,
+				9FFEB7B61CE2184F00F861D9 /* Info.plist */,
+			);
+			name = "Supporting Files";
+			sourceTree = "<group>";
+		};
 		9FFEB7A71CE2184F00F861D9 = {
 			isa = PBXGroup;
 			children = (
 				9FFEB7B31CE2184F00F861D9 /* KPCSplitPanes */,
+				9FDD230C1CE2FBE20038EA59 /* Supporting Files */,
+				9FDD22F91CE2FA400038EA59 /* KPCSplitPanesDemo */,
 				9FFEB7B21CE2184F00F861D9 /* Products */,
 			);
 			sourceTree = "<group>";
@@ -39,6 +117,7 @@
 			isa = PBXGroup;
 			children = (
 				9FFEB7B11CE2184F00F861D9 /* KPCSplitPanes.framework */,
+				9FDD22F81CE2FA400038EA59 /* KPCSplitPanesDemo.app */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -47,7 +126,9 @@
 			isa = PBXGroup;
 			children = (
 				9FFEB7B41CE2184F00F861D9 /* KPCSplitPanes.h */,
-				9FFEB7B61CE2184F00F861D9 /* Info.plist */,
+				9FFEB7BC1CE2186C00F861D9 /* PaneView.swift */,
+				9FFEB7BE1CE218AC00F861D9 /* PressureSplitView.swift */,
+				9FDD22F21CE288060038EA59 /* PanesContainerViewController.swift */,
 			);
 			path = KPCSplitPanes;
 			sourceTree = "<group>";
@@ -66,6 +147,25 @@
 /* End PBXHeadersBuildPhase section */
 
 /* Begin PBXNativeTarget section */
+		9FDD22F71CE2FA400038EA59 /* KPCSplitPanesDemo */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 9FDD23041CE2FA400038EA59 /* Build configuration list for PBXNativeTarget "KPCSplitPanesDemo" */;
+			buildPhases = (
+				9FDD22F41CE2FA400038EA59 /* Sources */,
+				9FDD22F51CE2FA400038EA59 /* Frameworks */,
+				9FDD22F61CE2FA400038EA59 /* Resources */,
+				9FDD230A1CE2FADB0038EA59 /* Copy Frameworks */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+				9FDD23081CE2FAD20038EA59 /* PBXTargetDependency */,
+			);
+			name = KPCSplitPanesDemo;
+			productName = KPCSplitPanesDemo;
+			productReference = 9FDD22F81CE2FA400038EA59 /* KPCSplitPanesDemo.app */;
+			productType = "com.apple.product-type.application";
+		};
 		9FFEB7B01CE2184F00F861D9 /* KPCSplitPanes */ = {
 			isa = PBXNativeTarget;
 			buildConfigurationList = 9FFEB7B91CE2184F00F861D9 /* Build configuration list for PBXNativeTarget "KPCSplitPanes" */;
@@ -90,9 +190,13 @@
 		9FFEB7A81CE2184F00F861D9 /* Project object */ = {
 			isa = PBXProject;
 			attributes = {
+				LastSwiftUpdateCheck = 0730;
 				LastUpgradeCheck = 0730;
 				ORGANIZATIONNAME = onekiloparsec;
 				TargetAttributes = {
+					9FDD22F71CE2FA400038EA59 = {
+						CreatedOnToolsVersion = 7.3.1;
+					};
 					9FFEB7B01CE2184F00F861D9 = {
 						CreatedOnToolsVersion = 7.3.1;
 					};
@@ -104,6 +208,7 @@
 			hasScannedForEncodings = 0;
 			knownRegions = (
 				en,
+				Base,
 			);
 			mainGroup = 9FFEB7A71CE2184F00F861D9;
 			productRefGroup = 9FFEB7B21CE2184F00F861D9 /* Products */;
@@ -111,11 +216,21 @@
 			projectRoot = "";
 			targets = (
 				9FFEB7B01CE2184F00F861D9 /* KPCSplitPanes */,
+				9FDD22F71CE2FA400038EA59 /* KPCSplitPanesDemo */,
 			);
 		};
 /* End PBXProject section */
 
 /* Begin PBXResourcesBuildPhase section */
+		9FDD22F61CE2FA400038EA59 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				9FDD22FF1CE2FA400038EA59 /* Assets.xcassets in Resources */,
+				9FDD23021CE2FA400038EA59 /* Main.storyboard in Resources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 		9FFEB7AF1CE2184F00F861D9 /* Resources */ = {
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
@@ -126,16 +241,71 @@
 /* End PBXResourcesBuildPhase section */
 
 /* Begin PBXSourcesBuildPhase section */
+		9FDD22F41CE2FA400038EA59 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				9FDD22FD1CE2FA400038EA59 /* ViewController.swift in Sources */,
+				9FDD22FB1CE2FA400038EA59 /* AppDelegate.swift in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 		9FFEB7AC1CE2184F00F861D9 /* Sources */ = {
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				9FFEB7BD1CE2186C00F861D9 /* PaneView.swift in Sources */,
+				9FDD22F31CE288060038EA59 /* PanesContainerViewController.swift in Sources */,
+				9FFEB7BF1CE218AC00F861D9 /* PressureSplitView.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 /* End PBXSourcesBuildPhase section */
 
+/* Begin PBXTargetDependency section */
+		9FDD23081CE2FAD20038EA59 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = 9FFEB7B01CE2184F00F861D9 /* KPCSplitPanes */;
+			targetProxy = 9FDD23071CE2FAD20038EA59 /* PBXContainerItemProxy */;
+		};
+/* End PBXTargetDependency section */
+
+/* Begin PBXVariantGroup section */
+		9FDD23001CE2FA400038EA59 /* Main.storyboard */ = {
+			isa = PBXVariantGroup;
+			children = (
+				9FDD23011CE2FA400038EA59 /* Base */,
+			);
+			name = Main.storyboard;
+			sourceTree = "<group>";
+		};
+/* End PBXVariantGroup section */
+
 /* Begin XCBuildConfiguration section */
+		9FDD23051CE2FA400038EA59 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				COMBINE_HIDPI_IMAGES = YES;
+				INFOPLIST_FILE = KPCSplitPanesDemo/Info.plist;
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/../Frameworks";
+				PRODUCT_BUNDLE_IDENTIFIER = com.onekiloparsec.KPCSplitPanesDemo;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+			};
+			name = Debug;
+		};
+		9FDD23061CE2FA400038EA59 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				COMBINE_HIDPI_IMAGES = YES;
+				INFOPLIST_FILE = KPCSplitPanesDemo/Info.plist;
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/../Frameworks";
+				PRODUCT_BUNDLE_IDENTIFIER = com.onekiloparsec.KPCSplitPanesDemo;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+			};
+			name = Release;
+		};
 		9FFEB7B71CE2184F00F861D9 /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
@@ -227,6 +397,7 @@
 		9FFEB7BA1CE2184F00F861D9 /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
+				CLANG_ENABLE_MODULES = YES;
 				COMBINE_HIDPI_IMAGES = YES;
 				DEFINES_MODULE = YES;
 				DYLIB_COMPATIBILITY_VERSION = 1;
@@ -239,12 +410,14 @@
 				PRODUCT_BUNDLE_IDENTIFIER = com.onekiloparsec.KPCSplitPanes;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SKIP_INSTALL = YES;
+				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
 			};
 			name = Debug;
 		};
 		9FFEB7BB1CE2184F00F861D9 /* Release */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
+				CLANG_ENABLE_MODULES = YES;
 				COMBINE_HIDPI_IMAGES = YES;
 				DEFINES_MODULE = YES;
 				DYLIB_COMPATIBILITY_VERSION = 1;
@@ -263,6 +436,14 @@
 /* End XCBuildConfiguration section */
 
 /* Begin XCConfigurationList section */
+		9FDD23041CE2FA400038EA59 /* Build configuration list for PBXNativeTarget "KPCSplitPanesDemo" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				9FDD23051CE2FA400038EA59 /* Debug */,
+				9FDD23061CE2FA400038EA59 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+		};
 		9FFEB7AB1CE2184F00F861D9 /* Build configuration list for PBXProject "KPCSplitPanes" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
@@ -279,6 +460,7 @@
 				9FFEB7BB1CE2184F00F861D9 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
 	};

@@ -4,14 +4,24 @@
 <dict>
 	<key>SchemeUserState</key>
 	<dict>
-		<key>KPCSplitPanes.xcscheme</key>
+		<key>KPCSplitPanes.xcscheme_^#shared#^_</key>
 		<dict>
 			<key>orderHint</key>
 			<integer>0</integer>
 		</dict>
+		<key>KPCSplitPanesDemo.xcscheme_^#shared#^_</key>
+		<dict>
+			<key>orderHint</key>
+			<integer>1</integer>
+		</dict>
 	</dict>
 	<key>SuppressBuildableAutocreation</key>
 	<dict>
+		<key>9FDD22F71CE2FA400038EA59</key>
+		<dict>
+			<key>primary</key>
+			<true/>
+		</dict>
 		<key>9FFEB7B01CE2184F00F861D9</key>
 		<dict>
 			<key>primary</key>
