@@ -3,6 +3,7 @@
     <dependencies>
         <deployment identifier="macosx"/>
         <plugIn identifier="com.apple.InterfaceBuilder.CocoaPlugin" version="10117"/>
+        <capability name="Alignment constraints to the first baseline" minToolsVersion="6.0"/>
     </dependencies>
     <scenes>
         <!--Application-->
@@ -665,13 +666,67 @@
             </objects>
             <point key="canvasLocation" x="75" y="250"/>
         </scene>
-        <!--Panes Container View Controller-->
+        <!--View Controller-->
         <scene sceneID="hIz-AP-VOD">
             <objects>
-                <viewController id="XfG-lQ-9wD" customClass="PanesContainerViewController" customModule="KPCSplitPanes" sceneMemberID="viewController">
+                <viewController id="XfG-lQ-9wD" sceneMemberID="viewController">
                     <view key="view" id="m2S-Jp-Qdl">
                         <rect key="frame" x="0.0" y="0.0" width="480" height="270"/>
                         <autoresizingMask key="autoresizingMask"/>
+                        <subviews>
+                            <splitView arrangesAllSubviews="NO" dividerStyle="paneSplitter" translatesAutoresizingMaskIntoConstraints="NO" id="KDt-mA-ss5" customClass="PressureSplitView" customModule="KPCSplitPanes">
+                                <rect key="frame" x="0.0" y="0.0" width="480" height="270"/>
+                                <subviews>
+                                    <customView id="TGX-ha-2do" customClass="PaneView" customModule="KPCSplitPanes">
+                                        <rect key="frame" x="0.0" y="0.0" width="480" height="270"/>
+                                        <autoresizingMask key="autoresizingMask"/>
+                                        <subviews>
+                                            <button horizontalHuggingPriority="750" verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="ueV-tM-tRY">
+                                                <rect key="frame" x="435" y="245" width="24" height="24"/>
+                                                <constraints>
+                                                    <constraint firstAttribute="height" constant="24" id="LNh-LR-URs"/>
+                                                    <constraint firstAttribute="width" constant="24" id="ac3-hF-tn4"/>
+                                                </constraints>
+                                                <buttonCell key="cell" type="square" bezelStyle="shadowlessSquare" imagePosition="only" alignment="left" imageScaling="proportionallyDown" inset="2" id="sCh-DC-O8P">
+                                                    <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
+                                                    <font key="font" metaFont="system"/>
+                                                </buttonCell>
+                                            </button>
+                                            <button horizontalHuggingPriority="750" verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="Tck-Ya-sJL">
+                                                <rect key="frame" x="456" y="245" width="24" height="24"/>
+                                                <constraints>
+                                                    <constraint firstAttribute="width" constant="24" id="PLc-6v-ue5"/>
+                                                </constraints>
+                                                <buttonCell key="cell" type="square" bezelStyle="shadowlessSquare" imagePosition="only" alignment="left" imageScaling="proportionallyDown" inset="2" id="JtI-fa-Tjg">
+                                                    <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
+                                                    <font key="font" metaFont="system"/>
+                                                </buttonCell>
+                                            </button>
+                                        </subviews>
+                                        <constraints>
+                                            <constraint firstAttribute="trailing" secondItem="Tck-Ya-sJL" secondAttribute="trailing" id="KaC-tq-DAQ"/>
+                                            <constraint firstAttribute="trailing" secondItem="ueV-tM-tRY" secondAttribute="trailing" constant="21" id="MBY-Mx-563"/>
+                                            <constraint firstItem="ueV-tM-tRY" firstAttribute="top" secondItem="TGX-ha-2do" secondAttribute="top" constant="1" id="Wnl-oa-Q1h"/>
+                                            <constraint firstItem="ueV-tM-tRY" firstAttribute="baseline" secondItem="Tck-Ya-sJL" secondAttribute="baseline" id="qfK-3m-V96"/>
+                                            <constraint firstItem="ueV-tM-tRY" firstAttribute="firstBaseline" secondItem="Tck-Ya-sJL" secondAttribute="firstBaseline" id="zte-j3-3e0"/>
+                                        </constraints>
+                                        <connections>
+                                            <outlet property="closeButton" destination="ueV-tM-tRY" id="LVB-L3-BjE"/>
+                                            <outlet property="splitButton" destination="Tck-Ya-sJL" id="7bd-Mf-Uen"/>
+                                        </connections>
+                                    </customView>
+                                </subviews>
+                                <holdingPriorities>
+                                    <real value="250"/>
+                                </holdingPriorities>
+                            </splitView>
+                        </subviews>
+                        <constraints>
+                            <constraint firstAttribute="bottom" secondItem="KDt-mA-ss5" secondAttribute="bottom" id="0cX-Ip-CZl"/>
+                            <constraint firstItem="KDt-mA-ss5" firstAttribute="top" secondItem="m2S-Jp-Qdl" secondAttribute="top" id="AbN-B0-QQ3"/>
+                            <constraint firstItem="KDt-mA-ss5" firstAttribute="leading" secondItem="m2S-Jp-Qdl" secondAttribute="leading" id="AuH-Z1-WFM"/>
+                            <constraint firstAttribute="trailing" secondItem="KDt-mA-ss5" secondAttribute="trailing" id="DCG-IU-5Ol"/>
+                        </constraints>
                     </view>
                 </viewController>
                 <customObject id="rPt-NT-nkU" userLabel="First Responder" customClass="NSResponder" sceneMemberID="firstResponder"/>

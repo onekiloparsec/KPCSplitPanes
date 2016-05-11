@@ -11,12 +11,26 @@ import AppKit
 let minimumHeight: CGFloat = 350.0
 let minimumWidth: CGFloat = 550.0
 
-class PressureSplitView : NSSplitView {
+public class PressureSplitView : NSSplitView {
     
     private var verticalPressure: Int = 0
     private var horizontalPressure: Int = 0
     
-    required init?(coder: NSCoder) {
+    private static func defaultIcon(named name: String) -> NSImage {
+        let b = NSBundle(forClass: self)
+        return NSImage(contentsOfURL: b.URLForImageResource(name)!)!
+    }
+    static func defaultCloseIcon() -> NSImage {
+        return self.defaultIcon(named: "CloseCrossIcon")
+    }
+    static func defaultSplitIcon() -> NSImage {
+        return self.defaultIcon(named: "SplitHorizontalRectIcon")
+    }
+    static func defaultAlternateSplitIcon() -> NSImage {
+        return self.defaultIcon(named: "SplitVerticalRectIcon")
+    }
+    
+    required public init?(coder: NSCoder) {
         super.init(coder: coder)
         self.setup()
     }
@@ -32,6 +46,23 @@ class PressureSplitView : NSSplitView {
         self.autoresizingMask = [.ViewWidthSizable, .ViewHeightSizable]
     }
     
+    override public var acceptsFirstResponder: Bool {
+        return true
+    }
+    
+    private func paneSubviews() -> Array<PaneView> {
+        var subPaneViews = self.subviews as Array<NSView>
+        subPaneViews = subPaneViews.filter({ $0.isKindOfClass(PaneView) })
+        return subPaneViews as! Array<PaneView>
+    }
+    
+    public override func flagsChanged(theEvent: NSEvent) {
+        let optionsKey = NSEventModifierFlags(rawValue: theEvent.modifierFlags.rawValue & NSEventModifierFlags.AlternateKeyMask.rawValue)
+        for paneView in self.paneSubviews() {
+            paneView.splitButton?.image = (optionsKey == .AlternateKeyMask) ? PressureSplitView.defaultAlternateSplitIcon() : PressureSplitView.defaultSplitIcon()
+        }
+    }
+
     func canAddSubview(vertically: Bool) -> Bool {
         let viewCount = max(1, (vertically == true) ? self.horizontalPressure : self.verticalPressure)
         let minimumCurrentExtension = CGFloat(viewCount) * ((vertically == true) ? minimumWidth : minimumHeight)
@@ -41,12 +72,12 @@ class PressureSplitView : NSSplitView {
         
     }
     
-    override func addSubview(aView: NSView) {
+    override public func addSubview(aView: NSView) {
         super.addSubview(aView);
         self.updatePressuresWithView(aView, sign:1);
     }
 
-    override func addSubview(aView: NSView, positioned place: NSWindowOrderingMode, relativeTo otherView: NSView?) {
+    override public func addSubview(aView: NSView, positioned place: NSWindowOrderingMode, relativeTo otherView: NSView?) {
         super.addSubview(aView, positioned: place, relativeTo: otherView)
         self.updatePressuresWithView(aView, sign:1);
     }

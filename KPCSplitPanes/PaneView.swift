@@ -21,4 +21,14 @@ class PaneView : NSView {
             sv.removeSubview(self)
         }
     }
+    
+    override func viewDidMoveToWindow() {
+        super.viewDidMoveToWindow()
+        if self.closeButton?.image == nil {
+            self.closeButton?.image = PressureSplitView.defaultCloseIcon()
+        }
+        if self.splitButton?.image == nil {
+            self.splitButton?.image = PressureSplitView.defaultSplitIcon()
+        }
+    }
 }

@@ -1,54 +1,35 @@
-[![Build Status](http://img.shields.io/travis/onekiloparsec/KPCJumpBarControl.svg?style=flat)](https://travis-ci.org/onekiloparsec/KPCJumpBarControl)
-![Version](https://img.shields.io/cocoapods/v/KPCJumpBarControl.svg?style=flat)
-![License](https://img.shields.io/cocoapods/l/KPCJumpBarControl.svg?style=flat)
-![Platform](https://img.shields.io/cocoapods/p/KPCJumpBarControl.svg?style=flat)
+[![Build Status](http://img.shields.io/travis/onekiloparsec/KPCSplitPanes.svg?style=flat)](https://travis-ci.org/onekiloparsec/KPCSplitPanes)
+![Version](https://img.shields.io/cocoapods/v/KPCSplitPanes.svg?style=flat)
+![License](https://img.shields.io/cocoapods/l/KPCSplitPanes.svg?style=flat)
+![Platform](https://img.shields.io/cocoapods/p/KPCSplitPanes.svg?style=flat)
 [![Carthage compatible](https://img.shields.io/badge/Carthage-compatible-4BC51D.svg?style=flat)](https://github.com/Carthage/Carthage)
 
 
-KPCJumpBarControl
+KPCSplitPanes
 ==============
 
-A jump bar similar to Xcode's allowing to easily display and navigate across a tree of objects.
-
-![Demo JumpBar](http://www.onekilopars.ec/s/KPCJumpBarControlDemo.gif) 
+A view controller that splits well, according to some user-limits, well suited to make split panes.
+ 
+![Demo JumpBar](http://www.onekilopars.ec/s/KPCSplitPanesDemo.gif) 
 
 
 Installation
 ------------
 
-Using [Carthage](https://github.com/Carthage/Carthage): add `github "onekiloparsec/KPCJumpBarControl"` to your `Cartfile` and then run `carthage update`.
+Using [Carthage](https://github.com/Carthage/Carthage): add `github "onekiloparsec/KPCSplitPanes"` to your `Cartfile` and then run `carthage update`.
 
-Using [CocoaPods](http://cocoapods.org/): `pod 'KPCJumpBarControl'`
+Using [CocoaPods](http://cocoapods.org/): `pod 'KPCSplitPanes'`
 
 
 Usage
 -----
 
-KPCJumpBarControl is designed for you to use only the `JumpBarControl` class, and fill it with a tree of object
-conforming to `JumpBarItemProtocol`. A helper class `JumpBarItem` is here for that, if you need one. 
-Simply place a `NSView` in a storyboard or xib, where you need a jump bar, change its class to `JumpBarControl` and
-that's it. To react when the jumbpar selection change, implement the `JumpBarControlDelegate` methods.
-
-For instance:
-```swift 
-    let rootSegment = JumpBarItem.item(withTitle:"level 0", icon:NSImage(named:"Oval"))
-    let segment1Item0 = JumpBarItem.item(withTitle:"level 1.0", icon:NSImage(named:"Polygon"))
-    let segment1Item1 = JumpBarItem.item(withTitle:"level 1.1", icon:NSImage(named:"Rectangle"))
+KPCSplitPanes is ...
  
-    rootSegment.children = [segment1Item0, segment1Item1]
-  
-    self.jumpBar?.useItemsTree([rootSegment])
-    self.jumpBar?.delegate = self
-```
-
 Highlighting
 ------------
 
-The jump bar control support the possibility to be highlighted. This is useful when you have multiple subviews, each with
-jump bars, and you need to indicate to the user which subview is actually 'active'. (In the screenshot above, the upper
-bar has a darker background than the lower ones).
-
-
+ 
 Author
 ------
 
@@ -58,5 +39,5 @@ Author
 LICENSE & NOTES
 ---------------
 
-KPCJumpBarControl is licensed under the MIT license and hosted on GitHub at https://github.com/onekiloparsec/KPCJumpBarControl/
+KPCSplitPanes is licensed under the MIT license and hosted on GitHub at https://github.com/onekiloparsec/KPCSplitPanes/
 Fork the project and feel free to send pull requests with your changes!
