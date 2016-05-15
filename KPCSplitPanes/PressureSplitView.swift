@@ -10,37 +10,6 @@ import AppKit
 
 let PressureSplitViewSplitSizeWarningShowAgainKey = "PressureSplitViewSplitSizeWarningShowAgainKey"
 
-private extension NSAlert {
-    static func alertForMinimumSplitAdditionalExtension(minimumAdditionalExtension: CGFloat,
-                                                 currentExtension: CGFloat,
-                                                 maximumExtension: CGFloat,
-                                                 vertical: Bool) -> NSAlert
-    {
-        let direction = (vertical) ? "horizontally" : "vertically"
-        let extensionName = (vertical) ? "width" : "height"
-    
-        let informativeText = NSMutableString()
-        informativeText.appendFormat(NSLocalizedString("A new pane requires a minimum of \(minimumAdditionalExtension) additional points \(direction).", comment: ""))
-        informativeText.appendString(" ")
-        informativeText.appendFormat(NSLocalizedString("The current view has a \(extensionName) of \(currentExtension) points.", comment: ""))
-    
-        informativeText.appendString(" ")
-        informativeText.appendFormat(NSLocalizedString("And it can extends to a maximum of \(maximumExtension) points (accounting for window borders).", comment: ""))
-    
-        let alert = NSAlert()
-        alert.messageText = NSLocalizedString("Not enough room to split.", comment: "")
-        alert.informativeText = informativeText as String
-        alert.showsSuppressionButton = true
-        alert.addButtonWithTitle(NSLocalizedString("OK", comment: ""))
-    
-        if (currentExtension + minimumAdditionalExtension < maximumExtension) {
-            alert.addButtonWithTitle(NSLocalizedString("Adjust window automatically", comment: ""))
-        }
-    
-        return alert
-    }
-}
-
 public class PressureSplitView : NSSplitView {
     
     private var verticalPressure: Int = 0
@@ -318,5 +287,37 @@ public class PressureSplitView : NSSplitView {
             return v1 < v2
         })
         return sortedSubviews.indexOf(paneView)!
+    }
+}
+
+
+private extension NSAlert {
+    static func alertForMinimumSplitAdditionalExtension(minimumAdditionalExtension: CGFloat,
+                                                        currentExtension: CGFloat,
+                                                        maximumExtension: CGFloat,
+                                                        vertical: Bool) -> NSAlert
+    {
+        let direction = (vertical) ? "horizontally" : "vertically"
+        let extensionName = (vertical) ? "width" : "height"
+        
+        let informativeText = NSMutableString()
+        informativeText.appendFormat(NSLocalizedString("A new pane requires a minimum of \(minimumAdditionalExtension) additional points \(direction).", comment: ""))
+        informativeText.appendString(" ")
+        informativeText.appendFormat(NSLocalizedString("The current view has a \(extensionName) of \(currentExtension) points.", comment: ""))
+        
+        informativeText.appendString(" ")
+        informativeText.appendFormat(NSLocalizedString("And it can extends to a maximum of \(maximumExtension) points (accounting for window borders).", comment: ""))
+        
+        let alert = NSAlert()
+        alert.messageText = NSLocalizedString("Not enough room to split.", comment: "")
+        alert.informativeText = informativeText as String
+        alert.showsSuppressionButton = true
+        alert.addButtonWithTitle(NSLocalizedString("OK", comment: ""))
+        
+        if (currentExtension + minimumAdditionalExtension < maximumExtension) {
+            alert.addButtonWithTitle(NSLocalizedString("Adjust window automatically", comment: ""))
+        }
+        
+        return alert
     }
 }
