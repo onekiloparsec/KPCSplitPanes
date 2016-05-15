@@ -155,7 +155,7 @@ public class PressureSplitView : NSSplitView {
     
     func removeSubPaneView(aView: PaneView) {
         guard self.allSubPaneViews().contains(aView) else {
-            fatalError("Huh....")
+            fatalError("PaneView \(aView) is not a subview of \(self), as it should to be actually removed.fatalError")
         }
         self.updatePressuresWithView(aView, sign: -1)
     }
@@ -246,7 +246,7 @@ public class PressureSplitView : NSSplitView {
         
         let parentSplitView = paneView.parentSplitView()
         guard parentSplitView == self else {
-            fatalError("huh?")
+            fatalError("Parent SplitView of \(paneView) should be \(self), and it seems it is not.")
         }
         
         if self.vertical == vertically {
