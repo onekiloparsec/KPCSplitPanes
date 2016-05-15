@@ -91,9 +91,23 @@ public class PressureSplitView : NSSplitView {
         self.autoresizesSubviews = true
         self.translatesAutoresizingMaskIntoConstraints = false
         self.autoresizingMask = [.ViewWidthSizable, .ViewHeightSizable]
+        
+        NSNotificationCenter.defaultCenter().addObserver(self,
+                                                         selector: #selector(PressureSplitView.refreshUponFrameResize(_:)),
+                                                         name: NSViewFrameDidChangeNotification,
+                                                         object: self)
+    }
+    
+    func refreshUponFrameResize(notification: NSNotification) {
+        
     }
     
     // MARK: - Overrides
+    
+    override public var postsFrameChangedNotifications: Bool {
+        get { return true }
+        set {}
+    }
     
     override public var acceptsFirstResponder: Bool {
         return true
@@ -157,16 +171,18 @@ public class PressureSplitView : NSSplitView {
         guard self.allSubPaneViews().contains(aView) else {
             fatalError("PaneView \(aView) is not a subview of \(self), as it should to be actually removed.fatalError")
         }
+        aView.removeFromSuperview()
         self.updatePressuresWithView(aView, sign: -1)
     }
 
     // MARK: - Close & Split
 
-    func close(pane: PaneView) {
-        
+    func close(paneView pane: PaneView) {
+        self.removeSubPaneView(pane)
+        self.adjustSubviews()
     }
     
-    func split(pane: PaneView) {
+    func split(paneView pane: PaneView) {
         let mask = self.window?.styleMask;
         if (mask ==  NSFullScreenWindowMask || mask == NSFullSizeContentViewWindowMask) {
             NSBeep();

@@ -36,8 +36,8 @@ class PaneView : NSView {
     }
     
     override func removeFromSuperview() {
-        self.parentSplitView()?.removeSubPaneView(self)
         super.removeFromSuperview()
+        self.parentSplitView()?.removeSubPaneView(self)
     }
     
     override func viewDidMoveToWindow() {
@@ -58,10 +58,10 @@ class PaneView : NSView {
     }
     
     func closePane() {
-        self.parentSplitView()?.close(self)
+        self.parentSplitView()?.close(paneView: self)
     }
 
     func splitPane() {
-        self.parentSplitView()?.split(self)
+        self.parentSplitView()?.split(paneView: self)
     }
 }
