@@ -8,7 +8,7 @@
 KPCSplitPanes
 ==============
 
-A set of classes, among which a subclass of NSSplitView, that splits when you're intented to make panes.
+A set of classes, among which a subclass of NSSplitView, that splits well and allow you to make make panes. 
 Horizontal and vertical panes can be combined.
 
 ![Demo JumpBar](http://www.onekilopars.ec/s/KPCSplitPanesDemo.gif)
