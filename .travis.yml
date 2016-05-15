@@ -1,0 +1,4 @@
+language: swift 
+xcode_project: KPCSplitPanes.xcodeproj
+xcode_scheme: KPCSplitPanes
+osx_image: xcode7
