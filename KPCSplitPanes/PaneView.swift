@@ -13,6 +13,12 @@ class PaneView : NSView {
     @IBOutlet weak var closeButton: NSButton?
     @IBOutlet weak var splitButton: NSButton?
     
+    static func newPaneView() -> PaneView {
+        var topLevels = NSArray?()
+        NSBundle(forClass: self).loadNibNamed("PaneView", owner: self, topLevelObjects: &topLevels)
+        return topLevels!.filter({ $0.isKindOfClass(PaneView) })[0] as! PaneView
+    }
+    
     func parentSplitView() -> PressureSplitView? {
         var view: NSView? = self
         while view != nil && view?.isKindOfClass(PressureSplitView) == false {
@@ -22,7 +28,8 @@ class PaneView : NSView {
     }
     
     override func removeFromSuperview() {
-        self.parentSplitView()?.removeSubview(self)
+        self.parentSplitView()?.removeSubPaneView(self)
+        super.removeFromSuperview()
     }
     
     override func viewDidMoveToWindow() {

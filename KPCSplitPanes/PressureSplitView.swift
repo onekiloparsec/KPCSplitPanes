@@ -8,27 +8,73 @@
 
 import AppKit
 
-let minimumHeight: CGFloat = 350.0
-let minimumWidth: CGFloat = 550.0
+let PressureSplitViewSplitSizeWarningShowAgainKey = "PressureSplitViewSplitSizeWarningShowAgainKey"
+
+extension NSSplitView {
+    func allNonDividerSubviews() -> [NSView] {
+        // Some pane views can be splitviews themselves, if horizontal|vertical split has been
+        // embedded inside a vertical|horizontal pane.
+        return self.subviews.filter({ $0.isKindOfClass(PaneView) || $0.isKindOfClass(PressureSplitView) })
+    }
+
+    func allSubPaneViews() -> [PaneView] {
+        return self.subviews.filter({ $0.isKindOfClass(PaneView) }) as! [PaneView]
+    }
+}
+
+extension NSAlert {
+    static func alertForMinimumSplitAdditionalExtension(minimumAdditionalExtension: CGFloat,
+                                                 currentExtension: CGFloat,
+                                                 maximumExtension: CGFloat,
+                                                 vertical: Bool) -> NSAlert
+    {
+        let direction = (vertical) ? "horizontally" : "vertically"
+        let extensionName = (vertical) ? "width" : "height"
+    
+        let informativeText = NSMutableString()
+        informativeText.appendFormat(NSLocalizedString("A new pane requires a minimum of \(minimumAdditionalExtension) additional points \(direction).", comment: ""))
+        informativeText.appendString(" ")
+        informativeText.appendFormat(NSLocalizedString("The current view has a \(extensionName) of \(currentExtension) points.", comment: ""))
+    
+        informativeText.appendString(" ")
+        informativeText.appendFormat(NSLocalizedString("And it can extends to a maximum of \(maximumExtension) points (accounting for window borders).", comment: ""))
+    
+        let alert = NSAlert()
+        alert.messageText = NSLocalizedString("Not enough room to split.", comment: "")
+        alert.informativeText = informativeText as String
+        alert.showsSuppressionButton = true
+        alert.addButtonWithTitle(NSLocalizedString("OK", comment: ""))
+    
+        if (currentExtension + minimumAdditionalExtension < maximumExtension) {
+            alert.addButtonWithTitle(NSLocalizedString("Adjust window automatically", comment: ""))
+        }
+    
+        return alert
+    }
+}
 
 public class PressureSplitView : NSSplitView {
     
     private var verticalPressure: Int = 0
     private var horizontalPressure: Int = 0
     
+    // MARK: - Static methods for icons
     private static func defaultIcon(named name: String) -> NSImage {
         let b = NSBundle(forClass: self)
         return NSImage(contentsOfURL: b.URLForImageResource(name)!)!
     }
-    static func defaultCloseIcon() -> NSImage {
+    
+    public static func defaultCloseIcon() -> NSImage {
         return self.defaultIcon(named: "CloseCrossIcon")
     }
-    static func defaultSplitIcon() -> NSImage {
+    public static func defaultSplitIcon() -> NSImage {
         return self.defaultIcon(named: "SplitHorizontalRectIcon")
     }
-    static func defaultAlternateSplitIcon() -> NSImage {
+    public static func defaultAlternateSplitIcon() -> NSImage {
         return self.defaultIcon(named: "SplitVerticalRectIcon")
     }
+    
+    // MARK: - Constructors
     
     required public init?(coder: NSCoder) {
         super.init(coder: coder)
@@ -46,32 +92,35 @@ public class PressureSplitView : NSSplitView {
         self.autoresizingMask = [.ViewWidthSizable, .ViewHeightSizable]
     }
     
+    // MARK: - Overrides
+    
     override public var acceptsFirstResponder: Bool {
         return true
     }
     
-    private func paneSubviews() -> Array<PaneView> {
-        var subPaneViews = self.subviews as Array<NSView>
-        subPaneViews = subPaneViews.filter({ $0.isKindOfClass(PaneView) })
-        return subPaneViews as! Array<PaneView>
-    }
-    
     public override func flagsChanged(theEvent: NSEvent) {
         let optionsKey = NSEventModifierFlags(rawValue: theEvent.modifierFlags.rawValue & NSEventModifierFlags.AlternateKeyMask.rawValue)
-        for paneView in self.paneSubviews() {
-            paneView.splitButton?.image = (optionsKey == .AlternateKeyMask) ? PressureSplitView.defaultAlternateSplitIcon() : PressureSplitView.defaultSplitIcon()
+        for paneView in self.allSubPaneViews() {
+            let useAlt = (optionsKey == .AlternateKeyMask)
+            paneView.splitButton?.image = useAlt ? PressureSplitView.defaultAlternateSplitIcon() : PressureSplitView.defaultSplitIcon()
         }
     }
-
-    func canAddSubview(vertically: Bool) -> Bool {
-        let viewCount = max(1, (vertically == true) ? self.horizontalPressure : self.verticalPressure)
-        let minimumCurrentExtension = CGFloat(viewCount) * ((vertically == true) ? minimumWidth : minimumHeight)
-        let minimumAdditionalExtension = (vertically == true) ? minimumWidth : minimumHeight;
-        let currentExtension = (vertically == true) ? CGRectGetWidth(self.frame) : CGRectGetHeight(self.frame);
-        return (currentExtension - minimumCurrentExtension >= minimumAdditionalExtension);
-        
-    }
     
+    // MARK: - Adding & Removing Subviews
+
+    public func canAddSubview(vertically: Bool) -> Bool {
+        guard self.delegate != nil, let delegate = self.delegate as! PressureSplitViewDelegate? else {
+            return true
+        }
+        
+        let viewCount = max(1, (vertically == true) ? self.horizontalPressure : self.verticalPressure)
+        let minimumCurrentExtension = CGFloat(viewCount) * ((vertically == true) ? delegate.minimumWidth : delegate.minimumHeight)
+        let minimumAdditionalExtension = (vertically == true) ? delegate.minimumWidth : delegate.minimumHeight;
+        let currentExtension = (vertically == true) ? CGRectGetWidth(self.frame) : CGRectGetHeight(self.frame);
+        
+        return (currentExtension - minimumCurrentExtension >= minimumAdditionalExtension);
+    }
+
     override public func addSubview(aView: NSView) {
         super.addSubview(aView);
         self.updatePressuresWithView(aView, sign:1);
@@ -99,14 +148,224 @@ public class PressureSplitView : NSSplitView {
         }
     }
     
-    func removeSubview(aView: NSView) {
-        guard self.subviews.contains(aView) else {
+    func removeSubPaneView(aView: PaneView) {
+        guard self.allSubPaneViews().contains(aView) else {
             fatalError("Huh....")
         }
-
         self.updatePressuresWithView(aView, sign: -1)
-        aView.removeFromSuperview()
-        self.adjustSubviews()        
     }
 
+    // MARK: - Close & Split
+
+    func close(pane: PaneView) {
+        
+    }
+    
+    func split(pane: PaneView) {
+        let mask = self.window?.styleMask;
+        if (mask ==  NSFullScreenWindowMask || mask == NSFullSizeContentViewWindowMask) {
+            NSBeep();
+            return;
+        }
+        
+        let theEvent = NSApp.currentEvent;
+        let optionsKey = NSEventModifierFlags(rawValue: theEvent!.modifierFlags.rawValue & NSEventModifierFlags.AlternateKeyMask.rawValue)
+        let vertical = (optionsKey == .AlternateKeyMask)
+        
+        if self.canAddSubview(vertical) == true {
+            self.splitPaneView(pane, vertically: vertical)
+        }
+        else {
+            if NSUserDefaults.standardUserDefaults().valueForKey(PressureSplitViewSplitSizeWarningShowAgainKey) == nil {
+                NSUserDefaults.standardUserDefaults().setBool(true, forKey: PressureSplitViewSplitSizeWarningShowAgainKey)
+            }
+            
+            if NSUserDefaults.standardUserDefaults().boolForKey(PressureSplitViewSplitSizeWarningShowAgainKey) {
+                // WARN: Make sure we have a delegate with min and max!
+                self.showSplitSizeWarningAlert(pane, vertically: vertical)
+            }
+            else {
+                NSBeep();
+            }
+        }
+    }
+    
+    func showSplitSizeWarningAlert(paneView: PaneView, vertically: Bool) {
+        guard self.delegate != nil, let delegate = self.delegate as! PressureSplitViewDelegate? else {
+            return
+        }
+        
+        let topPaneSize = self.frame.size
+        let maximumContentRect = self.window!.contentRectForFrameRect(self.window!.screen!.frame)
+    
+        let currentExtension = (vertical) ? topPaneSize.width : topPaneSize.height;
+        let maximumExtension = (vertical) ? maximumContentRect.size.width : maximumContentRect.size.height;
+        let minimumAdditionalExtension = (vertical) ? delegate.minimumWidth+5.0 : delegate.minimumHeight+5.0;
+    
+        let alert = NSAlert.alertForMinimumSplitAdditionalExtension(minimumAdditionalExtension,
+                                                                    currentExtension:currentExtension,
+                                                                    maximumExtension:maximumExtension,
+                                                                    vertical:vertical)
+    
+        alert.beginSheetModalForWindow(self.window!, completionHandler: { (returnCode) in
+            if alert.suppressionButton?.state == NSOnState {
+                let defaults = NSUserDefaults.standardUserDefaults()
+                defaults.setBool(false, forKey: PressureSplitViewSplitSizeWarningShowAgainKey)
+            }
+            
+            if (returnCode == NSAlertSecondButtonReturn) {
+                let deltaExtension = 2.0*minimumAdditionalExtension - currentExtension;
+                var newWindowFrame = self.window!.contentRectForFrameRect(self.window!.frame)
+    
+                if (vertically) {
+                    newWindowFrame.origin.x -= deltaExtension/2.0;
+                    newWindowFrame.size.width += deltaExtension;
+                }
+                else {
+                    newWindowFrame.origin.y -= deltaExtension/2.0;
+                    newWindowFrame.size.height += deltaExtension;
+                }
+    
+                newWindowFrame = self.window!.frameRectForContentRect(newWindowFrame)
+    
+                NSAnimationContext.currentContext().completionHandler = {
+                    self.splitPaneView(paneView, vertically: vertically)
+                }
+                self.window!.setFrame(newWindowFrame, display:true, animate:true)
+            }
+        })
+    }
+
+    private func splitPaneView(paneView: PaneView, vertically: Bool) {
+        
+        let parentSplitView = paneView.parentSplitView()
+        guard parentSplitView == self else {
+            fatalError("huh?")
+        }
+        
+        if self.vertical == vertically {
+            // We are going into the same direction, just add a new pane.
+            
+            let newSplitView = PressureSplitView()
+            newSplitView.delegate = self.delegate
+            newSplitView.frame = self.frame
+            
+            for view in self.allNonDividerSubviews() {
+                view.removeFromSuperview()
+                newSplitView.addSubview(view)
+            }
+            newSplitView.addSubview(PaneView.newPaneView())
+            newSplitView.adjustSubviews()
+            
+            self.superview?.addSubview(newSplitView)            
+            self.removeFromSuperview()
+        }
+        else {
+            // We are going into the opposite direction, replace the original pane by a splitView, replace the pane, add a new one.
+            
+            let newSplitView = PressureSplitView()
+
+            newSplitView.vertical = vertically
+            newSplitView.delegate = self.delegate
+            
+            let newFrame = (self.vertical == true) ?
+                CGRectInset(paneView.frame, 0, self.dividerThickness) :
+                CGRectInset(paneView.frame, self.dividerThickness, 0)
+            
+            
+            paneView.removeFromSuperview()
+            
+            newSplitView.addSubview(paneView)
+            newSplitView.addSubview(PaneView.newPaneView())
+            newSplitView.adjustSubviews()
+
+            newSplitView.frame = newFrame
+            
+            self.addSubview(newSplitView)
+            self.adjustSubviews()
+            
+            let dividerIndex = self.allNonDividerSubviews().count-2
+            let position = (self.vertical == true) ? CGRectGetWidth(newFrame) : CGRectGetHeight(newFrame)
+            self.setPosition(position, ofDividerAtIndex: dividerIndex)
+            
+//            if (self.vertical) {
+//                // Don't add left
+//                self.addConstraint(NSLayoutConstraint(item: newSplitView,
+//                    attribute: .Top,
+//                    relatedBy: .Equal,
+//                    toItem: self,
+//                    attribute: .Top,
+//                    multiplier: 1.0,
+//                    constant: 0.0))
+//                
+//            }
+//            else {
+//                // Don't add top
+//                self.addConstraint(NSLayoutConstraint(item: newSplitView,
+//                    attribute: .Left,
+//                    relatedBy: .Equal,
+//                    toItem: self,
+//                    attribute: .Left,
+//                    multiplier: 1.0,
+//                    constant: 0.0))
+//            }
+//         
+//            self.addConstraint(NSLayoutConstraint(item: newSplitView,
+//                attribute: .Bottom,
+//                relatedBy: .Equal,
+//                toItem: self,
+//                attribute: .Bottom,
+//                multiplier: 1.0,
+//                constant: 0.0))
+//            
+//            self.addConstraint(NSLayoutConstraint(item: newSplitView,
+//                attribute: .Right,
+//                relatedBy: .Equal,
+//                toItem: self,
+//                attribute: .Right,
+//                multiplier: 1.0,
+//                constant: 0.0))
+        }
+
+        
+//        Swift.print("self frame \(self.frame)")
+//        
+//        // Let's first filter out the divider views, if any
+//        let subPaneViews = self.subPaneViews()
+//        
+//        let size = self.frame.size;
+//        let subviewsCount = CGFloat(subPaneViews.count)
+//        let side = (self.vertical == true) ? size.width : size.height
+//        let ext = (side - self.dividerThickness*(subviewsCount-1))/subviewsCount
+//        let newSize = (self.vertical == true) ? CGSizeMake(ext, size.height) : CGSizeMake(size.width, ext);
+//        
+//        for (index, view) in subPaneViews.enumerate() {
+//            view.removeConstraints(view.constraints)
+//            
+//            let x = (self.vertical == true) ? CGFloat(index) * (ext + self.dividerThickness) : 0
+//            let y = (self.vertical == true) ? 0 : CGFloat(index) * (ext + self.dividerThickness)
+//
+//            var newFrame = CGRectZero
+//            newFrame.size = newSize
+//            newFrame.origin = CGPointMake(x, y)
+//            view.frame = newFrame
+//            Swift.print("\(index) -> frame \(view.frame)")
+        
+//            if index < subPaneViews.count - 1 {
+//                self.setPosition(y+ext, ofDividerAtIndex: index)
+//                Swift.print("Divider \(index) -> position \(y+ext) thickness \(self.dividerThickness)")
+//            }
+//        }
+//        
+//        for index in 0..<subPaneViews.count-1 {
+//            let y = (self.vertical == true) ? 0 : CGFloat(index) * (ext + self.dividerThickness)
+//            self.setPosition(y+ext, ofDividerAtIndex: index)
+//            Swift.print("Divider \(index) -> position \(y+ext) thickness \(self.dividerThickness)")
+//        }
+//        
+//        self.adjustSubviews()
+//        self.setNeedsDisplayInRect(self.bounds)
+        
+    }
+    
 }

@@ -3,7 +3,6 @@
     <dependencies>
         <deployment identifier="macosx"/>
         <plugIn identifier="com.apple.InterfaceBuilder.CocoaPlugin" version="10117"/>
-        <capability name="Alignment constraints to the first baseline" minToolsVersion="6.0"/>
     </dependencies>
     <scenes>
         <!--Application-->
@@ -655,7 +654,7 @@
                     <window key="window" title="Window" allowsToolTipsWhenApplicationIsInactive="NO" autorecalculatesKeyViewLoop="NO" oneShot="NO" releasedWhenClosed="NO" showsToolbarButton="NO" visibleAtLaunch="NO" animationBehavior="default" id="IQv-IB-iLA">
                         <windowStyleMask key="styleMask" titled="YES" closable="YES" miniaturizable="YES" resizable="YES"/>
                         <windowPositionMask key="initialPositionMask" leftStrut="YES" rightStrut="YES" topStrut="YES" bottomStrut="YES"/>
-                        <rect key="contentRect" x="196" y="240" width="480" height="270"/>
+                        <rect key="contentRect" x="561" y="358" width="480" height="300"/>
                         <rect key="screenRect" x="0.0" y="0.0" width="1680" height="1027"/>
                     </window>
                     <connections>
@@ -669,69 +668,111 @@
         <!--View Controller-->
         <scene sceneID="hIz-AP-VOD">
             <objects>
-                <viewController id="XfG-lQ-9wD" sceneMemberID="viewController">
+                <viewController id="XfG-lQ-9wD" customClass="ViewController" customModule="KPCSplitPanesDemo" customModuleProvider="target" sceneMemberID="viewController">
                     <view key="view" id="m2S-Jp-Qdl">
-                        <rect key="frame" x="0.0" y="0.0" width="480" height="270"/>
+                        <rect key="frame" x="0.0" y="0.0" width="480" height="300"/>
                         <autoresizingMask key="autoresizingMask"/>
                         <subviews>
-                            <splitView arrangesAllSubviews="NO" dividerStyle="paneSplitter" translatesAutoresizingMaskIntoConstraints="NO" id="KDt-mA-ss5" customClass="PressureSplitView" customModule="KPCSplitPanes">
-                                <rect key="frame" x="0.0" y="0.0" width="480" height="270"/>
+                            <splitView arrangesAllSubviews="NO" dividerStyle="thin" translatesAutoresizingMaskIntoConstraints="NO" id="9MM-X5-7U0" customClass="PressureSplitView" customModule="KPCSplitPanes">
+                                <rect key="frame" x="0.0" y="0.0" width="480" height="300"/>
                                 <subviews>
-                                    <customView id="TGX-ha-2do" customClass="PaneView" customModule="KPCSplitPanes">
-                                        <rect key="frame" x="0.0" y="0.0" width="480" height="270"/>
+                                    <customView horizontalHuggingPriority="252" ambiguous="YES" id="F0X-Pq-UwG" customClass="PaneView" customModule="KPCSplitPanes">
+                                        <rect key="frame" x="0.0" y="0.0" width="480" height="149.5"/>
                                         <autoresizingMask key="autoresizingMask"/>
                                         <subviews>
-                                            <button horizontalHuggingPriority="750" verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="ueV-tM-tRY">
-                                                <rect key="frame" x="435" y="245" width="24" height="24"/>
+                                            <button verticalHuggingPriority="750" ambiguous="YES" translatesAutoresizingMaskIntoConstraints="NO" id="owJ-Kr-3TP">
+                                                <rect key="frame" x="456" y="125.5" width="24" height="24"/>
                                                 <constraints>
-                                                    <constraint firstAttribute="height" constant="24" id="LNh-LR-URs"/>
-                                                    <constraint firstAttribute="width" constant="24" id="ac3-hF-tn4"/>
+                                                    <constraint firstAttribute="width" constant="24" id="7NP-W6-4Wv"/>
+                                                    <constraint firstAttribute="height" constant="24" id="r7m-eV-ZOi"/>
                                                 </constraints>
-                                                <buttonCell key="cell" type="square" bezelStyle="shadowlessSquare" imagePosition="only" alignment="left" imageScaling="proportionallyDown" inset="2" id="sCh-DC-O8P">
+                                                <buttonCell key="cell" type="square" bezelStyle="shadowlessSquare" imagePosition="overlaps" alignment="center" imageScaling="proportionallyDown" inset="2" id="SLO-Wh-Wpp">
                                                     <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
                                                     <font key="font" metaFont="system"/>
                                                 </buttonCell>
                                             </button>
-                                            <button horizontalHuggingPriority="750" verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="Tck-Ya-sJL">
-                                                <rect key="frame" x="456" y="245" width="24" height="24"/>
+                                            <button verticalHuggingPriority="750" ambiguous="YES" translatesAutoresizingMaskIntoConstraints="NO" id="4MI-ar-0nO">
+                                                <rect key="frame" x="432" y="125.5" width="24" height="24"/>
                                                 <constraints>
-                                                    <constraint firstAttribute="width" constant="24" id="PLc-6v-ue5"/>
+                                                    <constraint firstAttribute="width" constant="24" id="8k8-zO-g4V"/>
+                                                    <constraint firstAttribute="height" constant="24" id="MCp-Gv-mIC"/>
                                                 </constraints>
-                                                <buttonCell key="cell" type="square" bezelStyle="shadowlessSquare" imagePosition="only" alignment="left" imageScaling="proportionallyDown" inset="2" id="JtI-fa-Tjg">
+                                                <buttonCell key="cell" type="square" bezelStyle="shadowlessSquare" imagePosition="overlaps" alignment="center" imageScaling="proportionallyDown" inset="2" id="zLP-8y-Xy8">
                                                     <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
                                                     <font key="font" metaFont="system"/>
                                                 </buttonCell>
                                             </button>
                                         </subviews>
                                         <constraints>
-                                            <constraint firstAttribute="trailing" secondItem="Tck-Ya-sJL" secondAttribute="trailing" id="KaC-tq-DAQ"/>
-                                            <constraint firstAttribute="trailing" secondItem="ueV-tM-tRY" secondAttribute="trailing" constant="21" id="MBY-Mx-563"/>
-                                            <constraint firstItem="ueV-tM-tRY" firstAttribute="top" secondItem="TGX-ha-2do" secondAttribute="top" constant="1" id="Wnl-oa-Q1h"/>
-                                            <constraint firstItem="ueV-tM-tRY" firstAttribute="baseline" secondItem="Tck-Ya-sJL" secondAttribute="baseline" id="qfK-3m-V96"/>
-                                            <constraint firstItem="ueV-tM-tRY" firstAttribute="firstBaseline" secondItem="Tck-Ya-sJL" secondAttribute="firstBaseline" id="zte-j3-3e0"/>
+                                            <constraint firstAttribute="trailing" secondItem="owJ-Kr-3TP" secondAttribute="trailing" id="FHt-px-tcY"/>
+                                            <constraint firstItem="owJ-Kr-3TP" firstAttribute="leading" secondItem="4MI-ar-0nO" secondAttribute="trailing" id="I6s-36-4oV"/>
+                                            <constraint firstItem="4MI-ar-0nO" firstAttribute="top" secondItem="F0X-Pq-UwG" secondAttribute="top" id="iSZ-rd-FdD"/>
+                                            <constraint firstItem="owJ-Kr-3TP" firstAttribute="top" secondItem="F0X-Pq-UwG" secondAttribute="top" id="n58-Jj-tcW"/>
                                         </constraints>
                                         <connections>
-                                            <outlet property="closeButton" destination="ueV-tM-tRY" id="LVB-L3-BjE"/>
-                                            <outlet property="splitButton" destination="Tck-Ya-sJL" id="7bd-Mf-Uen"/>
+                                            <outlet property="closeButton" destination="owJ-Kr-3TP" id="W7p-HL-dIh"/>
+                                            <outlet property="splitButton" destination="4MI-ar-0nO" id="zFW-Wa-XRP"/>
+                                        </connections>
+                                    </customView>
+                                    <customView ambiguous="YES" id="fNI-7G-5d5" customClass="PaneView" customModule="KPCSplitPanes">
+                                        <rect key="frame" x="0.0" y="150.5" width="480" height="149.5"/>
+                                        <autoresizingMask key="autoresizingMask"/>
+                                        <subviews>
+                                            <button verticalHuggingPriority="750" ambiguous="YES" translatesAutoresizingMaskIntoConstraints="NO" id="KiR-Sp-m0q">
+                                                <rect key="frame" x="456" y="125.5" width="24" height="24"/>
+                                                <constraints>
+                                                    <constraint firstAttribute="height" constant="24" id="GOQ-MT-3wH"/>
+                                                    <constraint firstAttribute="width" constant="24" id="pg6-kp-Y8M"/>
+                                                </constraints>
+                                                <buttonCell key="cell" type="square" bezelStyle="shadowlessSquare" imagePosition="overlaps" alignment="center" imageScaling="proportionallyDown" inset="2" id="VVD-AQ-LZE">
+                                                    <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
+                                                    <font key="font" metaFont="system"/>
+                                                </buttonCell>
+                                            </button>
+                                            <button verticalHuggingPriority="750" ambiguous="YES" translatesAutoresizingMaskIntoConstraints="NO" id="Mtr-pW-yJm">
+                                                <rect key="frame" x="432" y="125.5" width="24" height="24"/>
+                                                <constraints>
+                                                    <constraint firstAttribute="height" constant="24" id="DQP-Ps-htJ"/>
+                                                    <constraint firstAttribute="width" constant="24" id="vMN-aM-Xc7"/>
+                                                </constraints>
+                                                <buttonCell key="cell" type="square" bezelStyle="shadowlessSquare" imagePosition="overlaps" alignment="center" imageScaling="proportionallyDown" inset="2" id="Fwc-rG-RbO">
+                                                    <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
+                                                    <font key="font" metaFont="system"/>
+                                                </buttonCell>
+                                            </button>
+                                        </subviews>
+                                        <constraints>
+                                            <constraint firstItem="KiR-Sp-m0q" firstAttribute="leading" secondItem="Mtr-pW-yJm" secondAttribute="trailing" id="69Y-Lx-A2f"/>
+                                            <constraint firstItem="KiR-Sp-m0q" firstAttribute="top" secondItem="fNI-7G-5d5" secondAttribute="top" id="7Qa-aP-egU"/>
+                                            <constraint firstAttribute="trailing" secondItem="KiR-Sp-m0q" secondAttribute="trailing" id="DrN-3Q-cPs"/>
+                                            <constraint firstItem="Mtr-pW-yJm" firstAttribute="top" secondItem="fNI-7G-5d5" secondAttribute="top" id="LOb-5j-tVQ"/>
+                                        </constraints>
+                                        <connections>
+                                            <outlet property="closeButton" destination="KiR-Sp-m0q" id="sjz-u6-CY7"/>
+                                            <outlet property="splitButton" destination="Mtr-pW-yJm" id="iMp-a1-GRK"/>
                                         </connections>
                                     </customView>
                                 </subviews>
                                 <holdingPriorities>
                                     <real value="250"/>
+                                    <real value="250"/>
                                 </holdingPriorities>
                             </splitView>
                         </subviews>
                         <constraints>
-                            <constraint firstAttribute="bottom" secondItem="KDt-mA-ss5" secondAttribute="bottom" id="0cX-Ip-CZl"/>
-                            <constraint firstItem="KDt-mA-ss5" firstAttribute="top" secondItem="m2S-Jp-Qdl" secondAttribute="top" id="AbN-B0-QQ3"/>
-                            <constraint firstItem="KDt-mA-ss5" firstAttribute="leading" secondItem="m2S-Jp-Qdl" secondAttribute="leading" id="AuH-Z1-WFM"/>
-                            <constraint firstAttribute="trailing" secondItem="KDt-mA-ss5" secondAttribute="trailing" id="DCG-IU-5Ol"/>
+                            <constraint firstAttribute="trailing" secondItem="9MM-X5-7U0" secondAttribute="trailing" id="0Da-vw-ujE"/>
+                            <constraint firstItem="9MM-X5-7U0" firstAttribute="leading" secondItem="m2S-Jp-Qdl" secondAttribute="leading" id="Jhb-IZ-C7c"/>
+                            <constraint firstAttribute="bottom" secondItem="9MM-X5-7U0" secondAttribute="bottom" id="WHb-UR-SMT"/>
+                            <constraint firstItem="9MM-X5-7U0" firstAttribute="top" secondItem="m2S-Jp-Qdl" secondAttribute="top" id="Ybu-m9-Fux"/>
                         </constraints>
                     </view>
+                    <connections>
+                        <outlet property="splitView" destination="9MM-X5-7U0" id="YHJ-eG-Raw"/>
+                    </connections>
                 </viewController>
                 <customObject id="rPt-NT-nkU" userLabel="First Responder" customClass="NSResponder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="75" y="655"/>
+            <point key="canvasLocation" x="25" y="741"/>
         </scene>
     </scenes>
 </document>
