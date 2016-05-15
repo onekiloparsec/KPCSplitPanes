@@ -10,19 +10,7 @@ import AppKit
 
 let PressureSplitViewSplitSizeWarningShowAgainKey = "PressureSplitViewSplitSizeWarningShowAgainKey"
 
-extension NSSplitView {
-    func allNonDividerSubviews() -> [NSView] {
-        // Some pane views can be splitviews themselves, if horizontal|vertical split has been
-        // embedded inside a vertical|horizontal pane.
-        return self.subviews.filter({ $0.isKindOfClass(PaneView) || $0.isKindOfClass(PressureSplitView) })
-    }
-
-    func allSubPaneViews() -> [PaneView] {
-        return self.subviews.filter({ $0.isKindOfClass(PaneView) }) as! [PaneView]
-    }
-}
-
-extension NSAlert {
+private extension NSAlert {
     static func alertForMinimumSplitAdditionalExtension(minimumAdditionalExtension: CGFloat,
                                                  currentExtension: CGFloat,
                                                  maximumExtension: CGFloat,
@@ -113,7 +101,7 @@ public class PressureSplitView : NSSplitView {
         return true
     }
     
-    public override func flagsChanged(theEvent: NSEvent) {
+    override public func flagsChanged(theEvent: NSEvent) {
         let optionsKey = NSEventModifierFlags(rawValue: theEvent.modifierFlags.rawValue & NSEventModifierFlags.AlternateKeyMask.rawValue)
         for paneView in self.allSubPaneViews() {
             let useAlt = (optionsKey == .AlternateKeyMask)
@@ -121,7 +109,7 @@ public class PressureSplitView : NSSplitView {
         }
     }
     
-    public override class func requiresConstraintBasedLayout() -> Bool {
+    override public class func requiresConstraintBasedLayout() -> Bool {
         return false
     }
     
@@ -140,46 +128,55 @@ public class PressureSplitView : NSSplitView {
         return (currentExtension - minimumCurrentExtension >= minimumAdditionalExtension);
     }
 
-    override public func addSubview(aView: NSView) {
-        super.addSubview(aView);
-        self.updatePressuresWithView(aView, sign:1);
+    override public func addSubview(view: NSView) {
+        super.addSubview(view);
+        self.updatePressuresWithView(view, sign:1);
     }
 
     override public func addSubview(aView: NSView, positioned place: NSWindowOrderingMode, relativeTo otherView: NSView?) {
         super.addSubview(aView, positioned: place, relativeTo: otherView)
-        self.updatePressuresWithView(aView, sign:1);
+        self.updatePressuresWithView(aView, sign: 1);
     }
     
-    private func updatePressuresWithView(aView: NSView, sign: Int) {
+    override public func addArrangedSubview(view: NSView) {
+        super.addArrangedSubview(view)
+        self.updatePressuresWithView(view, sign: 1)
+    }
+    
+    override public func insertArrangedSubview(view: NSView, atIndex index: Int) {
+        super.insertArrangedSubview(view, atIndex: index)
+        self.updatePressuresWithView(view, sign: 1)
+    }
+    
+    private func updatePressuresWithView(view: NSView, sign: Int) {
         if (self.vertical) {
             self.horizontalPressure += sign
-            if aView.isKindOfClass(NSSplitView) {
-                let sv = aView as! NSSplitView
+            if view.isKindOfClass(NSSplitView) {
+                let sv = view as! NSSplitView
                 self.verticalPressure += sign*sv.subviews.count
             }
         }
         else {
             self.verticalPressure += sign
-            if aView.isKindOfClass(NSSplitView) {
-                let sv = aView as! NSSplitView
+            if view.isKindOfClass(NSSplitView) {
+                let sv = view as! NSSplitView
                 self.horizontalPressure += sign*sv.subviews.count
             }
         }
     }
     
-    func removeSubPaneView(aView: PaneView) {
-        guard self.allSubPaneViews().contains(aView) else {
-            fatalError("PaneView \(aView) is not a subview of \(self), as it should to be actually removed.fatalError")
+    override public func removeArrangedSubview(view: NSView) {
+        guard self.allSubPaneViews().contains(view as! PaneView) else {
+            fatalError("PaneView \(view) is not a subview of \(self), as it should to be actually removed.fatalError")
         }
-        aView.removeFromSuperview()
-        self.updatePressuresWithView(aView, sign: -1)
+        super.removeArrangedSubview(view)
+        self.updatePressuresWithView(view, sign: -1)
     }
 
     // MARK: - Close & Split
 
     func close(paneView pane: PaneView) {
-        self.removeSubPaneView(pane)
-        self.adjustSubviews()
+        self.removeArrangedSubview(pane)
     }
     
     func split(paneView pane: PaneView) {
@@ -200,9 +197,7 @@ public class PressureSplitView : NSSplitView {
             if NSUserDefaults.standardUserDefaults().valueForKey(PressureSplitViewSplitSizeWarningShowAgainKey) == nil {
                 NSUserDefaults.standardUserDefaults().setBool(true, forKey: PressureSplitViewSplitSizeWarningShowAgainKey)
             }
-            
             if NSUserDefaults.standardUserDefaults().boolForKey(PressureSplitViewSplitSizeWarningShowAgainKey) {
-                // WARN: Make sure we have a delegate with min and max!
                 self.showSplitSizeWarningAlert(pane, vertically: vertical)
             }
             else {
@@ -211,7 +206,7 @@ public class PressureSplitView : NSSplitView {
         }
     }
     
-    func showSplitSizeWarningAlert(paneView: PaneView, vertically: Bool) {
+    private func showSplitSizeWarningAlert(paneView: PaneView, vertically: Bool) {
         guard self.delegate != nil, let delegate = self.delegate as! PressureSplitViewDelegate? else {
             NSBeep();
             return
@@ -225,9 +220,9 @@ public class PressureSplitView : NSSplitView {
         let minimumAdditionalExtension = (vertical) ? delegate.minimumWidth+5.0 : delegate.minimumHeight+5.0;
     
         let alert = NSAlert.alertForMinimumSplitAdditionalExtension(minimumAdditionalExtension,
-                                                                    currentExtension:currentExtension,
-                                                                    maximumExtension:maximumExtension,
-                                                                    vertical:vertical)
+                                                                    currentExtension: currentExtension,
+                                                                    maximumExtension: maximumExtension,
+                                                                    vertical: vertical)
     
         alert.beginSheetModalForWindow(self.window!, completionHandler: { (returnCode) in
             if alert.suppressionButton?.state == NSOnState {
@@ -265,43 +260,63 @@ public class PressureSplitView : NSSplitView {
             fatalError("Parent SplitView of \(paneView) should be \(self), and it seems it is not.")
         }
         
+        let paneViewIndex = self.indexOfPaneView(paneView)
+        let newSplitView = PressureSplitView()
+        newSplitView.delegate = self.delegate
+
         if self.vertical == vertically {
             // We are going into the same direction, just add a new pane.
             
-            let newSplitView = PressureSplitView()
-            newSplitView.delegate = self.delegate
             newSplitView.frame = self.frame
             
             for view in self.allNonDividerSubviews() {
                 view.removeFromSuperview()
                 newSplitView.addSubview(view)
             }
-            newSplitView.addSubview(PaneView.newPaneView())
+            
+            newSplitView.insertArrangedSubview(PaneView.newPaneView(), atIndex: paneViewIndex)
             newSplitView.adjustSubviews()
             
             self.superview?.addSubview(newSplitView)            
             self.removeFromSuperview()
         }
         else {
-            // We are going into the opposite direction, replace the original pane by a splitView, replace the pane, add a new one.
+            // We are going into the opposite direction, replace the original pane by a splitView, 
+            // replace the pane, add a new one.
             
-            let newSplitView = PressureSplitView()
             newSplitView.vertical = vertically
-            newSplitView.delegate = self.delegate
+            let side = (vertically) ? CGRectGetWidth(paneView.frame) : CGRectGetHeight(paneView.frame)
 
-            let newFrame = (self.vertical == true) ?
-                CGRectInset(paneView.frame, 0, self.dividerThickness) :
-                CGRectInset(paneView.frame, self.dividerThickness, 0)
-            
-            self.addSubview(newSplitView)
+            self.insertArrangedSubview(newSplitView, atIndex: paneViewIndex)
             paneView.removeFromSuperview()
             self.adjustSubviews()
             
             newSplitView.addSubview(paneView)
             newSplitView.addSubview(PaneView.newPaneView())
             newSplitView.adjustSubviews()
+            newSplitView.setPosition(side/2.0, ofDividerAtIndex: 0)
             
-            newSplitView.frame = newFrame
+            // This is a tricky workaround to force rearrangement of subviews...
+            self.setPosition(1, ofDividerAtIndex: paneViewIndex)
         }
+    }
+    
+    private func allNonDividerSubviews() -> [NSView] {
+        // Some pane views can be splitviews themselves, if horizontal|vertical split has been
+        // embedded inside a vertical|horizontal pane.
+        return self.subviews.filter({ $0.isKindOfClass(PaneView) || $0.isKindOfClass(PressureSplitView) })
+    }
+    
+    private func allSubPaneViews() -> [PaneView] {
+        return self.subviews.filter({ $0.isKindOfClass(PaneView) }) as! [PaneView]
+    }
+    
+    private func indexOfPaneView(paneView: PaneView) -> Int {
+        let sortedSubviews = self.allNonDividerSubviews().sort( { (firstView, secondView) -> Bool in
+            let v1 = (self.vertical) ? CGRectGetMinX(firstView.frame) : CGRectGetMinY(firstView.frame)
+            let v2 = (self.vertical) ? CGRectGetMinX(secondView.frame) : CGRectGetMinY(secondView.frame)
+            return v1 < v2
+        })
+        return sortedSubviews.indexOf(paneView)!
     }
 }
