@@ -3,7 +3,7 @@
 //  KPCSplitPanes
 //
 //  Created by Cédric Foellmi on 10/05/16.
-//  Copyright © 2016 onekiloparsec. All rights reserved.
+//  Licensed under the MIT License (see LICENSE file)
 //
 
 import AppKit
@@ -48,17 +48,8 @@ public class PressureSplitView : NSSplitView {
         self.autoresizesSubviews = true
         self.translatesAutoresizingMaskIntoConstraints = false
         self.autoresizingMask = [.ViewWidthSizable, .ViewHeightSizable]
-        
-        NSNotificationCenter.defaultCenter().addObserver(self,
-                                                         selector: #selector(PressureSplitView.refreshUponFrameResize(_:)),
-                                                         name: NSViewFrameDidChangeNotification,
-                                                         object: self)
     }
-    
-    func refreshUponFrameResize(notification: NSNotification) {
         
-    }
-    
     // MARK: - Overrides
     
     override public var postsFrameChangedNotifications: Bool {
@@ -181,10 +172,10 @@ public class PressureSplitView : NSSplitView {
             return
         }
         
-        let topPaneSize = self.frame.size
+        let size = self.frame.size
         let maximumContentRect = self.window!.contentRectForFrameRect(self.window!.screen!.frame)
     
-        let currentExtension = (vertical) ? topPaneSize.width : topPaneSize.height;
+        let currentExtension = (vertical) ? size.width : size.height;
         let maximumExtension = (vertical) ? maximumContentRect.size.width : maximumContentRect.size.height;
         let minimumAdditionalExtension = (vertical) ? delegate.minimumWidth+5.0 : delegate.minimumHeight+5.0;
     
@@ -200,16 +191,16 @@ public class PressureSplitView : NSSplitView {
             }
             
             if (returnCode == NSAlertSecondButtonReturn) {
-                let deltaExtension = 2.0*minimumAdditionalExtension - currentExtension;
+                let deltaExtension = 2.0*minimumAdditionalExtension
                 var newWindowFrame = self.window!.contentRectForFrameRect(self.window!.frame)
     
                 if (vertically) {
-                    newWindowFrame.origin.x -= deltaExtension/2.0;
-                    newWindowFrame.size.width += deltaExtension;
+                    newWindowFrame.origin.x -= deltaExtension/2.0
+                    newWindowFrame.size.width += deltaExtension
                 }
                 else {
-                    newWindowFrame.origin.y -= deltaExtension/2.0;
-                    newWindowFrame.size.height += deltaExtension;
+                    newWindowFrame.origin.y -= deltaExtension/2.0
+                    newWindowFrame.size.height += deltaExtension
                 }
     
                 newWindowFrame = self.window!.frameRectForContentRect(newWindowFrame)

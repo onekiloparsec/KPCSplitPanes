@@ -3,10 +3,10 @@
 //  KPCSplitPanes
 //
 //  Created by Cédric Foellmi on 11/05/16.
-//  Copyright © 2016 onekiloparsec. All rights reserved.
+//  Licensed under the MIT License (see LICENSE file)
 //
 
-import Foundation
+import AppKit
 
 public class PressureSplitViewDelegate : NSObject, NSSplitViewDelegate {
     
