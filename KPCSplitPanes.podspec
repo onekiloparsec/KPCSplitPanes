@@ -1,6 +1,6 @@
 Pod::Spec.new do |s|
   s.name         = "KPCSplitPanes"
-  s.version      = "0.1.0"
+  s.version      = "0.1.1"
   s.summary      = "A set of classes, among which a subclass of NSSplitView, that splits when you're intented to make panes."
   s.homepage     = "https://github.com/onekiloparsec/KPCJumpBarControl.git"
   s.license      = { :type => 'MIT', :file => 'LICENSE' }
@@ -10,5 +10,5 @@ Pod::Spec.new do |s|
   s.platform     = :osx, '10.11'
   s.framework    = 'QuartzCore', 'AppKit'
   s.requires_arc = true
-  s.resources    = 'Resources/*.pdf'
+  s.resources    = 'Resources/*.png'
 end
