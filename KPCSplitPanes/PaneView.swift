@@ -16,9 +16,17 @@ class PaneView : NSView {
     static func newPaneView() -> PaneView {
         var topLevels = NSArray?()
         NSBundle(forClass: self).loadNibNamed("PaneView", owner: self, topLevelObjects: &topLevels)
-        return topLevels!.filter({ $0.isKindOfClass(PaneView) })[0] as! PaneView
+        let pv = topLevels!.filter({ $0.isKindOfClass(PaneView) })[0] as! PaneView
+        pv.autoresizesSubviews = true
+        pv.translatesAutoresizingMaskIntoConstraints = false
+        pv.autoresizingMask = [.ViewWidthSizable, .ViewHeightSizable]
+        return pv
     }
     
+    override class func requiresConstraintBasedLayout() -> Bool {
+        return false
+    }
+
     func parentSplitView() -> PressureSplitView? {
         var view: NSView? = self
         while view != nil && view?.isKindOfClass(PressureSplitView) == false {

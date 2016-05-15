@@ -10,8 +10,8 @@ import Foundation
 
 public class PressureSplitViewDelegate : NSObject, NSSplitViewDelegate {
     
-    public var minimumHeight: CGFloat = 50.0
-    public var minimumWidth: CGFloat = 50.0
+    public var minimumHeight: CGFloat = 100.0
+    public var minimumWidth: CGFloat = 100.0
     public var canCollapse: Bool = false
     
     public func splitView(splitView: NSSplitView, canCollapseSubview subview: NSView) -> Bool {

@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
-<document type="com.apple.InterfaceBuilder3.Cocoa.Storyboard.XIB" version="3.0" toolsVersion="10117" systemVersion="15E65" targetRuntime="MacOSX.Cocoa" propertyAccessControl="none" useAutolayout="YES" initialViewController="B8D-0N-5wS">
+<document type="com.apple.InterfaceBuilder3.Cocoa.Storyboard.XIB" version="3.0" toolsVersion="10117" systemVersion="15E65" targetRuntime="MacOSX.Cocoa" propertyAccessControl="none" initialViewController="B8D-0N-5wS">
     <dependencies>
         <deployment identifier="macosx"/>
         <plugIn identifier="com.apple.InterfaceBuilder.CocoaPlugin" version="10117"/>
@@ -651,7 +651,7 @@
         <scene sceneID="R2V-B0-nI4">
             <objects>
                 <windowController id="B8D-0N-5wS" sceneMemberID="viewController">
-                    <window key="window" title="Window" allowsToolTipsWhenApplicationIsInactive="NO" autorecalculatesKeyViewLoop="NO" oneShot="NO" releasedWhenClosed="NO" showsToolbarButton="NO" visibleAtLaunch="NO" animationBehavior="default" id="IQv-IB-iLA">
+                    <window key="window" title="Window" allowsToolTipsWhenApplicationIsInactive="NO" autorecalculatesKeyViewLoop="NO" restorable="NO" oneShot="NO" releasedWhenClosed="NO" showsToolbarButton="NO" visibleAtLaunch="NO" animationBehavior="default" id="IQv-IB-iLA">
                         <windowStyleMask key="styleMask" titled="YES" closable="YES" miniaturizable="YES" resizable="YES"/>
                         <windowPositionMask key="initialPositionMask" leftStrut="YES" rightStrut="YES" topStrut="YES" bottomStrut="YES"/>
                         <rect key="contentRect" x="561" y="358" width="480" height="300"/>
@@ -673,80 +673,57 @@
                         <rect key="frame" x="0.0" y="0.0" width="480" height="300"/>
                         <autoresizingMask key="autoresizingMask"/>
                         <subviews>
-                            <splitView arrangesAllSubviews="NO" dividerStyle="thin" translatesAutoresizingMaskIntoConstraints="NO" id="9MM-X5-7U0" customClass="PressureSplitView" customModule="KPCSplitPanes">
+                            <splitView arrangesAllSubviews="NO" dividerStyle="thin" id="9MM-X5-7U0" customClass="PressureSplitView" customModule="KPCSplitPanes">
                                 <rect key="frame" x="0.0" y="0.0" width="480" height="300"/>
+                                <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                                 <subviews>
-                                    <customView horizontalHuggingPriority="252" ambiguous="YES" id="F0X-Pq-UwG" customClass="PaneView" customModule="KPCSplitPanes">
+                                    <customView horizontalHuggingPriority="252" id="F0X-Pq-UwG" customClass="PaneView" customModule="KPCSplitPanes">
                                         <rect key="frame" x="0.0" y="0.0" width="480" height="149.5"/>
                                         <autoresizingMask key="autoresizingMask"/>
                                         <subviews>
-                                            <button verticalHuggingPriority="750" ambiguous="YES" translatesAutoresizingMaskIntoConstraints="NO" id="owJ-Kr-3TP">
+                                            <button verticalHuggingPriority="750" id="owJ-Kr-3TP">
                                                 <rect key="frame" x="456" y="125.5" width="24" height="24"/>
-                                                <constraints>
-                                                    <constraint firstAttribute="width" constant="24" id="7NP-W6-4Wv"/>
-                                                    <constraint firstAttribute="height" constant="24" id="r7m-eV-ZOi"/>
-                                                </constraints>
+                                                <autoresizingMask key="autoresizingMask" flexibleMinX="YES" flexibleMinY="YES"/>
                                                 <buttonCell key="cell" type="square" bezelStyle="shadowlessSquare" imagePosition="overlaps" alignment="center" imageScaling="proportionallyDown" inset="2" id="SLO-Wh-Wpp">
                                                     <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
                                                     <font key="font" metaFont="system"/>
                                                 </buttonCell>
                                             </button>
-                                            <button verticalHuggingPriority="750" ambiguous="YES" translatesAutoresizingMaskIntoConstraints="NO" id="4MI-ar-0nO">
+                                            <button verticalHuggingPriority="750" id="4MI-ar-0nO">
                                                 <rect key="frame" x="432" y="125.5" width="24" height="24"/>
-                                                <constraints>
-                                                    <constraint firstAttribute="width" constant="24" id="8k8-zO-g4V"/>
-                                                    <constraint firstAttribute="height" constant="24" id="MCp-Gv-mIC"/>
-                                                </constraints>
+                                                <autoresizingMask key="autoresizingMask" flexibleMinX="YES" flexibleMinY="YES"/>
                                                 <buttonCell key="cell" type="square" bezelStyle="shadowlessSquare" imagePosition="overlaps" alignment="center" imageScaling="proportionallyDown" inset="2" id="zLP-8y-Xy8">
                                                     <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
                                                     <font key="font" metaFont="system"/>
                                                 </buttonCell>
                                             </button>
                                         </subviews>
-                                        <constraints>
-                                            <constraint firstAttribute="trailing" secondItem="owJ-Kr-3TP" secondAttribute="trailing" id="FHt-px-tcY"/>
-                                            <constraint firstItem="owJ-Kr-3TP" firstAttribute="leading" secondItem="4MI-ar-0nO" secondAttribute="trailing" id="I6s-36-4oV"/>
-                                            <constraint firstItem="4MI-ar-0nO" firstAttribute="top" secondItem="F0X-Pq-UwG" secondAttribute="top" id="iSZ-rd-FdD"/>
-                                            <constraint firstItem="owJ-Kr-3TP" firstAttribute="top" secondItem="F0X-Pq-UwG" secondAttribute="top" id="n58-Jj-tcW"/>
-                                        </constraints>
                                         <connections>
                                             <outlet property="closeButton" destination="owJ-Kr-3TP" id="W7p-HL-dIh"/>
                                             <outlet property="splitButton" destination="4MI-ar-0nO" id="zFW-Wa-XRP"/>
                                         </connections>
                                     </customView>
-                                    <customView ambiguous="YES" id="fNI-7G-5d5" customClass="PaneView" customModule="KPCSplitPanes">
+                                    <customView id="fNI-7G-5d5" customClass="PaneView" customModule="KPCSplitPanes">
                                         <rect key="frame" x="0.0" y="150.5" width="480" height="149.5"/>
                                         <autoresizingMask key="autoresizingMask"/>
                                         <subviews>
-                                            <button verticalHuggingPriority="750" ambiguous="YES" translatesAutoresizingMaskIntoConstraints="NO" id="KiR-Sp-m0q">
+                                            <button verticalHuggingPriority="750" id="KiR-Sp-m0q">
                                                 <rect key="frame" x="456" y="125.5" width="24" height="24"/>
-                                                <constraints>
-                                                    <constraint firstAttribute="height" constant="24" id="GOQ-MT-3wH"/>
-                                                    <constraint firstAttribute="width" constant="24" id="pg6-kp-Y8M"/>
-                                                </constraints>
+                                                <autoresizingMask key="autoresizingMask" flexibleMinX="YES" flexibleMinY="YES"/>
                                                 <buttonCell key="cell" type="square" bezelStyle="shadowlessSquare" imagePosition="overlaps" alignment="center" imageScaling="proportionallyDown" inset="2" id="VVD-AQ-LZE">
                                                     <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
                                                     <font key="font" metaFont="system"/>
                                                 </buttonCell>
                                             </button>
-                                            <button verticalHuggingPriority="750" ambiguous="YES" translatesAutoresizingMaskIntoConstraints="NO" id="Mtr-pW-yJm">
+                                            <button verticalHuggingPriority="750" id="Mtr-pW-yJm">
                                                 <rect key="frame" x="432" y="125.5" width="24" height="24"/>
-                                                <constraints>
-                                                    <constraint firstAttribute="height" constant="24" id="DQP-Ps-htJ"/>
-                                                    <constraint firstAttribute="width" constant="24" id="vMN-aM-Xc7"/>
-                                                </constraints>
+                                                <autoresizingMask key="autoresizingMask" flexibleMinX="YES" flexibleMinY="YES"/>
                                                 <buttonCell key="cell" type="square" bezelStyle="shadowlessSquare" imagePosition="overlaps" alignment="center" imageScaling="proportionallyDown" inset="2" id="Fwc-rG-RbO">
                                                     <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
                                                     <font key="font" metaFont="system"/>
                                                 </buttonCell>
                                             </button>
                                         </subviews>
-                                        <constraints>
-                                            <constraint firstItem="KiR-Sp-m0q" firstAttribute="leading" secondItem="Mtr-pW-yJm" secondAttribute="trailing" id="69Y-Lx-A2f"/>
-                                            <constraint firstItem="KiR-Sp-m0q" firstAttribute="top" secondItem="fNI-7G-5d5" secondAttribute="top" id="7Qa-aP-egU"/>
-                                            <constraint firstAttribute="trailing" secondItem="KiR-Sp-m0q" secondAttribute="trailing" id="DrN-3Q-cPs"/>
-                                            <constraint firstItem="Mtr-pW-yJm" firstAttribute="top" secondItem="fNI-7G-5d5" secondAttribute="top" id="LOb-5j-tVQ"/>
-                                        </constraints>
                                         <connections>
                                             <outlet property="closeButton" destination="KiR-Sp-m0q" id="sjz-u6-CY7"/>
                                             <outlet property="splitButton" destination="Mtr-pW-yJm" id="iMp-a1-GRK"/>
@@ -759,12 +736,6 @@
                                 </holdingPriorities>
                             </splitView>
                         </subviews>
-                        <constraints>
-                            <constraint firstAttribute="trailing" secondItem="9MM-X5-7U0" secondAttribute="trailing" id="0Da-vw-ujE"/>
-                            <constraint firstItem="9MM-X5-7U0" firstAttribute="leading" secondItem="m2S-Jp-Qdl" secondAttribute="leading" id="Jhb-IZ-C7c"/>
-                            <constraint firstAttribute="bottom" secondItem="9MM-X5-7U0" secondAttribute="bottom" id="WHb-UR-SMT"/>
-                            <constraint firstItem="9MM-X5-7U0" firstAttribute="top" secondItem="m2S-Jp-Qdl" secondAttribute="top" id="Ybu-m9-Fux"/>
-                        </constraints>
                     </view>
                     <connections>
                         <outlet property="splitView" destination="9MM-X5-7U0" id="YHJ-eG-Raw"/>

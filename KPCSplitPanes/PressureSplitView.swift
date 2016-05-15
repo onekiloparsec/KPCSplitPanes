@@ -89,6 +89,7 @@ public class PressureSplitView : NSSplitView {
     private func setup() {
         self.dividerStyle = .Thin
         self.autoresizesSubviews = true
+        self.translatesAutoresizingMaskIntoConstraints = false
         self.autoresizingMask = [.ViewWidthSizable, .ViewHeightSizable]
     }
     
@@ -104,6 +105,10 @@ public class PressureSplitView : NSSplitView {
             let useAlt = (optionsKey == .AlternateKeyMask)
             paneView.splitButton?.image = useAlt ? PressureSplitView.defaultAlternateSplitIcon() : PressureSplitView.defaultSplitIcon()
         }
+    }
+    
+    public override class func requiresConstraintBasedLayout() -> Bool {
+        return false
     }
     
     // MARK: - Adding & Removing Subviews
@@ -192,6 +197,7 @@ public class PressureSplitView : NSSplitView {
     
     func showSplitSizeWarningAlert(paneView: PaneView, vertically: Bool) {
         guard self.delegate != nil, let delegate = self.delegate as! PressureSplitViewDelegate? else {
+            NSBeep();
             return
         }
         
@@ -264,30 +270,28 @@ public class PressureSplitView : NSSplitView {
             // We are going into the opposite direction, replace the original pane by a splitView, replace the pane, add a new one.
             
             let newSplitView = PressureSplitView()
-
             newSplitView.vertical = vertically
             newSplitView.delegate = self.delegate
-            
+
             let newFrame = (self.vertical == true) ?
                 CGRectInset(paneView.frame, 0, self.dividerThickness) :
                 CGRectInset(paneView.frame, self.dividerThickness, 0)
             
-            
+            self.addSubview(newSplitView)
             paneView.removeFromSuperview()
+            self.adjustSubviews()
             
             newSplitView.addSubview(paneView)
             newSplitView.addSubview(PaneView.newPaneView())
             newSplitView.adjustSubviews()
-
+            
             newSplitView.frame = newFrame
-            
-            self.addSubview(newSplitView)
-            self.adjustSubviews()
-            
-            let dividerIndex = self.allNonDividerSubviews().count-2
-            let position = (self.vertical == true) ? CGRectGetWidth(newFrame) : CGRectGetHeight(newFrame)
-            self.setPosition(position, ofDividerAtIndex: dividerIndex)
-            
+
+//            let dividerIndex = self.allNonDividerSubviews().count-2
+//            let position = (self.vertical == true) ? CGRectGetWidth(newFrame) : CGRectGetHeight(newFrame)
+//            self.setPosition(position, ofDividerAtIndex: dividerIndex)
+//
+
 //            if (self.vertical) {
 //                // Don't add left
 //                self.addConstraint(NSLayoutConstraint(item: newSplitView,
