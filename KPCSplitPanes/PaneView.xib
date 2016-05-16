@@ -15,7 +15,7 @@
                 <button verticalHuggingPriority="750" id="tK5-ax-UaU">
                     <rect key="frame" x="176" y="176" width="24" height="24"/>
                     <autoresizingMask key="autoresizingMask" flexibleMinX="YES" flexibleMinY="YES"/>
-                    <buttonCell key="cell" type="square" bezelStyle="shadowlessSquare" image="CloseCrossIcon" imagePosition="only" alignment="center" state="on" imageScaling="proportionallyDown" inset="2" id="VTT-by-TQB">
+                    <buttonCell key="cell" type="square" bezelStyle="shadowlessSquare" imagePosition="only" alignment="center" state="on" imageScaling="proportionallyDown" inset="2" id="VTT-by-TQB">
                         <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
                         <font key="font" metaFont="system"/>
                     </buttonCell>
@@ -23,7 +23,7 @@
                 <button verticalHuggingPriority="750" id="x0f-kM-jaf">
                     <rect key="frame" x="152" y="176" width="24" height="24"/>
                     <autoresizingMask key="autoresizingMask" flexibleMinX="YES" flexibleMinY="YES"/>
-                    <buttonCell key="cell" type="square" bezelStyle="shadowlessSquare" image="SplitHorizontalRectIcon" imagePosition="only" alignment="center" state="on" imageScaling="proportionallyDown" inset="2" id="FbH-Pu-fx9">
+                    <buttonCell key="cell" type="square" bezelStyle="shadowlessSquare" imagePosition="only" alignment="center" state="on" imageScaling="proportionallyDown" inset="2" id="FbH-Pu-fx9">
                         <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
                         <font key="font" metaFont="system"/>
                     </buttonCell>
@@ -36,8 +36,4 @@
             <point key="canvasLocation" x="300.5" y="476"/>
         </customView>
     </objects>
-    <resources>
-        <image name="CloseCrossIcon" width="20" height="20"/>
-        <image name="SplitHorizontalRectIcon" width="20" height="20"/>
-    </resources>
 </document>
