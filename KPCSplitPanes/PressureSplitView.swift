@@ -128,9 +128,6 @@ public class PressureSplitView : NSSplitView {
     }
     
     override public func removeArrangedSubview(view: NSView) {
-        guard self.allSubPaneViews().contains(view as! PaneView) else {
-            fatalError("PaneView \(view) is not a subview of \(self), as it should to be actually removed.fatalError")
-        }
         super.removeArrangedSubview(view)
         self.updatePressuresWithView(view, sign: -1)
     }
@@ -138,7 +135,7 @@ public class PressureSplitView : NSSplitView {
     // MARK: - Close & Split
 
     func close(paneView pane: PaneView) {
-        self.removeArrangedSubview(pane)
+        pane.removeFromSuperview()
     }
     
     func split(paneView pane: PaneView) {
