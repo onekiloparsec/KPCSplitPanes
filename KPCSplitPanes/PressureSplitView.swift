@@ -135,7 +135,22 @@ public class PressureSplitView : NSSplitView {
     // MARK: - Close & Split
 
     func close(paneView pane: PaneView) {
-        pane.removeFromSuperview()
+        if self.allSubPaneViews().count == 1 {
+            let alert = NSAlert()
+            alert.alertStyle = .WarningAlertStyle
+            alert.messageText = NSLocalizedString("Be careful!", comment: "")
+            alert.informativeText = NSLocalizedString("This is the last pane of the split view. Do you confirm you want to close it?", comment: "")
+            alert.addButtonWithTitle(NSLocalizedString("Cancel", comment: ""))
+            alert.addButtonWithTitle(NSLocalizedString("I confirm, close it.", comment: ""))
+            alert.beginSheetModalForWindow(self.window!, completionHandler: { (returnCode) in
+                if (returnCode == NSAlertSecondButtonReturn) {
+                    pane.removeFromSuperview()
+                }
+            })
+        }
+        else {
+            pane.removeFromSuperview()
+        }
     }
     
     func split(paneView pane: PaneView) {
