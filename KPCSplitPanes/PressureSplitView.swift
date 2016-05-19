@@ -34,7 +34,8 @@ public class PressureSplitView : NSSplitView {
         self.dividerStyle = .Thin
         self.autoresizesSubviews = true
         self.translatesAutoresizingMaskIntoConstraints = false
-        self.autoresizingMask = [.ViewWidthSizable, .ViewHeightSizable]        
+        self.autoresizingMask = [.ViewWidthSizable, .ViewHeightSizable]
+        self.arrangesAllSubviews = true
     }
     
         
@@ -275,14 +276,20 @@ public class PressureSplitView : NSSplitView {
             newSplitView.addSubview(newPaneView)
             newSplitView.select(paneView: newPaneView)
             
+            // MUST be set before adjustSubviews
+            newSplitView.frame = (vertically == true) ?
+                CGRectInset(paneView.frame, 0, self.dividerThickness) :
+                CGRectInset(paneView.frame, self.dividerThickness, 0)
+
             newSplitView.adjustSubviews()
             newSplitView.setPosition(side/2.0, ofDividerAtIndex: 0)
 
             // This is a tricky workaround to force rearrangement of subviews...
-            self.setPosition(1, ofDividerAtIndex: newPaneViewIndex)
+//            let pos = (vertically == true) ? CGRectGetHeight(self.frame)/2.0 : CGRectGetWidth(self.frame)/2.0
+//            self.setPosition(pos, ofDividerAtIndex: newPaneViewIndex)
         }
         
-        newSplitView.window?.makeFirstResponder(newPaneView)
+//        newSplitView.window?.makeFirstResponder(newPaneView)
     }
     
     // MARK: - Helpers
