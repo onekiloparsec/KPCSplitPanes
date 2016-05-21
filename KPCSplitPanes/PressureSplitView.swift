@@ -170,28 +170,16 @@ public class PressureSplitView : NSSplitView {
                 self.showSplitSizeWarningAlert(pane, vertically: vertical)
             }
             else {
-                NSBeep();
+                self.expandWindowAndSplit(paneView: pane, vertically: vertical)
             }
         }
     }
     
     private func showSplitSizeWarningAlert(paneView: PaneView, vertically: Bool) {
-        guard self.delegate != nil, let delegate = self.delegate as! PressureSplitViewDelegate? else {
-            NSBeep();
-            return
-        }
-        
-        let size = self.frame.size
-        let maximumContentRect = self.window!.contentRectForFrameRect(self.window!.screen!.frame)
-    
-        let currentExtension = (vertical) ? size.width : size.height;
-        let maximumExtension = (vertical) ? maximumContentRect.size.width : maximumContentRect.size.height;
-        let minimumAdditionalExtension = (vertical) ? delegate.minimumWidth+5.0 : delegate.minimumHeight+5.0;
-    
-        let alert = NSAlert.alertForMinimumSplitAdditionalExtension(minimumAdditionalExtension,
-                                                                    currentExtension: currentExtension,
-                                                                    maximumExtension: maximumExtension,
-                                                                    vertical: vertical)
+        let alert = NSAlert.alert(forMinimumAdditionalExtension: self.minimumExtent(self.vertical),
+                                  currentExtent: self.currentExtent(self.vertical),
+                                  maximumExtent: self.maximumExtent(self.vertical),
+                                  vertical: self.vertical)
     
         alert.beginSheetModalForWindow(self.window!, completionHandler: { (returnCode) in
             if alert.suppressionButton?.state == NSOnState {
@@ -200,26 +188,30 @@ public class PressureSplitView : NSSplitView {
             }
             
             if (returnCode == NSAlertSecondButtonReturn) {
-                let deltaExtension = 2.0*minimumAdditionalExtension
-                var newWindowFrame = self.window!.contentRectForFrameRect(self.window!.frame)
-    
-                if (vertically) {
-                    newWindowFrame.origin.x -= deltaExtension/2.0
-                    newWindowFrame.size.width += deltaExtension
-                }
-                else {
-                    newWindowFrame.origin.y -= deltaExtension/2.0
-                    newWindowFrame.size.height += deltaExtension
-                }
-    
-                newWindowFrame = self.window!.frameRectForContentRect(newWindowFrame)
-    
-                NSAnimationContext.currentContext().completionHandler = {
-                    self.splitPaneView(paneView, vertically: vertically)
-                }
-                self.window!.setFrame(newWindowFrame, display:true, animate:true)
+                self.expandWindowAndSplit(paneView: paneView, vertically: vertically)
             }
         })
+    }
+    
+    private func expandWindowAndSplit(paneView pane: PaneView, vertically: Bool) {
+        let deltaExtension = self.minimumExtent(self.vertical) // WARN: 2?
+        var newWindowFrame = self.window!.contentRectForFrameRect(self.window!.frame)
+        
+        if (vertically) {
+            newWindowFrame.origin.x -= deltaExtension/2.0
+            newWindowFrame.size.width += deltaExtension
+        }
+        else {
+            newWindowFrame.origin.y -= deltaExtension/2.0
+            newWindowFrame.size.height += deltaExtension
+        }
+        
+        newWindowFrame = self.window!.frameRectForContentRect(newWindowFrame)
+        
+        NSAnimationContext.currentContext().completionHandler = {
+            self.splitPaneView(pane, vertically: vertically)
+        }
+        self.window!.setFrame(newWindowFrame, display:true, animate:true)
     }
 
     private func splitPaneView(paneView: PaneView, vertically: Bool) {
