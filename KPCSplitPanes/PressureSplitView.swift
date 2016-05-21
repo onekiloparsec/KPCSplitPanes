@@ -309,21 +309,21 @@ public class PressureSplitView : NSSplitView {
 // MARK: Alert
 
 private extension NSAlert {
-    static func alertForMinimumSplitAdditionalExtension(minimumAdditionalExtension: CGFloat,
-                                                        currentExtension: CGFloat,
-                                                        maximumExtension: CGFloat,
-                                                        vertical: Bool) -> NSAlert
+    static func alert(forMinimumAdditionalExtension additionalExtension: CGFloat,
+                                                    currentExtent: CGFloat,
+                                                    maximumExtent: CGFloat,
+                                                    vertical: Bool) -> NSAlert
     {
         let direction = (vertical) ? "horizontally" : "vertically"
         let extensionName = (vertical) ? "width" : "height"
         
         let informativeText = NSMutableString()
-        informativeText.appendFormat(NSLocalizedString("A new pane requires a minimum of \(minimumAdditionalExtension) additional points \(direction).", comment: ""))
+        informativeText.appendFormat(NSLocalizedString("A new pane requires a minimum of \(additionalExtension) additional points \(direction).", comment: ""))
         informativeText.appendString(" ")
-        informativeText.appendFormat(NSLocalizedString("The current view has a \(extensionName) of \(currentExtension) points.", comment: ""))
+        informativeText.appendFormat(NSLocalizedString("The current view has a \(extensionName) of \(currentExtent) points.", comment: ""))
         
         informativeText.appendString(" ")
-        informativeText.appendFormat(NSLocalizedString("And it can extends to a maximum of \(maximumExtension) points (accounting for window borders).", comment: ""))
+        informativeText.appendFormat(NSLocalizedString("And it can extends to a maximum of \(maximumExtent) points (accounting for window borders).", comment: ""))
         
         let alert = NSAlert()
         alert.messageText = NSLocalizedString("Not enough room to split.", comment: "")
@@ -331,7 +331,7 @@ private extension NSAlert {
         alert.showsSuppressionButton = true
         alert.addButtonWithTitle(NSLocalizedString("OK", comment: ""))
         
-        if (currentExtension + minimumAdditionalExtension < maximumExtension) {
+        if (currentExtent + additionalExtension < maximumExtent) {
             alert.addButtonWithTitle(NSLocalizedString("Adjust window automatically", comment: ""))
         }
         
