@@ -8,7 +8,7 @@
 
 import AppKit
 
-let PressureSplitViewSplitSizeWarningShowAgainKey = "PressureSplitViewSplitSizeWarningShowAgainKey"
+public let PressureSplitViewSplitSizeWarningShowAgainKey = "PressureSplitViewSplitSizeWarningShowAgainKey"
 
 public class PressureSplitView : NSSplitView {
     
