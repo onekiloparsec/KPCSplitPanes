@@ -53,7 +53,14 @@ public class PressureSplitView : NSSplitView {
     override public class func requiresConstraintBasedLayout() -> Bool {
         return false
     }
-        
+    
+    public override func viewDidMoveToWindow() {
+        super.viewDidMoveToWindow()
+        if (self.selectedPaneView == nil) {
+            self.select(paneView: self.lastSubPaneView())
+        }
+    }
+    
     // MARK: - Selection
 
     public override func mouseUp(theEvent: NSEvent) {
@@ -65,6 +72,7 @@ public class PressureSplitView : NSSplitView {
     private func select(paneView pane: PaneView?) {
         self.selectedPaneView = pane
         for subPaneView in self.allSubPaneViews() { subPaneView.select(subPaneView == pane) }
+        self.window?.makeFirstResponder(pane)
     }
     
     // MARK: - Adding & Removing Subviews
@@ -145,9 +153,19 @@ public class PressureSplitView : NSSplitView {
             alert.addButtonWithTitle(NSLocalizedString("I confirm, close it.", comment: ""))
             alert.beginSheetModalForWindow(self.window!, completionHandler: { (returnCode) in
                 if (returnCode == NSAlertSecondButtonReturn) {
-                    pane.removeFromSuperview()
+                    self.remove(paneView: pane)
                 }
             })
+        }
+        else {
+            self.remove(paneView: pane)
+        }
+    }
+    
+    private func remove(paneView pane: PaneView) {
+        let parentSplitView = pane.parentSplitView()
+        if parentSplitView?.allSubPaneViews().count == 1 {
+            parentSplitView?.removeFromSuperview()
         }
         else {
             pane.removeFromSuperview()
@@ -289,7 +307,7 @@ public class PressureSplitView : NSSplitView {
 //            self.setPosition(pos, ofDividerAtIndex: newPaneViewIndex)
         }
         
-//        newSplitView.window?.makeFirstResponder(newPaneView)
+        newSplitView.window?.makeFirstResponder(newPaneView)
     }
     
     // MARK: - Helpers
@@ -304,6 +322,14 @@ public class PressureSplitView : NSSplitView {
         return self.subviews.filter({ $0.isKindOfClass(PaneView) }) as! [PaneView]
     }
     
+    private func lastSubPaneView() -> PaneView {
+        return self.allSubPaneViews().sort({ (first, second) -> Bool in
+            return (self.vertical) ?
+                (CGRectGetMaxX(first.frame) < CGRectGetMaxX(second.frame)) :
+                (CGRectGetMaxY(first.frame) < CGRectGetMaxY(second.frame))
+        }).last!
+    }
+    
     private func indexOfPaneView(paneView: PaneView) -> Int {
         let sortedSubviews = self.allNonDividerSubviews().sort( { (firstView, secondView) -> Bool in
             let v1 = (self.vertical) ? CGRectGetMinX(firstView.frame) : CGRectGetMinY(firstView.frame)
@@ -314,6 +340,7 @@ public class PressureSplitView : NSSplitView {
     }
 }
 
+// MARK: Alert
 
 private extension NSAlert {
     static func alertForMinimumSplitAdditionalExtension(minimumAdditionalExtension: CGFloat,
