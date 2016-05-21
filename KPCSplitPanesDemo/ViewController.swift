@@ -17,6 +17,7 @@ class ViewController: NSViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         NSUserDefaults.standardUserDefaults().setBool(true, forKey: "NSConstraintBasedLayoutVisualizeMutuallyExclusiveConstraints")
+        NSUserDefaults.standardUserDefaults().removeObjectForKey(PressureSplitViewSplitSizeWarningShowAgainKey)
         self.splitView?.delegate = self.splitViewDelegate
     }
 }
