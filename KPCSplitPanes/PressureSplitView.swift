@@ -14,10 +14,7 @@ public class PressureSplitView : NSSplitView {
     
     public var useHorizontalSplitAsDefault = true
     public private(set) var selectedPaneView: NSView?
-    
-    private var verticalPressure: Int = 0
-    private var horizontalPressure: Int = 0
-    
+        
     // MARK: - Constructors
     
     required public init?(coder: NSCoder) {
@@ -38,7 +35,6 @@ public class PressureSplitView : NSSplitView {
         self.arrangesAllSubviews = true
     }
     
-        
     // MARK: - Overrides
     
     override public var postsFrameChangedNotifications: Bool {
@@ -54,97 +50,64 @@ public class PressureSplitView : NSSplitView {
         return false
     }
     
-    public override func viewDidMoveToWindow() {
+    override public func viewDidMoveToWindow() {
         super.viewDidMoveToWindow()
         if (self.selectedPaneView == nil) {
-            self.select(paneView: self.lastSubPaneView())
+            self.select(paneView: self.lastPaneSubview())
         }
     }
     
     // MARK: - Selection
 
-    public override func mouseUp(theEvent: NSEvent) {
+    override public func mouseUp(theEvent: NSEvent) {
         let downPoint = self.convertPoint(theEvent.locationInWindow, fromView:nil)
-        self.select(paneView: self.allSubPaneViews().filter({ NSPointInRect(downPoint, $0.frame) }).first)
+        let clickedSubviews = self.paneSubviews().filter({ NSPointInRect(downPoint, $0.frame) })
+        if clickedSubviews.count == 1 && clickedSubviews.first!.isKindOfClass(PaneView) {
+            self.select(paneView: clickedSubviews.first! as PaneView)
+        }
         super.mouseUp(theEvent)
     }
     
     private func select(paneView pane: PaneView?) {
         self.selectedPaneView = pane
-        for subPaneView in self.allSubPaneViews() { subPaneView.select(subPaneView == pane) }
-        self.window?.makeFirstResponder(pane)
+        for paneSubview in self.paneSubviews() {
+            paneSubview.select(paneSubview == pane)
+        }
+        if pane != nil {
+            self.window?.makeFirstResponder(pane)
+        }
     }
     
     // MARK: - Adding & Removing Subviews
 
-    public func canAddSubview(vertically: Bool) -> Bool {
+    private func pressure(vertically: Bool) -> Int {
+        return (vertically == self.vertical) ? max(self.subviews.count, 1) : 1
+    }
+    
+    private func minimumExtent(vertically: Bool) -> CGFloat {
         guard self.delegate != nil, let delegate = self.delegate as! PressureSplitViewDelegate? else {
-            return true
+            return 1
         }
-        
-        let viewCount = max(1, (vertically == true) ? self.horizontalPressure : self.verticalPressure)
-        let minimumCurrentExtension = CGFloat(viewCount) * ((vertically == true) ? delegate.minimumWidth : delegate.minimumHeight)
-        let minimumAdditionalExtension = (vertically == true) ? delegate.minimumWidth : delegate.minimumHeight;
-        let currentExtension = (vertically == true) ? CGRectGetWidth(self.frame) : CGRectGetHeight(self.frame);
-        
-        return (currentExtension - minimumCurrentExtension >= minimumAdditionalExtension);
-    }
-
-    override public func addSubview(view: NSView) {
-        super.addSubview(view);
-        if view.isKindOfClass(PaneView) {
-            self.updatePressuresWithView(view, sign:1);
-        }
-    }
-
-    override public func addSubview(view: NSView, positioned place: NSWindowOrderingMode, relativeTo otherView: NSView?) {
-        super.addSubview(view, positioned: place, relativeTo: otherView)
-        if view.isKindOfClass(PaneView) {
-            self.updatePressuresWithView(view, sign: 1);
-        }
+        return (vertically == true) ? delegate.minimumWidth : delegate.minimumHeight
     }
     
-    override public func addArrangedSubview(view: NSView) {
-        super.addArrangedSubview(view)
-        if view.isKindOfClass(PaneView) {
-            self.updatePressuresWithView(view, sign: 1)
-        }
+    private func currentExtent(vertically: Bool) -> CGFloat {
+        return (vertically == true) ? CGRectGetWidth(self.frame) : CGRectGetHeight(self.frame);
     }
     
-    override public func insertArrangedSubview(view: NSView, atIndex index: Int) {
-        super.insertArrangedSubview(view, atIndex: index)
-        if view.isKindOfClass(PaneView) {
-            self.updatePressuresWithView(view, sign: 1)
-        }
+    private func maximumScreenRect() -> NSRect {
+        return self.window!.contentRectForFrameRect(self.window!.screen!.frame)
     }
     
-    private func updatePressuresWithView(view: NSView, sign: Int) {
-        // I'm sure there must be something a lot simpler for this.
-        if (self.vertical) {
-            self.horizontalPressure += sign
-            if view.isKindOfClass(NSSplitView) {
-                let sv = view as! NSSplitView
-                self.verticalPressure += sign*sv.subviews.count
-            }
-        }
-        else {
-            self.verticalPressure += sign
-            if view.isKindOfClass(NSSplitView) {
-                let sv = view as! NSSplitView
-                self.horizontalPressure += sign*sv.subviews.count
-            }
-        }
+    private func maximumExtent(vertically: Bool) -> CGFloat {
+        let rect = self.maximumScreenRect()
+        return (self.vertical) ? CGRectGetWidth(rect) : CGRectGetHeight(rect)
     }
     
-    override public func removeArrangedSubview(view: NSView) {
-        super.removeArrangedSubview(view)
-        self.updatePressuresWithView(view, sign: -1)
-    }
+    // MARK: - Close
 
-    // MARK: - Close & Split
-
-    func close(paneView pane: PaneView) {
-        if self.allSubPaneViews().count == 1 {
+    public func close(paneView pane: PaneView) -> Void {
+        if self.paneSubviews().count == 1 {
             let alert = NSAlert()
             alert.alertStyle = .WarningAlertStyle
             alert.messageText = NSLocalizedString("Be careful!", comment: "")
@@ -163,16 +126,29 @@ public class PressureSplitView : NSSplitView {
     }
     
     private func remove(paneView pane: PaneView) {
-        let parentSplitView = pane.parentSplitView()
-        if parentSplitView?.allSubPaneViews().count == 1 {
-            parentSplitView?.removeFromSuperview()
+        if pane.parentSplitView()?.paneSubviews().count == 1 {
+            pane.parentSplitView()?.removeFromSuperview()
         }
         else {
             pane.removeFromSuperview()
         }
     }
     
-    func split(paneView pane: PaneView) {
+    // MARK: - Split
+
+    private func splitShouldBeVertical() -> Bool {
+        let theEvent = NSApp.currentEvent
+        let optionsKey = NSEventModifierFlags(rawValue: theEvent!.modifierFlags.rawValue & NSEventModifierFlags.AlternateKeyMask.rawValue)
+        let useAlt = (optionsKey == .AlternateKeyMask)
+        return (useAlt == false && self.useHorizontalSplitAsDefault == false) || (useAlt == true && self.useHorizontalSplitAsDefault == true)
+    }
+    
+    private func canAddSubview() -> Bool {
+        let v = self.splitShouldBeVertical()
+        return (self.currentExtent(v) - CGFloat(self.pressure(v))*self.minimumExtent(v) >= self.minimumExtent(v));
+    }
+    
+    public func split(paneView pane: PaneView) {
         let mask = self.window?.styleMask;
         if (mask ==  NSFullScreenWindowMask || mask == NSFullSizeContentViewWindowMask) {
             NSBeep();
@@ -183,7 +159,7 @@ public class PressureSplitView : NSSplitView {
         let optionsKey = NSEventModifierFlags(rawValue: theEvent!.modifierFlags.rawValue & NSEventModifierFlags.AlternateKeyMask.rawValue)
         let vertical = (optionsKey == .AlternateKeyMask)
         
-        if self.canAddSubview(vertical) == true {
+        if self.canAddSubview() == true {
             self.splitPaneView(pane, vertically: vertical)
         }
         else {
@@ -254,7 +230,7 @@ public class PressureSplitView : NSSplitView {
         }
         
         let newPaneView = PaneView.newPaneView()
-        let newPaneViewIndex = self.indexOfPaneView(paneView)+1
+        let newPaneViewIndex = self.indexOfPaneView(paneView)!+1
         
         let newSplitView = PressureSplitView()
         newSplitView.delegate = self.delegate
@@ -265,9 +241,9 @@ public class PressureSplitView : NSSplitView {
             newSplitView.frame = self.frame
             self.superview?.addSubview(newSplitView)
             
-            for view in self.allNonDividerSubviews() {
+            for view in self.paneSubviews() {
                 view.removeFromSuperview()
-                newSplitView.addSubview(view)
+                newSplitView.addArrangedSubview(view)
             }
             
             newSplitView.insertArrangedSubview(newPaneView, atIndex: newPaneViewIndex)
@@ -312,31 +288,21 @@ public class PressureSplitView : NSSplitView {
     
     // MARK: - Helpers
     
-    private func allNonDividerSubviews() -> [NSView] {
-        // Some pane views can be splitviews themselves, if horizontal|vertical split has been
-        // embedded inside a vertical|horizontal pane.
-        return self.subviews.filter({ $0.isKindOfClass(PaneView) || $0.isKindOfClass(PressureSplitView) })
-    }
-    
-    private func allSubPaneViews() -> [PaneView] {
-        return self.subviews.filter({ $0.isKindOfClass(PaneView) }) as! [PaneView]
-    }
-    
-    private func lastSubPaneView() -> PaneView {
-        return self.allSubPaneViews().sort({ (first, second) -> Bool in
+    // Consider both PaneViews and PressureSplitViews (to also count perpendicular splits).
+    private func paneSubviews() -> [PaneView] {
+        return self.subviews.filter({ $0.isKindOfClass(PaneView) }).sort({ (first, second) -> Bool in
             return (self.vertical) ?
                 (CGRectGetMaxX(first.frame) < CGRectGetMaxX(second.frame)) :
                 (CGRectGetMaxY(first.frame) < CGRectGetMaxY(second.frame))
-        }).last!
+        }) as! [PaneView]
     }
     
-    private func indexOfPaneView(paneView: PaneView) -> Int {
-        let sortedSubviews = self.allNonDividerSubviews().sort( { (firstView, secondView) -> Bool in
-            let v1 = (self.vertical) ? CGRectGetMinX(firstView.frame) : CGRectGetMinY(firstView.frame)
-            let v2 = (self.vertical) ? CGRectGetMinX(secondView.frame) : CGRectGetMinY(secondView.frame)
-            return v1 < v2
-        })
-        return sortedSubviews.indexOf(paneView)!
+    private func lastPaneSubview() -> PaneView? {
+        return self.paneSubviews().last
+    }
+    
+    private func indexOfPaneView(paneView: PaneView) -> Int? {
+        return self.paneSubviews().indexOf(paneView)
     }
 }
 
