@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
-<document type="com.apple.InterfaceBuilder3.Cocoa.XIB" version="3.0" toolsVersion="10117" systemVersion="15E65" targetRuntime="MacOSX.Cocoa" propertyAccessControl="none" customObjectInstantitationMethod="direct">
+<document type="com.apple.InterfaceBuilder3.Cocoa.XIB" version="3.0" toolsVersion="10117" systemVersion="15F34" targetRuntime="MacOSX.Cocoa" propertyAccessControl="none" useAutolayout="YES" customObjectInstantitationMethod="direct">
     <dependencies>
         <deployment identifier="macosx"/>
         <plugIn identifier="com.apple.InterfaceBuilder.CocoaPlugin" version="10117"/>
@@ -12,23 +12,35 @@
             <rect key="frame" x="0.0" y="0.0" width="200" height="200"/>
             <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
             <subviews>
-                <button verticalHuggingPriority="750" id="tK5-ax-UaU">
+                <button verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="tK5-ax-UaU">
                     <rect key="frame" x="176" y="176" width="24" height="24"/>
-                    <autoresizingMask key="autoresizingMask" flexibleMinX="YES" flexibleMinY="YES"/>
+                    <constraints>
+                        <constraint firstAttribute="height" constant="24" id="P6J-fd-SbS"/>
+                        <constraint firstAttribute="width" constant="24" id="YVj-oB-EsJ"/>
+                    </constraints>
                     <buttonCell key="cell" type="square" bezelStyle="shadowlessSquare" imagePosition="only" alignment="center" state="on" imageScaling="proportionallyDown" inset="2" id="VTT-by-TQB">
                         <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
                         <font key="font" metaFont="system"/>
                     </buttonCell>
                 </button>
-                <button verticalHuggingPriority="750" id="x0f-kM-jaf">
+                <button verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="x0f-kM-jaf">
                     <rect key="frame" x="152" y="176" width="24" height="24"/>
-                    <autoresizingMask key="autoresizingMask" flexibleMinX="YES" flexibleMinY="YES"/>
+                    <constraints>
+                        <constraint firstAttribute="width" constant="24" id="6oN-3z-5h1"/>
+                        <constraint firstAttribute="height" constant="24" id="iii-re-nDS"/>
+                    </constraints>
                     <buttonCell key="cell" type="square" bezelStyle="shadowlessSquare" imagePosition="only" alignment="center" state="on" imageScaling="proportionallyDown" inset="2" id="FbH-Pu-fx9">
                         <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
                         <font key="font" metaFont="system"/>
                     </buttonCell>
                 </button>
             </subviews>
+            <constraints>
+                <constraint firstItem="tK5-ax-UaU" firstAttribute="top" secondItem="zqd-8h-Xfj" secondAttribute="top" id="76Z-05-LIO"/>
+                <constraint firstItem="tK5-ax-UaU" firstAttribute="leading" secondItem="x0f-kM-jaf" secondAttribute="trailing" id="Jew-Yk-iL0"/>
+                <constraint firstAttribute="trailing" secondItem="tK5-ax-UaU" secondAttribute="trailing" id="Tcz-mz-XtT"/>
+                <constraint firstItem="x0f-kM-jaf" firstAttribute="top" secondItem="zqd-8h-Xfj" secondAttribute="top" id="u3Z-lV-GSq"/>
+            </constraints>
             <connections>
                 <outlet property="closeButton" destination="tK5-ax-UaU" id="CPg-gZ-H8V"/>
                 <outlet property="splitButton" destination="x0f-kM-jaf" id="4Lc-bp-YKh"/>

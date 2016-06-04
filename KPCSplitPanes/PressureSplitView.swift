@@ -30,7 +30,7 @@ public class PressureSplitView : NSSplitView {
     private func setup() {
         self.dividerStyle = .Thin
         self.autoresizesSubviews = true
-        self.translatesAutoresizingMaskIntoConstraints = false
+        self.translatesAutoresizingMaskIntoConstraints = true
         self.autoresizingMask = [.ViewWidthSizable, .ViewHeightSizable]
         self.arrangesAllSubviews = true
     }
@@ -47,7 +47,7 @@ public class PressureSplitView : NSSplitView {
     }
     
     override public class func requiresConstraintBasedLayout() -> Bool {
-        return false
+        return true
     }
     
     override public func viewDidMoveToWindow() {
@@ -108,12 +108,7 @@ public class PressureSplitView : NSSplitView {
 
     public func close(paneView pane: PaneView) -> Void {
         if self.paneSubviews().count == 1 {
-            let alert = NSAlert()
-            alert.alertStyle = .WarningAlertStyle
-            alert.messageText = NSLocalizedString("Be careful!", comment: "")
-            alert.informativeText = NSLocalizedString("This is the last pane of the split view. Do you confirm you want to close it?", comment: "")
-            alert.addButtonWithTitle(NSLocalizedString("Cancel", comment: ""))
-            alert.addButtonWithTitle(NSLocalizedString("I confirm, close it.", comment: ""))
+            let alert = NSAlert.alertForLastPane()
             alert.beginSheetModalForWindow(self.window!, completionHandler: { (returnCode) in
                 if (returnCode == NSAlertSecondButtonReturn) {
                     self.remove(paneView: pane)
@@ -131,16 +126,15 @@ public class PressureSplitView : NSSplitView {
         }
         else {
             pane.removeFromSuperview()
+            self.adjustSubviews()
         }
     }
     
     // MARK: - Split
 
-    private func splitShouldBeVertical() -> Bool {
-        let theEvent = NSApp.currentEvent
-        let optionsKey = NSEventModifierFlags(rawValue: theEvent!.modifierFlags.rawValue & NSEventModifierFlags.AlternateKeyMask.rawValue)
-        let useAlt = (optionsKey == .AlternateKeyMask)
-        return (useAlt == false && self.useHorizontalSplitAsDefault == false) || (useAlt == true && self.useHorizontalSplitAsDefault == true)
+    public func splitShouldBeVertical() -> Bool {
+        let useAlt = NSApp.currentEvent?.hasAltKeyPressed()
+        return (useAlt == self.useHorizontalSplitAsDefault)
     }
     
     private func canAddSubview() -> Bool {
@@ -155,18 +149,17 @@ public class PressureSplitView : NSSplitView {
             return;
         }
         
-        let theEvent = NSApp.currentEvent;
-        let optionsKey = NSEventModifierFlags(rawValue: theEvent!.modifierFlags.rawValue & NSEventModifierFlags.AlternateKeyMask.rawValue)
-        let vertical = (optionsKey == .AlternateKeyMask)
+        let vertical = self.splitShouldBeVertical()
         
         if self.canAddSubview() == true {
             self.splitPaneView(pane, vertically: vertical)
         }
         else {
-            if NSUserDefaults.standardUserDefaults().valueForKey(PressureSplitViewSplitSizeWarningShowAgainKey) == nil {
-                NSUserDefaults.standardUserDefaults().setBool(true, forKey: PressureSplitViewSplitSizeWarningShowAgainKey)
+            let sud = NSUserDefaults.standardUserDefaults()
+            if sud.valueForKey(PressureSplitViewSplitSizeWarningShowAgainKey) == nil {
+                sud.setBool(true, forKey: PressureSplitViewSplitSizeWarningShowAgainKey)
             }
-            if NSUserDefaults.standardUserDefaults().boolForKey(PressureSplitViewSplitSizeWarningShowAgainKey) {
+            if sud.boolForKey(PressureSplitViewSplitSizeWarningShowAgainKey) {
                 self.showSplitSizeWarningAlert(pane, vertically: vertical)
             }
             else {
@@ -234,8 +227,10 @@ public class PressureSplitView : NSSplitView {
             self.superview?.addSubview(newSplitView)
             
             for view in self.paneSubviews() {
+                let constraints = view.constraints
                 view.removeFromSuperview()
                 newSplitView.addArrangedSubview(view)
+                view.addConstraints(constraints)
             }
             
             newSplitView.insertArrangedSubview(newPaneView, atIndex: newPaneViewIndex)
@@ -298,35 +293,3 @@ public class PressureSplitView : NSSplitView {
     }
 }
 
-// MARK: Alert
-
-private extension NSAlert {
-    static func alert(forMinimumAdditionalExtension additionalExtension: CGFloat,
-                                                    currentExtent: CGFloat,
-                                                    maximumExtent: CGFloat,
-                                                    vertical: Bool) -> NSAlert
-    {
-        let direction = (vertical) ? "horizontally" : "vertically"
-        let extensionName = (vertical) ? "width" : "height"
-        
-        let informativeText = NSMutableString()
-        informativeText.appendFormat(NSLocalizedString("A new pane requires a minimum of \(additionalExtension) additional points \(direction).", comment: ""))
-        informativeText.appendString(" ")
-        informativeText.appendFormat(NSLocalizedString("The current view has a \(extensionName) of \(currentExtent) points.", comment: ""))
-        
-        informativeText.appendString(" ")
-        informativeText.appendFormat(NSLocalizedString("And it can extends to a maximum of \(maximumExtent) points (accounting for window borders).", comment: ""))
-        
-        let alert = NSAlert()
-        alert.messageText = NSLocalizedString("Not enough room to split.", comment: "")
-        alert.informativeText = informativeText as String
-        alert.showsSuppressionButton = true
-        alert.addButtonWithTitle(NSLocalizedString("OK", comment: ""))
-        
-        if (currentExtent + additionalExtension < maximumExtent) {
-            alert.addButtonWithTitle(NSLocalizedString("Adjust window automatically", comment: ""))
-        }
-        
-        return alert
-    }
-}

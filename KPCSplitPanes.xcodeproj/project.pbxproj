@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		9F0FAF891D02FD1800CE1B61 /* Helpers.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9F0FAF881D02FD1800CE1B61 /* Helpers.swift */; };
 		9FD7603B1CE9D22C007EE7CB /* CloseDeselected@1x.png in Resources */ = {isa = PBXBuildFile; fileRef = 9FD760291CE9D22C007EE7CB /* CloseDeselected@1x.png */; };
 		9FD7603C1CE9D22C007EE7CB /* CloseDeselected@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 9FD7602A1CE9D22C007EE7CB /* CloseDeselected@2x.png */; };
 		9FD7603D1CE9D22C007EE7CB /* CloseDeselected@3x.png in Resources */ = {isa = PBXBuildFile; fileRef = 9FD7602B1CE9D22C007EE7CB /* CloseDeselected@3x.png */; };
@@ -62,6 +63,7 @@
 /* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
+		9F0FAF881D02FD1800CE1B61 /* Helpers.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Helpers.swift; sourceTree = "<group>"; };
 		9FD760291CE9D22C007EE7CB /* CloseDeselected@1x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "CloseDeselected@1x.png"; path = "Resources/CloseDeselected@1x.png"; sourceTree = "<group>"; };
 		9FD7602A1CE9D22C007EE7CB /* CloseDeselected@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "CloseDeselected@2x.png"; path = "Resources/CloseDeselected@2x.png"; sourceTree = "<group>"; };
 		9FD7602B1CE9D22C007EE7CB /* CloseDeselected@3x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "CloseDeselected@3x.png"; path = "Resources/CloseDeselected@3x.png"; sourceTree = "<group>"; };
@@ -191,6 +193,7 @@
 				9FFEB7BE1CE218AC00F861D9 /* PressureSplitView.swift */,
 				9FDD23151CE314290038EA59 /* PressureSplitViewDelegate.swift */,
 				9FED92F71CE7293100AB8F71 /* PaneView.xib */,
+				9F0FAF881D02FD1800CE1B61 /* Helpers.swift */,
 			);
 			path = KPCSplitPanes;
 			sourceTree = "<group>";
@@ -337,6 +340,7 @@
 				9FFEB7BD1CE2186C00F861D9 /* PaneView.swift in Sources */,
 				9FDD23161CE314290038EA59 /* PressureSplitViewDelegate.swift in Sources */,
 				9FFEB7BF1CE218AC00F861D9 /* PressureSplitView.swift in Sources */,
+				9F0FAF891D02FD1800CE1B61 /* Helpers.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

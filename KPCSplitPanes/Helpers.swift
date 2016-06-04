@@ -1,0 +1,62 @@
+//
+//  Helpers.swift
+//  KPCSplitPanes
+//
+//  Created by Cédric Foellmi on 04/06/16.
+//  Copyright © 2016 onekiloparsec. All rights reserved.
+//
+
+import Foundation
+import AppKit
+
+
+extension NSEvent {
+    func hasAltKeyPressed() -> Bool {
+        let optionsKey = NSEventModifierFlags(rawValue: self.modifierFlags.rawValue & NSEventModifierFlags.AlternateKeyMask.rawValue)
+        return (optionsKey == .AlternateKeyMask)
+    }
+}
+
+// MARK: Alert
+
+extension NSAlert {
+    static func alert(forMinimumAdditionalExtension additionalExtension: CGFloat,
+                                                    currentExtent: CGFloat,
+                                                    maximumExtent: CGFloat,
+                                                    vertical: Bool) -> NSAlert
+    {
+        let direction = (vertical) ? "horizontally" : "vertically"
+        let extensionName = (vertical) ? "width" : "height"
+        
+        let informativeText = NSMutableString()
+        informativeText.appendFormat(NSLocalizedString("A new pane requires a minimum of \(additionalExtension) additional points \(direction).", comment: ""))
+        informativeText.appendString(" ")
+        informativeText.appendFormat(NSLocalizedString("The current view has a \(extensionName) of \(currentExtent) points.", comment: ""))
+        
+        informativeText.appendString(" ")
+        informativeText.appendFormat(NSLocalizedString("And it can extends to a maximum of \(maximumExtent) points (accounting for window borders).", comment: ""))
+        
+        let alert = NSAlert()
+        alert.messageText = NSLocalizedString("Not enough room to split.", comment: "")
+        alert.informativeText = informativeText as String
+        alert.showsSuppressionButton = true
+        alert.addButtonWithTitle(NSLocalizedString("OK", comment: ""))
+        
+        if (currentExtent + additionalExtension < maximumExtent) {
+            alert.addButtonWithTitle(NSLocalizedString("Adjust window automatically", comment: ""))
+        }
+        
+        return alert
+    }
+    
+    static func alertForLastPane() -> NSAlert {
+        let alert = NSAlert()
+        alert.alertStyle = .WarningAlertStyle
+        alert.messageText = NSLocalizedString("Be careful!", comment: "")
+        alert.informativeText = NSLocalizedString("This is the last pane of the split view. Do you confirm you want to close it?", comment: "")
+        alert.addButtonWithTitle(NSLocalizedString("Cancel", comment: ""))
+        alert.addButtonWithTitle(NSLocalizedString("I confirm, close it.", comment: ""))
+        return alert
+    }
+}
+

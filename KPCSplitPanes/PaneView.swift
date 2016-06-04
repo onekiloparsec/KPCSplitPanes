@@ -18,7 +18,7 @@ public class PaneView : NSView {
         NSBundle(forClass: self).loadNibNamed("PaneView", owner: self, topLevelObjects: &topLevels)
         let pv = topLevels!.filter({ $0.isKindOfClass(PaneView) })[0] as! PaneView
         pv.autoresizesSubviews = true
-        pv.translatesAutoresizingMaskIntoConstraints = false
+        pv.translatesAutoresizingMaskIntoConstraints = true
         pv.autoresizingMask = [.ViewWidthSizable, .ViewHeightSizable]
         return pv
     }
@@ -28,7 +28,7 @@ public class PaneView : NSView {
     }
 
     override public class func requiresConstraintBasedLayout() -> Bool {
-        return false
+        return true
     }
         
     override public func viewDidMoveToWindow() {
@@ -58,12 +58,12 @@ public class PaneView : NSView {
     }
     
     override public func flagsChanged(theEvent: NSEvent) {
-        let optionsKey = NSEventModifierFlags(rawValue: theEvent.modifierFlags.rawValue & NSEventModifierFlags.AlternateKeyMask.rawValue)
-        let useAlt = (optionsKey == .AlternateKeyMask)
-        let defaultHorizontal = self.parentSplitView()?.useHorizontalSplitAsDefault == true
-        let horizontal = (useAlt == false && defaultHorizontal == true) || (useAlt == true && defaultHorizontal == false)
-        let selected = (self.parentSplitView()?.selectedPaneView == self)
-        self.splitButton?.image = PaneView.splitIcon(horizontal, selected: selected)
+        super.flagsChanged(theEvent)
+        if let parentSplitView = self.parentSplitView() {
+            let horizontal = parentSplitView.splitShouldBeVertical() == false
+            let selected = (parentSplitView.selectedPaneView == self)
+            self.splitButton?.image = PaneView.splitIcon(horizontal, selected: selected)
+        }
     }
     
     // MARK: Helpers
