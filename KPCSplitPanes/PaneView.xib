@@ -34,18 +34,30 @@
                         <font key="font" metaFont="system"/>
                     </buttonCell>
                 </button>
+                <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="fLb-oo-1J6">
+                    <rect key="frame" x="18" y="91" width="164" height="17"/>
+                    <textFieldCell key="cell" scrollable="YES" lineBreakMode="clipping" sendsActionOnEndEditing="YES" alignment="center" title="Label" id="eqv-3R-W5s">
+                        <font key="font" metaFont="system"/>
+                        <color key="textColor" name="secondaryLabelColor" catalog="System" colorSpace="catalog"/>
+                        <color key="backgroundColor" name="controlColor" catalog="System" colorSpace="catalog"/>
+                    </textFieldCell>
+                </textField>
             </subviews>
             <constraints>
+                <constraint firstItem="fLb-oo-1J6" firstAttribute="leading" secondItem="zqd-8h-Xfj" secondAttribute="leading" constant="20" id="5R3-Dl-yG8"/>
                 <constraint firstItem="tK5-ax-UaU" firstAttribute="top" secondItem="zqd-8h-Xfj" secondAttribute="top" id="76Z-05-LIO"/>
+                <constraint firstAttribute="trailing" secondItem="fLb-oo-1J6" secondAttribute="trailing" constant="20" id="EqU-Y4-KVY"/>
                 <constraint firstItem="tK5-ax-UaU" firstAttribute="leading" secondItem="x0f-kM-jaf" secondAttribute="trailing" id="Jew-Yk-iL0"/>
+                <constraint firstItem="fLb-oo-1J6" firstAttribute="centerY" secondItem="zqd-8h-Xfj" secondAttribute="centerY" id="TLS-s4-t5K"/>
                 <constraint firstAttribute="trailing" secondItem="tK5-ax-UaU" secondAttribute="trailing" id="Tcz-mz-XtT"/>
                 <constraint firstItem="x0f-kM-jaf" firstAttribute="top" secondItem="zqd-8h-Xfj" secondAttribute="top" id="u3Z-lV-GSq"/>
             </constraints>
             <connections>
                 <outlet property="closeButton" destination="tK5-ax-UaU" id="CPg-gZ-H8V"/>
+                <outlet property="emptyPaneLabel" destination="fLb-oo-1J6" id="x7g-Bc-CRl"/>
                 <outlet property="splitButton" destination="x0f-kM-jaf" id="4Lc-bp-YKh"/>
             </connections>
-            <point key="canvasLocation" x="300.5" y="476"/>
+            <point key="canvasLocation" x="300" y="476"/>
         </customView>
     </objects>
 </document>

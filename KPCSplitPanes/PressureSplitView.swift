@@ -14,7 +14,8 @@ public class PressureSplitView : NSSplitView {
     
     public var useHorizontalSplitAsDefault = true
     public private(set) var selectedPaneView: NSView?
-        
+    public private(set) var indexPath: NSIndexPath?
+    
     // MARK: - Constructors
     
     required public init?(coder: NSCoder) {
@@ -52,6 +53,7 @@ public class PressureSplitView : NSSplitView {
     
     override public func viewDidMoveToWindow() {
         super.viewDidMoveToWindow()
+        self.masterSplitView().applyPanesIndexPaths(startingWithIndexPath: NSIndexPath(index: 0))
         if (self.selectedPaneView == nil) {
             self.select(paneView: self.lastPaneSubview())
         }
@@ -118,6 +120,8 @@ public class PressureSplitView : NSSplitView {
         else {
             self.remove(paneView: pane)
         }
+        
+        self.masterSplitView().applyPanesIndexPaths(startingWithIndexPath: NSIndexPath(index: 0))
     }
     
     private func remove(paneView pane: PaneView) {
@@ -128,6 +132,8 @@ public class PressureSplitView : NSSplitView {
             pane.removeFromSuperview()
             self.adjustSubviews()
         }
+        
+        self.masterSplitView().applyPanesIndexPaths(startingWithIndexPath: NSIndexPath(index: 0))
     }
     
     // MARK: - Split
@@ -215,7 +221,16 @@ public class PressureSplitView : NSSplitView {
         }
         
         let newPaneView = PaneView.newPaneView()
-        let newPaneViewIndex = self.indexOfPaneView(paneView)!+1
+        let newPaneViewIndex = self.indexOfPaneView(paneView)! + 1
+        let dividerIndex = max(0, self.indexOfPaneView(paneView)! - 1)
+        var dividerPosition: CGFloat = -1
+        
+        if self.indexOfPaneView(paneView)! == 0 {
+            dividerPosition = (self.vertical == true) ? CGRectGetMaxX(paneView.frame) : CGRectGetMaxY(paneView.frame)
+        }
+        else {
+            dividerPosition = (self.vertical == true) ? CGRectGetMinX(paneView.frame) : CGRectGetMinY(paneView.frame)
+        }
         
         let newSplitView = PressureSplitView()
         newSplitView.delegate = self.delegate
@@ -234,7 +249,6 @@ public class PressureSplitView : NSSplitView {
             }
             
             newSplitView.insertArrangedSubview(newPaneView, atIndex: newPaneViewIndex)
-            newSplitView.select(paneView: newPaneView)
             newSplitView.adjustSubviews()
             
             self.removeFromSuperview()
@@ -242,40 +256,47 @@ public class PressureSplitView : NSSplitView {
         else {
             // We are going into the opposite direction, replace the original pane by a splitView, 
             // replace the pane, add a new one.
-            
+
+            // First unselect any pane
+            self.select(paneView: nil)
+
+            // Prepare newSplitView and add the newPaneView to it
             newSplitView.vertical = vertically
+            newSplitView.addSubview(newPaneView)
             
             // Get side size before playing with pane views.
-            let side = (vertically) ? CGRectGetWidth(paneView.frame) : CGRectGetHeight(paneView.frame)
+            let paneViewSide = (vertically) ? CGRectGetWidth(paneView.frame) : CGRectGetHeight(paneView.frame)
 
+            // Add the newSplitView after the triggering paneView
             self.insertArrangedSubview(newSplitView, atIndex: newPaneViewIndex)
+            self.adjustSubviews()
+
+            // Remove that paneView
             paneView.removeFromSuperview()
             self.adjustSubviews()
-            self.select(paneView: nil)
-            
-            newSplitView.addSubview(paneView)
-            newSplitView.addSubview(newPaneView)
-            newSplitView.select(paneView: newPaneView)
+
+            // Re-add that paneView as first member of the newly-inserted newSplitView
+            newSplitView.insertArrangedSubview(paneView, atIndex: 0)
             
             // MUST be set before adjustSubviews
             newSplitView.frame = (vertically == true) ?
                 CGRectInset(paneView.frame, 0, self.dividerThickness) :
                 CGRectInset(paneView.frame, self.dividerThickness, 0)
 
+            // Adjust the newSplitView subviews and set the position of the new divider to the middle
             newSplitView.adjustSubviews()
-            newSplitView.setPosition(side/2.0, ofDividerAtIndex: 0)
-
-            // This is a tricky workaround to force rearrangement of subviews...
-//            let pos = (vertically == true) ? CGRectGetHeight(self.frame)/2.0 : CGRectGetWidth(self.frame)/2.0
-//            self.setPosition(pos, ofDividerAtIndex: newPaneViewIndex)
+            newSplitView.setPosition(paneViewSide/2.0, ofDividerAtIndex: 0)
+            
+            // Re-adjust the position of our own divider that has certainly wiggled around...
+            self.setPosition(dividerPosition, ofDividerAtIndex: dividerIndex)
         }
         
-        newSplitView.window?.makeFirstResponder(newPaneView)
+        newSplitView.select(paneView: newPaneView)
+        newSplitView.masterSplitView().applyPanesIndexPaths(startingWithIndexPath: NSIndexPath(index: 0))
     }
     
     // MARK: - Helpers
     
-    // Consider both PaneViews and PressureSplitViews (to also count perpendicular splits).
     private func paneSubviews() -> [PaneView] {
         return self.subviews.filter({ $0.isKindOfClass(PaneView) }).sort({ (first, second) -> Bool in
             return (self.vertical) ?
@@ -291,5 +312,44 @@ public class PressureSplitView : NSSplitView {
     private func indexOfPaneView(paneView: PaneView) -> Int? {
         return self.paneSubviews().indexOf(paneView)
     }
+
+    private func masterSplitView() -> PressureSplitView {
+        var splitView: PressureSplitView? = self
+        while splitView != nil && splitView?.parentSplitView() != nil {
+            splitView = splitView!.parentSplitView()
+        }
+        return splitView!
+    }
+    
+    private func pressureSplitViewDepth() -> Int {
+        var count = 0
+        
+        var splitView: PressureSplitView? = self
+        while splitView != nil && splitView?.parentSplitView() != nil {
+            splitView = splitView!.parentSplitView()
+            count += 1
+        }
+        
+        return count
+    }
+    
+    private func applyPanesIndexPaths(startingWithIndexPath indexPath: NSIndexPath) {
+        self.indexPath = indexPath
+        
+        var enclosedSplitViewsCount = 0
+        for (index, paneView) in self.paneSubviews().enumerate() {
+            Swift.print("--->> \(index) \(paneView)")
+            paneView.indexPath = indexPath.indexPathByAddingIndex(index)
+            paneView.emptyPaneLabel?.stringValue = "\(paneView.indexPath!)"
+            
+            // paneView has an enclosed split view.
+            if let enclosedSplitView = paneView.enclosedSplitView() {
+                let enclosedSplitViewsIndexPath = paneView.indexPath!.indexPathByAddingIndex(enclosedSplitViewsCount)
+                enclosedSplitView.applyPanesIndexPaths(startingWithIndexPath: enclosedSplitViewsIndexPath)
+                enclosedSplitViewsCount += 1
+            }
+        }
+    }
+
 }
 

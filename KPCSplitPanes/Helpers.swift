@@ -9,6 +9,15 @@
 import Foundation
 import AppKit
 
+extension NSView {    
+    func parentSplitView() -> PressureSplitView? {
+        var view: NSView? = self.superview
+        while view != nil && view?.isKindOfClass(PressureSplitView) == false {
+            view = view!.superview
+        }
+        return view as! PressureSplitView?
+    }
+}
 
 extension NSEvent {
     func hasAltKeyPressed() -> Bool {

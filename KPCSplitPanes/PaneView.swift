@@ -10,13 +10,17 @@ import AppKit
 
 public class PaneView : NSView {
     
-    @IBOutlet weak var closeButton: NSButton?
-    @IBOutlet weak var splitButton: NSButton?
+    @IBOutlet public weak var closeButton: NSButton?
+    @IBOutlet public weak var splitButton: NSButton?
+    @IBOutlet public weak var emptyPaneLabel: NSTextField?
+    
+    public internal(set) var indexPath: NSIndexPath? 
     
     static func newPaneView() -> PaneView {
         var topLevels = NSArray?()
         NSBundle(forClass: self).loadNibNamed("PaneView", owner: self, topLevelObjects: &topLevels)
-        let pv = topLevels!.filter({ $0.isKindOfClass(PaneView) })[0] as! PaneView
+        // one should deal with failure at some point...
+        let pv = topLevels!.filter({ $0.isKindOfClass(PaneView) }).first as! PaneView
         pv.autoresizesSubviews = true
         pv.translatesAutoresizingMaskIntoConstraints = true
         pv.autoresizingMask = [.ViewWidthSizable, .ViewHeightSizable]
@@ -66,16 +70,13 @@ public class PaneView : NSView {
         }
     }
     
-    // MARK: Helpers
-    
-    func parentSplitView() -> PressureSplitView? {
-        var view: NSView? = self
-        while view != nil && view?.isKindOfClass(PressureSplitView) == false {
-            view = view!.superview
+    func enclosedSplitView() -> PressureSplitView? {
+        if self.subviews.first is PressureSplitView {
+            return self.subviews.first as? PressureSplitView
         }
-        return view as! PressureSplitView?
+        return nil
     }
-    
+        
     // MARK: - Icons (some troubles using NSBundle(forClass:) in an extension)
     
     static func icon(named name: String, selected: Bool) -> NSImage {
