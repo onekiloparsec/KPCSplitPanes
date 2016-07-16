@@ -8,8 +8,8 @@
 KPCSplitPanes
 ==============
 
-A set of classes, among which a subclass of NSSplitView, that splits well and allow you to make make panes. 
-Horizontal and vertical panes can be combined.
+A smart subclass of NSSplitView, that splits well and allows you to easily add new panes, and   
+combine horizontal and vertical panes.
 
 ![Demo JumpBar](http://www.onekilopars.ec/s/KPCSplitPanesDemo.gif)
 
@@ -27,15 +27,13 @@ Usage
 
 KPCSplitPanes is a lot a work in progress right now. A demo is here to show how to use it. Basically, install
 a `NSSplitView` in your xib/storyboard, declare it as a `PressureSplitView`, build a dedicated delegate, and assign
-it to the split view.
+it to the split view (see demo)
 
 The choice between horizontal and vertical split can be toggled by pressing `Alt` key.
- 
-**It is mandatory for the container view to not use AutoLayout.**
- 
+  
 What is currently not perfect/working
 * The automatic adjustment isn't working in all cases
-* The position of the divider isn't always right
+* ~~The position of the divider isn't always right~~ (pretty good now)
 * The window can be resized whatever the split view constraints
 * I'm sure there is something else...
 
