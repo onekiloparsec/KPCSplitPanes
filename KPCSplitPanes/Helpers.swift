@@ -34,25 +34,20 @@ extension NSAlert {
                                                     maximumExtent: CGFloat,
                                                     vertical: Bool) -> NSAlert
     {
+        let alert = NSAlert()
+        alert.messageText = NSLocalizedString("Not enough room to split internally", comment: "")
+        alert.showsSuppressionButton = true
+        alert.addButtonWithTitle(NSLocalizedString("Do nothing", comment: ""))
+     
         let direction = (vertical) ? "horizontally" : "vertically"
-        let extensionName = (vertical) ? "width" : "height"
-        
         let informativeText = NSMutableString()
         informativeText.appendFormat(NSLocalizedString("A new pane requires a minimum of \(additionalExtension) additional points \(direction).", comment: ""))
         informativeText.appendString(" ")
-        informativeText.appendFormat(NSLocalizedString("The current view has a \(extensionName) of \(currentExtent) points.", comment: ""))
-        
-        informativeText.appendString(" ")
-        informativeText.appendFormat(NSLocalizedString("And it can extends to a maximum of \(maximumExtent) points (accounting for window borders).", comment: ""))
-        
-        let alert = NSAlert()
-        alert.messageText = NSLocalizedString("Not enough room to split.", comment: "")
+        informativeText.appendFormat(NSLocalizedString("Window resize is possible: there are \(maximumExtent-currentExtent) points available in this direction on this screen (accounting for window borders).", comment: ""))
         alert.informativeText = informativeText as String
-        alert.showsSuppressionButton = true
-        alert.addButtonWithTitle(NSLocalizedString("OK", comment: ""))
         
         if (currentExtent + additionalExtension < maximumExtent) {
-            alert.addButtonWithTitle(NSLocalizedString("Adjust window automatically", comment: ""))
+            alert.addButtonWithTitle(NSLocalizedString("Adjust window size automatically", comment: ""))
         }
         
         return alert
