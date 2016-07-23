@@ -10,6 +10,8 @@ import AppKit
 
 public let PressureSplitViewSplitSizeWarningShowAgainKey = "PressureSplitViewSplitSizeWarningShowAgainKey"
 
+private var once = dispatch_once_t()
+
 public class PressureSplitView : NSSplitView {
     
     public var useHorizontalSplitAsDefault = true
@@ -34,6 +36,12 @@ public class PressureSplitView : NSSplitView {
         self.translatesAutoresizingMaskIntoConstraints = true
         self.autoresizingMask = [.ViewWidthSizable, .ViewHeightSizable]
         self.arrangesAllSubviews = true
+        #if DEBUG
+        dispatch_once(&once) {
+            let sud = NSUserDefaults.standardUserDefaults()
+            sud.setBool(true, forKey: PressureSplitViewSplitSizeWarningShowAgainKey)
+        }
+        #endif
     }
     
     // MARK: - Overrides
