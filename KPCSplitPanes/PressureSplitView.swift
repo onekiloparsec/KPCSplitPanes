@@ -312,6 +312,19 @@ public class PressureSplitView : NSSplitView {
     
     // MARK: - Helpers
     
+    private func dividerPosition(forPaneView paneView: PaneView) -> CGFloat {
+        var dividerPosition: CGFloat = -1
+        
+        if self.indexOfPaneView(paneView)! == 0 {
+            dividerPosition = (self.vertical == true) ? CGRectGetMaxX(paneView.frame) : CGRectGetMaxY(paneView.frame)
+        }
+        else {
+            dividerPosition = (self.vertical == true) ? CGRectGetMinX(paneView.frame) : CGRectGetMinY(paneView.frame)
+        }
+
+        return dividerPosition
+    }
+    
     private func paneSubviews() -> [PaneView] {
         return self.subviews.filter({ $0.isKindOfClass(PaneView) }).sort({ (first, second) -> Bool in
             return (self.vertical) ?
