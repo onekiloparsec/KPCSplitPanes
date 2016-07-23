@@ -234,6 +234,7 @@ public class PressureSplitView : NSSplitView {
         
         let newSplitView = PressureSplitView()
         newSplitView.delegate = self.delegate
+        newSplitView.vertical = vertically
 
         if self.vertical == vertically {
             // We are going into the same direction, just add a new pane.
