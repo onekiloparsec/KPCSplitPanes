@@ -226,19 +226,12 @@ public class PressureSplitView : NSSplitView {
             fatalError("Parent SplitView of \(paneView) should be \(self), and it seems it is not.")
         }
         
+        let paneViewIndex = self.indexOfPaneView(paneView)!
+        let dividerPosition = self.dividerPosition(forPaneView: paneView)
+
         let newPaneView = PaneView.newPaneView()
-        let newPaneViewIndex = self.indexOfPaneView(paneView)! + 1
-        let dividerIndex = max(0, self.indexOfPaneView(paneView)! - 1)
-        var dividerPosition: CGFloat = -1
-        
-        if self.indexOfPaneView(paneView)! == 0 {
-            dividerPosition = (self.vertical == true) ? CGRectGetMaxX(paneView.frame) : CGRectGetMaxY(paneView.frame)
-        }
-        else {
-            dividerPosition = (self.vertical == true) ? CGRectGetMinX(paneView.frame) : CGRectGetMinY(paneView.frame)
-        }
-        
         let newSplitView = PressureSplitView()
+        
         newSplitView.delegate = self.delegate
         newSplitView.vertical = vertically
 
@@ -247,6 +240,12 @@ public class PressureSplitView : NSSplitView {
             
             newSplitView.frame = self.frame
             self.superview?.addSubview(newSplitView)
+            self.removeFromSuperview()
+            
+            if self.superview is NSSplitView {
+                let sv = self.superview as! NSSplitView
+                sv.adjustSubviews()
+            }
             
             for view in self.paneSubviews() {
                 let constraints = view.constraints
@@ -255,7 +254,7 @@ public class PressureSplitView : NSSplitView {
                 view.addConstraints(constraints)
             }
             
-            newSplitView.insertArrangedSubview(newPaneView, atIndex: newPaneViewIndex)
+            newSplitView.insertArrangedSubview(newPaneView, atIndex: paneViewIndex + 1)
             newSplitView.adjustSubviews()
             
             let newPaneViews = newSplitView.paneSubviews()
@@ -265,15 +264,16 @@ public class PressureSplitView : NSSplitView {
             for index in 0..<newPaneViews.count-1 {
                 newSplitView.setPosition(CGFloat(index+1)*paneViewSide, ofDividerAtIndex: index)
             }
-            
-            self.removeFromSuperview()
         }
         else {
             // We are going into the opposite direction, replace the original pane by a splitView, 
-            // replace the pane, add a new one.
+            // put the original pane inside the newSplitView, and add a new one.
 
             // First unselect any pane
             self.select(paneView: nil)
+            
+            //
+            let dividerIndex = max(0, paneViewIndex - 1)
 
             // Prepare newSplitView and add the newPaneView to it
             newSplitView.vertical = vertically
@@ -283,7 +283,7 @@ public class PressureSplitView : NSSplitView {
             let paneViewSide = (vertically) ? CGRectGetWidth(paneView.frame) : CGRectGetHeight(paneView.frame)
 
             // Add the newSplitView after the triggering paneView
-            self.insertArrangedSubview(newSplitView, atIndex: newPaneViewIndex)
+            self.insertArrangedSubview(newSplitView, atIndex: paneViewIndex + 1)
             self.adjustSubviews()
 
             // Remove that paneView
