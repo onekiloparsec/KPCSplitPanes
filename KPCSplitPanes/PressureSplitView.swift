@@ -224,7 +224,7 @@ public class PressureSplitView : NSSplitView {
     private func splitPaneView(paneView: PaneView, vertically: Bool) {
         
         let parentSplitView = paneView.parentSplitView()
-        guard parentSplitView == self else {
+        guard parentSplitView === self else {
             fatalError("Parent SplitView of \(paneView) should be \(self), and it seems it is not.")
         }
         
