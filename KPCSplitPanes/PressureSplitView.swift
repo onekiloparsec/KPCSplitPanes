@@ -244,12 +244,20 @@ public class PressureSplitView : NSSplitView {
             for view in self.paneSubviews() {
                 let constraints = view.constraints
                 view.removeFromSuperview()
-                newSplitView.addArrangedSubview(view)
+                newSplitView.addSubview(view)
                 view.addConstraints(constraints)
             }
             
             newSplitView.insertArrangedSubview(newPaneView, atIndex: newPaneViewIndex)
             newSplitView.adjustSubviews()
+            
+            let newPaneViews = newSplitView.paneSubviews()
+            var paneViewSide = (self.vertical == true) ? CGRectGetWidth(newSplitView.frame) : CGRectGetHeight(newSplitView.frame)
+            paneViewSide = paneViewSide / CGFloat(newPaneViews.count) - newSplitView.dividerThickness*CGFloat(newPaneViews.count-1)
+            
+            for index in 0..<newPaneViews.count-1 {
+                newSplitView.setPosition(CGFloat(index+1)*paneViewSide, ofDividerAtIndex: index)
+            }
             
             self.removeFromSuperview()
         }
