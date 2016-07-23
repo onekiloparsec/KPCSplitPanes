@@ -202,7 +202,7 @@ public class PressureSplitView : NSSplitView {
     
     private func expandWindowAndSplit(paneView pane: PaneView, vertically: Bool) {
         let deltaExtension = self.minimumExtent(self.vertical) // WARN: 2?
-        var newWindowFrame = self.window!.contentRectForFrameRect(self.window!.frame)
+        var newWindowFrame = self.window!.frame
         
         if (vertically) {
             newWindowFrame.origin.x -= deltaExtension/2.0
@@ -212,8 +212,6 @@ public class PressureSplitView : NSSplitView {
             newWindowFrame.origin.y -= deltaExtension/2.0
             newWindowFrame.size.height += deltaExtension
         }
-        
-        newWindowFrame = self.window!.frameRectForContentRect(newWindowFrame)
         
         NSAnimationContext.currentContext().completionHandler = {
             self.splitPaneView(pane, vertically: vertically)
