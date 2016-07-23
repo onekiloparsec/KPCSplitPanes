@@ -33,9 +33,9 @@ public class PressureSplitView : NSSplitView {
     private func setup() {
         self.dividerStyle = .Thin
         self.autoresizesSubviews = true
-        self.translatesAutoresizingMaskIntoConstraints = true
-        self.autoresizingMask = [.ViewWidthSizable, .ViewHeightSizable]
         self.arrangesAllSubviews = true
+        self.translatesAutoresizingMaskIntoConstraints = true
+        
         #if DEBUG
         dispatch_once(&once) {
             let sud = NSUserDefaults.standardUserDefaults()
@@ -248,10 +248,8 @@ public class PressureSplitView : NSSplitView {
             }
             
             for view in self.paneSubviews() {
-                let constraints = view.constraints
                 view.removeFromSuperview()
                 newSplitView.addSubview(view)
-                view.addConstraints(constraints)
             }
             
             newSplitView.insertArrangedSubview(newPaneView, atIndex: paneViewIndex + 1)
