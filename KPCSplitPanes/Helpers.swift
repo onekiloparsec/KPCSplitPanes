@@ -64,3 +64,15 @@ extension NSAlert {
     }
 }
 
+extension NSIndexPath {
+    public func stringValue() -> String {
+        let reprensentation = NSMutableString()
+        reprensentation.appendFormat("%ld", self.indexAtPosition(0));
+        
+        for position in 1..<self.length {
+            reprensentation.appendFormat(".%ld", self.indexAtPosition(position));
+        }
+        
+        return reprensentation.copy() as! String;
+    }
+}

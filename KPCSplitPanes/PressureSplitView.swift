@@ -355,9 +355,8 @@ public class PressureSplitView : NSSplitView {
         
         var enclosedSplitViewsCount = 0
         for (index, paneView) in self.paneSubviews().enumerate() {
-            Swift.print("--->> \(index) \(paneView)")
             paneView.indexPath = indexPath.indexPathByAddingIndex(index)
-            paneView.emptyPaneLabel?.stringValue = "\(paneView.indexPath!)"
+            paneView.emptyPaneLabel!.stringValue = "\(paneView.indexPath!.stringValue())"
             
             // paneView has an enclosed split view.
             if let enclosedSplitView = paneView.enclosedSplitView() {
