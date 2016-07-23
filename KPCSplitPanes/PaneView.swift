@@ -58,7 +58,8 @@ public class PaneView : NSView {
     
     func select(flag: Bool) {
         self.closeButton?.image = PaneView.closeIcon(flag)
-        self.splitButton?.image = PaneView.splitIcon(self.parentSplitView()?.useHorizontalSplitAsDefault==true, selected: flag)
+        let horizontal = (self.parentSplitView()?.useHorizontalSplitAsDefault == true)
+        self.splitButton?.image = PaneView.splitIcon(horizontal, selected: flag)
     }
     
     override public func flagsChanged(theEvent: NSEvent) {
