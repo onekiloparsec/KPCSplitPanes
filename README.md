@@ -3,8 +3,8 @@
 </h3>
 <p align="center">
   <a href="https://github.com/onekiloparsec/KPCTabsControl">KPCTabsControl</a> &bull;
-  <a href="https://github.com/onekiloparsec/KPCJumpBarControl">KPCJumpBarControl</a>
-  <b>KPCSplitPanes</b> &bull;
+  <a href="https://github.com/onekiloparsec/KPCJumpBarControl">KPCJumpBarControl</a> &bull;
+  <b>KPCSplitPanes</b> 
 </p>
 
 -------
