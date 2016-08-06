@@ -1,12 +1,23 @@
+<h3 align="center">
+    <img src="http://onekilopars.ec/s/OnekiloparsecProComponents.png" width="90%" />
+</h3>
+<p align="center">
+  <a href="https://github.com/onekiloparsec/KPCTabsControl">KPCTabsControl</a> &bull;
+  <a href="https://github.com/onekiloparsec/KPCJumpBarControl">KPCJumpBarControl</a>
+  <b>KPCSplitPanes</b> &bull;
+</p>
+
+-------
+
+KPCSplitPanes
+==============
+
 [![Build Status](http://img.shields.io/travis/onekiloparsec/KPCSplitPanes.svg?style=flat)](https://travis-ci.org/onekiloparsec/KPCSplitPanes)
 ![Version](https://img.shields.io/cocoapods/v/KPCSplitPanes.svg?style=flat)
 ![License](https://img.shields.io/cocoapods/l/KPCSplitPanes.svg?style=flat)
 ![Platform](https://img.shields.io/cocoapods/p/KPCSplitPanes.svg?style=flat)
 [![Carthage compatible](https://img.shields.io/badge/Carthage-compatible-4BC51D.svg?style=flat)](https://github.com/Carthage/Carthage)
 
-
-KPCSplitPanes
-==============
 
 A smart subclass of NSSplitView, that splits well and allows you to easily add new panes, and   
 combine horizontal and vertical panes.
