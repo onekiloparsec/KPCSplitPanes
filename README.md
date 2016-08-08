@@ -4,7 +4,9 @@
 <p align="center">
   <a href="https://github.com/onekiloparsec/KPCTabsControl">KPCTabsControl</a> &bull;
   <a href="https://github.com/onekiloparsec/KPCJumpBarControl">KPCJumpBarControl</a> &bull;
-  <b>KPCSplitPanes</b> 
+  <b>KPCSplitPanes</b> &bull;
+  <a href="https://github.com/onekiloparsec/KPCAppTermination">KPCAppTermination</a> &bull;
+  <a href="https://github.com/onekiloparsec/KPCSearchableOutlineView">KPCSearchableOutlineView</a>
 </p>
 
 -------
