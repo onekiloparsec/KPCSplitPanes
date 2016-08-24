@@ -7,6 +7,7 @@
   <b>KPCSplitPanes</b> &bull;
   <a href="https://github.com/onekiloparsec/KPCAppTermination">KPCAppTermination</a> &bull;
   <a href="https://github.com/onekiloparsec/KPCSearchableOutlineView">KPCSearchableOutlineView</a>
+  <a href="https://github.com/onekiloparsec/KPCImportSheetController">KPCImportSheetController</a>
 </p>
 
 -------
