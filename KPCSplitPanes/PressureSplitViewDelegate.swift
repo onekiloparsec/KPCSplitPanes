@@ -8,28 +8,28 @@
 
 import AppKit
 
-public class PressureSplitViewDelegate : NSObject, NSSplitViewDelegate {
+open class PressureSplitViewDelegate : NSObject, NSSplitViewDelegate {
     
-    public var minimumHeight: CGFloat = 100.0
-    public var minimumWidth: CGFloat = 100.0
-    public var canCollapse: Bool = false
+    open var minimumHeight: CGFloat = 100.0
+    open var minimumWidth: CGFloat = 100.0
+    open var canCollapse: Bool = false
     
-    public func splitView(splitView: NSSplitView, canCollapseSubview subview: NSView) -> Bool {
+    open func splitView(_ splitView: NSSplitView, canCollapseSubview subview: NSView) -> Bool {
         return canCollapse
     }
     
-    public func splitView(splitView: NSSplitView, constrainMaxCoordinate proposedMaximumPosition: CGFloat, ofSubviewAt dividerIndex: Int) -> CGFloat {
+    open func splitView(_ splitView: NSSplitView, constrainMaxCoordinate proposedMaximumPosition: CGFloat, ofSubviewAt dividerIndex: Int) -> CGFloat {
         var minimum = CGFloat(0.0)
-        if splitView.isKindOfClass(PressureSplitView) {
-            minimum = (splitView.vertical == true) ? minimumWidth : minimumHeight
+        if splitView.isKind(of: PressureSplitView.self) {
+            minimum = (splitView.isVertical == true) ? minimumWidth : minimumHeight
         }
         return proposedMaximumPosition - minimum
     }
     
-    public func splitView(splitView: NSSplitView, constrainMinCoordinate proposedMinimumPosition: CGFloat, ofSubviewAt dividerIndex: Int) -> CGFloat {
+    open func splitView(_ splitView: NSSplitView, constrainMinCoordinate proposedMinimumPosition: CGFloat, ofSubviewAt dividerIndex: Int) -> CGFloat {
         var maximum = CGFloat(0.0)
-        if splitView.isKindOfClass(PressureSplitView) {
-            maximum = (splitView.vertical == true) ? minimumWidth : minimumHeight
+        if splitView.isKind(of: PressureSplitView.self) {
+            maximum = (splitView.isVertical == true) ? minimumWidth : minimumHeight
         }
         return proposedMinimumPosition + maximum
     }

@@ -12,7 +12,7 @@ import AppKit
 extension NSView {    
     func parentSplitView() -> PressureSplitView? {
         var view: NSView? = self.superview
-        while view != nil && view?.isKindOfClass(PressureSplitView) == false {
+        while view != nil && view?.isKind(of: PressureSplitView.self) == false {
             view = view!.superview
         }
         return view as! PressureSplitView?
@@ -21,8 +21,7 @@ extension NSView {
 
 extension NSEvent {
     func hasAltKeyPressed() -> Bool {
-        let optionsKey = NSEventModifierFlags(rawValue: self.modifierFlags.rawValue & NSEventModifierFlags.AlternateKeyMask.rawValue)
-        return (optionsKey == .AlternateKeyMask)
+        return NSEventModifierFlags(rawValue: self.modifierFlags.rawValue & NSEventModifierFlags.option.rawValue) == .option
     }
 }
 
@@ -37,17 +36,17 @@ extension NSAlert {
         let alert = NSAlert()
         alert.messageText = NSLocalizedString("Not enough room to split internally", comment: "")
         alert.showsSuppressionButton = true
-        alert.addButtonWithTitle(NSLocalizedString("Do nothing", comment: ""))
+        alert.addButton(withTitle: NSLocalizedString("Do nothing", comment: ""))
      
         let direction = (vertical) ? "horizontally" : "vertically"
         let informativeText = NSMutableString()
-        informativeText.appendFormat(NSLocalizedString("A new pane requires a minimum of \(additionalExtension) additional points \(direction).", comment: ""))
-        informativeText.appendString(" ")
-        informativeText.appendFormat(NSLocalizedString("Window resize is possible: there are \(maximumExtent-currentExtent) points available in this direction on this screen (accounting for window borders).", comment: ""))
+        informativeText.appendFormat(NSLocalizedString("A new pane requires a minimum of \(additionalExtension) additional points \(direction).", comment: "") as NSString)
+        informativeText.append(" ")
+        informativeText.appendFormat(NSLocalizedString("Window resize is possible: there are \(maximumExtent-currentExtent) points available in this direction on this screen (accounting for window borders).", comment: "") as NSString)
         alert.informativeText = informativeText as String
         
         if (currentExtent + additionalExtension < maximumExtent) {
-            alert.addButtonWithTitle(NSLocalizedString("Adjust window size automatically", comment: ""))
+            alert.addButton(withTitle: NSLocalizedString("Adjust window size automatically", comment: ""))
         }
         
         return alert
@@ -55,22 +54,22 @@ extension NSAlert {
     
     static func alertForLastPane() -> NSAlert {
         let alert = NSAlert()
-        alert.alertStyle = .WarningAlertStyle
+        alert.alertStyle = .warning
         alert.messageText = NSLocalizedString("Be careful!", comment: "")
         alert.informativeText = NSLocalizedString("This is the last pane of the split view. Do you confirm you want to close it?", comment: "")
-        alert.addButtonWithTitle(NSLocalizedString("Cancel", comment: ""))
-        alert.addButtonWithTitle(NSLocalizedString("I confirm, close it.", comment: ""))
+        alert.addButton(withTitle: NSLocalizedString("Cancel", comment: ""))
+        alert.addButton(withTitle: NSLocalizedString("I confirm, close it.", comment: ""))
         return alert
     }
 }
 
-extension NSIndexPath {
+extension IndexPath {
     public func stringValue() -> String {
         let reprensentation = NSMutableString()
-        reprensentation.appendFormat("%ld", self.indexAtPosition(0));
+        reprensentation.appendFormat("%ld", self[0]);
         
-        for position in 1..<self.length {
-            reprensentation.appendFormat(".%ld", self.indexAtPosition(position));
+        for position in 1..<(self as NSIndexPath).length {
+            reprensentation.appendFormat(".%ld", self[position]);
         }
         
         return reprensentation.copy() as! String;
