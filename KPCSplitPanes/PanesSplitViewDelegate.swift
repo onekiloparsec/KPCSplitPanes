@@ -8,7 +8,7 @@
 
 import AppKit
 
-open class PressureSplitViewDelegate : NSObject, NSSplitViewDelegate {
+open class PanesSplitViewDelegate : NSObject, NSSplitViewDelegate {
     
     open var minimumHeight: CGFloat = 100.0
     open var minimumWidth: CGFloat = 100.0
@@ -20,7 +20,7 @@ open class PressureSplitViewDelegate : NSObject, NSSplitViewDelegate {
     
     open func splitView(_ splitView: NSSplitView, constrainMaxCoordinate proposedMaximumPosition: CGFloat, ofSubviewAt dividerIndex: Int) -> CGFloat {
         var minimum = CGFloat(0.0)
-        if splitView.isKind(of: PressureSplitView.self) {
+        if splitView.isKind(of: PanesSplitView.self) {
             minimum = (splitView.isVertical == true) ? minimumWidth : minimumHeight
         }
         return proposedMaximumPosition - minimum
@@ -28,7 +28,7 @@ open class PressureSplitViewDelegate : NSObject, NSSplitViewDelegate {
     
     open func splitView(_ splitView: NSSplitView, constrainMinCoordinate proposedMinimumPosition: CGFloat, ofSubviewAt dividerIndex: Int) -> CGFloat {
         var maximum = CGFloat(0.0)
-        if splitView.isKind(of: PressureSplitView.self) {
+        if splitView.isKind(of: PanesSplitView.self) {
             maximum = (splitView.isVertical == true) ? minimumWidth : minimumHeight
         }
         return proposedMinimumPosition + maximum

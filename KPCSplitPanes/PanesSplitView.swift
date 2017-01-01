@@ -8,11 +8,11 @@
 
 import AppKit
 
-public let PressureSplitViewSplitSizeWarningShowAgainKey = "PressureSplitViewSplitSizeWarningShowAgainKey"
+public let PanesSplitViewSplitSizeWarningShowAgainKey = "PanesSplitViewSplitSizeWarningShowAgainKey"
 
 private var once = Int()
 
-open class PressureSplitView : NSSplitView {
+open class PanesSplitView : NSSplitView {
     
     open var useHorizontalSplitAsDefault = true
     open fileprivate(set) var selectedPaneView: NSView?
@@ -95,7 +95,7 @@ open class PressureSplitView : NSSplitView {
     }
     
     fileprivate func minimumExtent(_ vertically: Bool) -> CGFloat {
-        guard self.delegate != nil, let delegate = self.delegate as! PressureSplitViewDelegate? else {
+        guard self.delegate != nil, let delegate = self.delegate as! PanesSplitViewDelegate? else {
             return 1
         }
         return (vertically == true) ? delegate.minimumWidth : delegate.minimumHeight
@@ -170,10 +170,10 @@ open class PressureSplitView : NSSplitView {
         }
         else {
             let sud = UserDefaults.standard
-            if sud.value(forKey: PressureSplitViewSplitSizeWarningShowAgainKey) == nil {
-                sud.set(true, forKey: PressureSplitViewSplitSizeWarningShowAgainKey)
+            if sud.value(forKey: PanesSplitViewSplitSizeWarningShowAgainKey) == nil {
+                sud.set(true, forKey: PanesSplitViewSplitSizeWarningShowAgainKey)
             }
-            if sud.bool(forKey: PressureSplitViewSplitSizeWarningShowAgainKey) {
+            if sud.bool(forKey: PanesSplitViewSplitSizeWarningShowAgainKey) {
                 self.showSplitSizeWarningAlert(pane, vertically: vertical)
             }
             else {
@@ -191,7 +191,7 @@ open class PressureSplitView : NSSplitView {
         alert.beginSheetModal(for: self.window!, completionHandler: { (returnCode) in
             if alert.suppressionButton?.state == NSOnState {
                 let defaults = UserDefaults.standard
-                defaults.set(false, forKey: PressureSplitViewSplitSizeWarningShowAgainKey)
+                defaults.set(false, forKey: PanesSplitViewSplitSizeWarningShowAgainKey)
             }
             
             if (returnCode == NSAlertSecondButtonReturn) {
@@ -230,7 +230,7 @@ open class PressureSplitView : NSSplitView {
         let dividerPosition = self.dividerPosition(forPaneView: paneView)
 
         let newPaneView = PaneView.newPaneView()
-        let newSplitView = PressureSplitView()
+        let newSplitView = PanesSplitView()
         
         newSplitView.delegate = self.delegate
         newSplitView.isVertical = vertically
@@ -339,8 +339,8 @@ open class PressureSplitView : NSSplitView {
         return self.paneSubviews().index(of: paneView)
     }
 
-    fileprivate func masterSplitView() -> PressureSplitView {
-        var splitView: PressureSplitView? = self
+    fileprivate func masterSplitView() -> PanesSplitView {
+        var splitView: PanesSplitView? = self
         while splitView != nil && splitView?.parentSplitView() != nil {
             splitView = splitView!.parentSplitView()
         }
@@ -350,7 +350,7 @@ open class PressureSplitView : NSSplitView {
     fileprivate func pressureSplitViewDepth() -> Int {
         var count = 0
         
-        var splitView: PressureSplitView? = self
+        var splitView: PanesSplitView? = self
         while splitView != nil && splitView?.parentSplitView() != nil {
             splitView = splitView!.parentSplitView()
             count += 1

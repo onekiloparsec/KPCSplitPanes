@@ -71,9 +71,9 @@ open class PaneView : NSView {
         }
     }
     
-    func enclosedSplitView() -> PressureSplitView? {
-        if self.subviews.first is PressureSplitView {
-            return self.subviews.first as? PressureSplitView
+    func enclosedSplitView() -> PanesSplitView? {
+        if self.subviews.first is PanesSplitView {
+            return self.subviews.first as? PanesSplitView
         }
         return nil
     }

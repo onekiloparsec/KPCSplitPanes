@@ -11,13 +11,13 @@ import KPCSplitPanes
 
 class ViewController: NSViewController {
 
-    @IBOutlet weak var splitView: PressureSplitView?
-    let splitViewDelegate = PressureSplitViewDelegate()
+    @IBOutlet weak var splitView: PanesSplitView?
+    let splitViewDelegate = PanesSplitViewDelegate()
     
     override func viewDidLoad() {
         super.viewDidLoad()
         UserDefaults.standard.set(true, forKey: "NSConstraintBasedLayoutVisualizeMutuallyExclusiveConstraints")
-        UserDefaults.standard.removeObject(forKey: PressureSplitViewSplitSizeWarningShowAgainKey)
+        UserDefaults.standard.removeObject(forKey: PanesSplitViewSplitSizeWarningShowAgainKey)
         self.splitView?.delegate = self.splitViewDelegate
     }
 }

@@ -10,12 +10,12 @@ import Foundation
 import AppKit
 
 extension NSView {    
-    func parentSplitView() -> PressureSplitView? {
+    func parentSplitView() -> PanesSplitView? {
         var view: NSView? = self.superview
-        while view != nil && view?.isKind(of: PressureSplitView.self) == false {
+        while view != nil && view?.isKind(of: PanesSplitView.self) == false {
             view = view!.superview
         }
-        return view as! PressureSplitView?
+        return view as! PanesSplitView?
     }
 }
 
