@@ -366,7 +366,6 @@ open class PanesSplitView : NSSplitView {
         var enclosedSplitViewsCount = 0
         for (index, paneView) in self.paneSubviews().enumerated() {
             paneView.indexPath = indexPath.appending(index)
-            paneView.emptyPaneLabel!.stringValue = "\(paneView.indexPath!.stringValue())"
             
             // paneView has an enclosed split view.
             if let enclosedSplitView = paneView.enclosedSplitView() {
