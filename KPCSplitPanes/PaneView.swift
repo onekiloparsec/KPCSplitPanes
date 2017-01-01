@@ -8,6 +8,7 @@
 
 import AppKit
 
+@IBDesignable
 open class PaneView : NSView {
     
     @IBOutlet open weak var closeButton: NSButton?

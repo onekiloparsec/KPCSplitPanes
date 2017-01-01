@@ -12,6 +12,7 @@ public let PanesSplitViewSplitSizeWarningShowAgainKey = "PanesSplitViewSplitSize
 
 private var once = Int()
 
+@IBDesignable
 open class PanesSplitView : NSSplitView {
     
     open var useHorizontalSplitAsDefault = true
