@@ -65,9 +65,8 @@ open class PanesSplitView : NSSplitView {
     override open func viewDidMoveToWindow() {
         super.viewDidMoveToWindow()
         
-        guard self.factory != nil else {
-            Swift.print("The PanesSplitView \(self) needs a Pane View Factory to work with. Next split will throw an exception.")
-            return
+        if self.window != nil && self.factory == nil {
+            Swift.print("[WARN] The PanesSplitView \(self) needs a Pane View Factory to work with. Next split will throw an exception.")
         }
         
         self.masterSplitView().applyPanesIndexPaths(startingWithIndexPath: IndexPath(index: 0))
