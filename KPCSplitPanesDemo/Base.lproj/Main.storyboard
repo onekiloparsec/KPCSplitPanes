@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<document type="com.apple.InterfaceBuilder3.Cocoa.Storyboard.XIB" version="3.0" toolsVersion="11762" systemVersion="16C67" targetRuntime="MacOSX.Cocoa" propertyAccessControl="none" initialViewController="B8D-0N-5wS">
+<document type="com.apple.InterfaceBuilder3.Cocoa.Storyboard.XIB" version="3.0" toolsVersion="11762" systemVersion="16C67" targetRuntime="MacOSX.Cocoa" propertyAccessControl="none" useAutolayout="YES" initialViewController="B8D-0N-5wS">
     <dependencies>
         <deployment identifier="macosx"/>
         <plugIn identifier="com.apple.InterfaceBuilder.CocoaPlugin" version="11762"/>
@@ -654,7 +654,6 @@
                 <windowController id="B8D-0N-5wS" sceneMemberID="viewController">
                     <window key="window" title="Window" allowsToolTipsWhenApplicationIsInactive="NO" autorecalculatesKeyViewLoop="NO" restorable="NO" oneShot="NO" releasedWhenClosed="NO" showsToolbarButton="NO" visibleAtLaunch="NO" animationBehavior="default" id="IQv-IB-iLA">
                         <windowStyleMask key="styleMask" titled="YES" closable="YES" miniaturizable="YES" resizable="YES"/>
-                        <windowPositionMask key="initialPositionMask" leftStrut="YES" rightStrut="YES" topStrut="YES" bottomStrut="YES"/>
                         <rect key="contentRect" x="561" y="358" width="480" height="300"/>
                         <rect key="screenRect" x="0.0" y="0.0" width="1680" height="1027"/>
                     </window>
@@ -672,17 +671,16 @@
                 <viewController id="XfG-lQ-9wD" customClass="ViewController" customModule="KPCSplitPanesDemo" customModuleProvider="target" sceneMemberID="viewController">
                     <view key="view" id="m2S-Jp-Qdl">
                         <rect key="frame" x="0.0" y="0.0" width="480" height="300"/>
-                        <autoresizingMask key="autoresizingMask"/>
+                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
-                            <splitView dividerStyle="thin" id="9MM-X5-7U0" customClass="PanesSplitView" customModule="KPCSplitPanes">
+                            <splitView dividerStyle="thin" translatesAutoresizingMaskIntoConstraints="NO" id="9MM-X5-7U0" customClass="PanesSplitView" customModule="KPCSplitPanes">
                                 <rect key="frame" x="0.0" y="0.0" width="480" height="300"/>
-                                <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                                 <subviews>
-                                    <customView horizontalHuggingPriority="252" id="F0X-Pq-UwG" customClass="PaneView" customModule="KPCSplitPanes">
+                                    <customView horizontalHuggingPriority="252" fixedFrame="YES" id="F0X-Pq-UwG" customClass="PaneView" customModule="KPCSplitPanes">
                                         <rect key="frame" x="0.0" y="0.0" width="480" height="149.5"/>
                                         <autoresizingMask key="autoresizingMask"/>
                                         <subviews>
-                                            <button verticalHuggingPriority="750" id="owJ-Kr-3TP">
+                                            <button verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="owJ-Kr-3TP">
                                                 <rect key="frame" x="456" y="126.5" width="24" height="24"/>
                                                 <autoresizingMask key="autoresizingMask" flexibleMinX="YES" flexibleMinY="YES"/>
                                                 <buttonCell key="cell" type="square" bezelStyle="shadowlessSquare" imagePosition="overlaps" alignment="center" imageScaling="proportionallyDown" inset="2" id="SLO-Wh-Wpp">
@@ -690,7 +688,7 @@
                                                     <font key="font" metaFont="system"/>
                                                 </buttonCell>
                                             </button>
-                                            <button verticalHuggingPriority="750" id="4MI-ar-0nO">
+                                            <button verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="4MI-ar-0nO">
                                                 <rect key="frame" x="432" y="126.5" width="24" height="24"/>
                                                 <autoresizingMask key="autoresizingMask" flexibleMinX="YES" flexibleMinY="YES"/>
                                                 <buttonCell key="cell" type="square" bezelStyle="shadowlessSquare" imagePosition="overlaps" alignment="center" imageScaling="proportionallyDown" inset="2" id="zLP-8y-Xy8">
@@ -698,7 +696,7 @@
                                                     <font key="font" metaFont="system"/>
                                                 </buttonCell>
                                             </button>
-                                            <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" id="oei-Uk-dXx">
+                                            <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="oei-Uk-dXx">
                                                 <rect key="frame" x="18" y="66" width="444" height="17"/>
                                                 <autoresizingMask key="autoresizingMask" flexibleMinX="YES" flexibleMaxX="YES" flexibleMinY="YES" flexibleMaxY="YES"/>
                                                 <textFieldCell key="cell" scrollable="YES" lineBreakMode="clipping" sendsActionOnEndEditing="YES" alignment="center" title="Label" id="SXE-Bf-1aW">
@@ -714,11 +712,11 @@
                                             <outlet property="splitButton" destination="4MI-ar-0nO" id="zFW-Wa-XRP"/>
                                         </connections>
                                     </customView>
-                                    <customView id="fNI-7G-5d5" customClass="PaneView" customModule="KPCSplitPanes">
+                                    <customView fixedFrame="YES" id="fNI-7G-5d5" customClass="PaneView" customModule="KPCSplitPanes">
                                         <rect key="frame" x="0.0" y="150.5" width="480" height="149.5"/>
                                         <autoresizingMask key="autoresizingMask"/>
                                         <subviews>
-                                            <button verticalHuggingPriority="750" id="KiR-Sp-m0q">
+                                            <button verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="KiR-Sp-m0q">
                                                 <rect key="frame" x="456" y="126.5" width="24" height="24"/>
                                                 <autoresizingMask key="autoresizingMask" flexibleMinX="YES" flexibleMinY="YES"/>
                                                 <buttonCell key="cell" type="square" bezelStyle="shadowlessSquare" imagePosition="overlaps" alignment="center" imageScaling="proportionallyDown" inset="2" id="VVD-AQ-LZE">
@@ -726,7 +724,7 @@
                                                     <font key="font" metaFont="system"/>
                                                 </buttonCell>
                                             </button>
-                                            <button verticalHuggingPriority="750" id="Mtr-pW-yJm">
+                                            <button verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="Mtr-pW-yJm">
                                                 <rect key="frame" x="432" y="126.5" width="24" height="24"/>
                                                 <autoresizingMask key="autoresizingMask" flexibleMinX="YES" flexibleMinY="YES"/>
                                                 <buttonCell key="cell" type="square" bezelStyle="shadowlessSquare" imagePosition="overlaps" alignment="center" imageScaling="proportionallyDown" inset="2" id="Fwc-rG-RbO">
@@ -734,7 +732,7 @@
                                                     <font key="font" metaFont="system"/>
                                                 </buttonCell>
                                             </button>
-                                            <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" id="NK9-Fm-T9H">
+                                            <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="NK9-Fm-T9H">
                                                 <rect key="frame" x="18" y="66" width="444" height="17"/>
                                                 <autoresizingMask key="autoresizingMask" flexibleMinX="YES" flexibleMaxX="YES" flexibleMinY="YES" flexibleMaxY="YES"/>
                                                 <textFieldCell key="cell" scrollable="YES" lineBreakMode="clipping" sendsActionOnEndEditing="YES" alignment="center" title="Label" id="rLd-A9-Gls">
@@ -757,6 +755,12 @@
                                 </holdingPriorities>
                             </splitView>
                         </subviews>
+                        <constraints>
+                            <constraint firstAttribute="bottom" secondItem="9MM-X5-7U0" secondAttribute="bottom" id="2F5-hg-g1M"/>
+                            <constraint firstItem="9MM-X5-7U0" firstAttribute="leading" secondItem="m2S-Jp-Qdl" secondAttribute="leading" id="8Yf-1x-FaJ"/>
+                            <constraint firstAttribute="trailing" secondItem="9MM-X5-7U0" secondAttribute="trailing" id="9xU-Xb-M4K"/>
+                            <constraint firstItem="9MM-X5-7U0" firstAttribute="top" secondItem="m2S-Jp-Qdl" secondAttribute="top" id="DAT-VK-Gql"/>
+                        </constraints>
                     </view>
                     <connections>
                         <outlet property="splitView" destination="9MM-X5-7U0" id="YHJ-eG-Raw"/>

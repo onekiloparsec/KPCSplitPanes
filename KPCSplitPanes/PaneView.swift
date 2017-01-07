@@ -16,18 +16,7 @@ open class PaneView : NSView {
     @IBOutlet open weak var emptyPaneLabel: NSTextField?
     
     open internal(set) var indexPath: IndexPath? 
-    
-    static func newPaneView() -> PaneView {
-        var topLevels = NSArray()
-        Bundle(for: self).loadNibNamed("PaneView", owner: self, topLevelObjects: &topLevels)
-        // one should deal with failure at some point...
-        let pv = topLevels.filter({ ($0 as AnyObject).isKind(of: PaneView.self) }).first as! PaneView
-        pv.autoresizesSubviews = true
-        pv.translatesAutoresizingMaskIntoConstraints = true
-        pv.autoresizingMask = [.viewWidthSizable, .viewHeightSizable]
-        return pv
-    }
-    
+        
     override open var acceptsFirstResponder: Bool {
         return true
     }
@@ -35,11 +24,21 @@ open class PaneView : NSView {
     override open class func requiresConstraintBasedLayout() -> Bool {
         return true
     }
+    
+    override open func viewWillMove(toWindow newWindow: NSWindow?) {
+        super.viewWillMove(toWindow: newWindow)
         
+        if newWindow != nil {
+            self.autoresizesSubviews = true
+            self.translatesAutoresizingMaskIntoConstraints = true
+            self.autoresizingMask = [.viewWidthSizable, .viewHeightSizable]
+        }
+    }
+    
     override open func viewDidMoveToWindow() {
         super.viewDidMoveToWindow()
         
-        self.closeButton?.image = PaneView.closeIcon(false)
+        self.closeButton?.image = PaneView.closeIcon(selected: false)
         self.splitButton?.image = PaneView.splitIcon(self.parentSplitView()?.useHorizontalSplitAsDefault==true, selected: false)
         
         self.closeButton?.target = self
@@ -58,7 +57,7 @@ open class PaneView : NSView {
     }
     
     func select(_ flag: Bool) {
-        self.closeButton?.image = PaneView.closeIcon(flag)
+        self.closeButton?.image = PaneView.closeIcon(selected: flag)
         let horizontal = (self.parentSplitView()?.useHorizontalSplitAsDefault == true)
         self.splitButton?.image = PaneView.splitIcon(horizontal, selected: flag)
     }
@@ -89,19 +88,19 @@ open class PaneView : NSView {
         return img
     }
     
-    static open func closeIcon(_ selected: Bool) -> NSImage {
+    static open func closeIcon(selected: Bool) -> NSImage {
         return PaneView.icon(named: "Close", selected: selected)
     }
     
-    static open func splitHorizontalIcon(_ selected: Bool) -> NSImage {
+    static open func splitHorizontalIcon(selected: Bool) -> NSImage {
         return PaneView.icon(named: "SplitHorizontal", selected: selected)
     }
     
-    static open func splitVerticalIcon(_ selected: Bool) -> NSImage {
+    static open func splitVerticalIcon(selected: Bool) -> NSImage {
         return PaneView.icon(named: "SplitVertical", selected: selected)
     }
     
     static open func splitIcon(_ horizontal: Bool, selected: Bool) -> NSImage {
-        return horizontal ? PaneView.splitHorizontalIcon(selected) : PaneView.splitVerticalIcon(selected)
+        return horizontal ? PaneView.splitHorizontalIcon(selected: selected) : PaneView.splitVerticalIcon(selected: selected)
     }
 }

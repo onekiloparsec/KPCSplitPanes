@@ -19,6 +19,8 @@ open class PanesSplitView : NSSplitView {
     open fileprivate(set) var selectedPaneView: NSView?
     open fileprivate(set) var indexPath: IndexPath?
     
+    open var factory: PaneViewFactory!
+    
     // MARK: - Constructors
     
     required public init?(coder: NSCoder) {
@@ -62,6 +64,12 @@ open class PanesSplitView : NSSplitView {
     
     override open func viewDidMoveToWindow() {
         super.viewDidMoveToWindow()
+        
+        guard self.factory != nil else {
+            Swift.print("The PanesSplitView \(self) needs a Pane View Factory to work with. Next split will throw an exception.")
+            return
+        }
+        
         self.masterSplitView().applyPanesIndexPaths(startingWithIndexPath: IndexPath(index: 0))
         if (self.selectedPaneView == nil) {
             self.select(paneView: self.lastPaneSubview())
@@ -230,9 +238,16 @@ open class PanesSplitView : NSSplitView {
         let paneViewIndex = self.indexOfPaneView(paneView)!
         let dividerPosition = self.dividerPosition(forPaneView: paneView)
 
-        let newPaneView = PaneView.newPaneView()
-        let newSplitView = PanesSplitView()
+        let newPaneView = self.factory.newPaneView()
+        var newSplitView: PanesSplitView!
+        if let sv = self.factory.newPaneSplitView?() {
+            newSplitView = sv
+        }
+        else {
+            newSplitView = PanesSplitView()
+        }
         
+        newSplitView.factory = self.factory
         newSplitView.delegate = self.delegate
         newSplitView.isVertical = vertically
 
