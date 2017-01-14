@@ -125,6 +125,13 @@ open class PanesSplitView : NSSplitView {
     // MARK: - Close
 
     open func close(paneView pane: PaneView) -> Void {
+        if self.delegate is PanesSplitViewDelegateProtocol {
+            let paneDelegate = self.delegate as! PanesSplitViewDelegateProtocol
+            if paneDelegate.paneSplitView?(self, shouldRemove: pane) == false {
+                return
+            }
+        }
+        
         if self.paneSubviews().count == 1 {
             let alert = NSAlert.alertForLastPane()
             alert.beginSheetModal(for: self.window!, completionHandler: { (returnCode) in
@@ -141,6 +148,11 @@ open class PanesSplitView : NSSplitView {
     }
     
     fileprivate func remove(paneView pane: PaneView) {
+        if self.delegate is PanesSplitViewDelegateProtocol {
+            let paneDelegate = self.delegate as! PanesSplitViewDelegateProtocol
+            paneDelegate.paneSplitView?(self, willRemove: pane)
+        }
+
         if pane.parentSplitView()?.paneSubviews().count == 1 {
             pane.parentSplitView()?.removeFromSuperview()
         }
@@ -150,6 +162,11 @@ open class PanesSplitView : NSSplitView {
         }
         
         self.masterSplitView().applyPanesIndexPaths(startingWithIndexPath: IndexPath(index: 0))
+        
+        if self.delegate is PanesSplitViewDelegateProtocol {
+            let paneDelegate = self.delegate as! PanesSplitViewDelegateProtocol
+            paneDelegate.paneSplitView?(self, didRemove: pane)
+        }
     }
     
     // MARK: - Split

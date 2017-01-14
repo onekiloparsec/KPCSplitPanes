@@ -8,7 +8,13 @@
 
 import AppKit
 
-open class PanesSplitViewDelegate : NSObject, NSSplitViewDelegate {
+@objc public protocol PanesSplitViewDelegateProtocol : NSSplitViewDelegate {
+    @objc optional func paneSplitView(_ splitView: PanesSplitView, shouldRemove paneView: PaneView) -> Bool
+    @objc optional func paneSplitView(_ splitView: PanesSplitView, willRemove paneView: PaneView)
+    @objc optional func paneSplitView(_ splitView: PanesSplitView, didRemove paneView: PaneView)
+}
+
+open class PanesSplitViewDelegate : NSObject, PanesSplitViewDelegateProtocol {
     
     open var minimumHeight: CGFloat = 100.0
     open var minimumWidth: CGFloat = 100.0
