@@ -56,7 +56,7 @@ open class PaneView : NSView {
         self.parentSplitView()?.split(paneView: self)
     }
     
-    func select(_ flag: Bool) {
+    func makeKey(_ flag: Bool) {
         self.closeButton?.image = PaneView.closeIcon(selected: flag)
         let horizontal = (self.parentSplitView()?.useHorizontalSplitAsDefault == true)
         self.splitButton?.image = PaneView.splitIcon(horizontal, selected: flag)

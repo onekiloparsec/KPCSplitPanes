@@ -71,7 +71,7 @@ open class PanesSplitView : NSSplitView {
         
         self.masterSplitView().applyPanesIndexPaths(startingWithIndexPath: IndexPath(index: 0))
         if (self.selectedPaneView == nil) {
-            self.select(paneView: self.lastPaneSubview())
+            self.makeKey(self.lastPaneSubview())
         }
     }
     
@@ -81,19 +81,19 @@ open class PanesSplitView : NSSplitView {
         let downPoint = self.convert(theEvent.locationInWindow, from:nil)
         let clickedSubviews = self.paneSubviews().filter({ NSPointInRect(downPoint, $0.frame) })
         if clickedSubviews.count == 1 && clickedSubviews.first!.isKind(of: PaneView.self) {
-            self.select(paneView: clickedSubviews.first! as PaneView)
+            self.makeKey(clickedSubviews.first! as PaneView)
         }
         super.mouseUp(with: theEvent)
     }
     
-    fileprivate func select(paneView pane: PaneView?) {
-        self.selectedPaneView = pane
+    open func makeKey(_ paneView: PaneView?) {
+        self.selectedPaneView = paneView
         for paneSubview in self.paneSubviews() {
-            paneSubview.select(paneSubview == pane)
+            paneSubview.makeKey(paneSubview == paneView)
         }
-        if pane != nil {
-            self.window?.makeFirstResponder(pane)
-        }
+//        if paneView != nil {
+//            self.window?.makeFirstResponder(paneView)
+//        }
     }
     
     // MARK: - Adding & Removing Subviews
@@ -300,7 +300,7 @@ open class PanesSplitView : NSSplitView {
             // put the original pane inside the newSplitView, and add a new one.
 
             // First unselect any pane
-            self.select(paneView: nil)
+            self.makeKey(nil)
             
             //
             let dividerIndex = max(0, paneViewIndex - 1)
@@ -336,7 +336,7 @@ open class PanesSplitView : NSSplitView {
             self.setPosition(dividerPosition, ofDividerAt: dividerIndex)
         }
         
-        newSplitView.select(paneView: newPaneView)
+        newSplitView.makeKey(newPaneView)
         newSplitView.masterSplitView().applyPanesIndexPaths(startingWithIndexPath: IndexPath(index: 0))
     }
     
