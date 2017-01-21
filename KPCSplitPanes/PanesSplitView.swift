@@ -266,6 +266,8 @@ open class PanesSplitView : NSSplitView {
         newSplitView.factory = self.factory
         newSplitView.delegate = self.delegate
         newSplitView.isVertical = vertically
+        newSplitView.autoresizingMask = self.autoresizingMask
+        newSplitView.translatesAutoresizingMaskIntoConstraints = self.translatesAutoresizingMaskIntoConstraints
 
         if self.isVertical == vertically {
             // We are going into the same direction, just add a new pane.
