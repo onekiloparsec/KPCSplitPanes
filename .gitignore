@@ -1,29 +1,5 @@
-# Covers OS X
- 
-.DS_Store
-.AppleDouble
-.LSOverride
- 
-# Icon must end with two \r
-Icon
- 
- 
-# Thumbnails
-._*
- 
-# Files that might appear on external disk
-.Spotlight-V100
-.Trashes
- 
-# Directories potentially created on remote AFP share
-.AppleDB
-.AppleDesktop
-Network Trash Folder
-Temporary Items
-.apdisk
- 
-# Covers Xcode IDE
- 
+# Xcode
+#
 build/
 *.pbxuser
 !default.pbxuser
@@ -37,9 +13,10 @@ xcuserdata
 *.xccheckout
 *.moved-aside
 DerivedData
+*.hmap
+*.ipa
 *.xcuserstate
-*.gcno
- 
+
 # CocoaPods
 #
 # We recommend against adding the Pods directory to your .gitignore. However
@@ -47,63 +24,4 @@ DerivedData
 # http://guides.cocoapods.org/using/using-cocoapods.html#should-i-ignore-the-pods-directory-in-source-control
 #
 # Pods/
- 
-# Covers JetBrains IDEs: IntelliJ, RubyMine, PhpStorm, AppCode
- 
-*.iml
- 
-## Directory-based project format:
-.idea/
- 
-## File-based project format:
-*.ipr
-*.iws
- 
-## Plugin-specific files:
- 
-# IntelliJ
-out/
- 
-# mpeltonen/sbt-idea plugin
-.idea_modules/
- 
-# JIRA plugin
-atlassian-ide-plugin.xml
- 
-# Crashlytics plugin (for Android Studio and IntelliJ)
-com_crashlytics_export_strings.xml
-crashlytics.properties
-crashlytics-build.properties
- 
-## Covers Sonar
-.sonar
-compile_commands.json
-sonar-reports/
-
-## Covers Fastlane
-
-# fastlane specific
-fastlane/report.xml
-
-# deliver temporary files
-fastlane/Preview.html
-
-# snapshot generated screenshots
-fastlane/screenshots/**/*.png
-fastlane/screenshots/screenshots.html
-
-# scan temporary files
-fastlane/test_output
-
-# other temporary files
-fastlane/temp
-
-# build files
-fastlane/build
-
-## Covers Carthage
-# It may be safer to always commit these folders... 
-#Carthage/Checkouts
-#Carthage/Build
-
-KPCJumpBarControl.xcodeproj/xcuserdata/onekiloparsec.xcuserdatad/xcdebugger/Breakpoints_v2.xcbkptlist
+.DS_Store
