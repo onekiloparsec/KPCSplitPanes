@@ -1,42 +1,41 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<document type="com.apple.InterfaceBuilder3.Cocoa.XIB" version="3.0" toolsVersion="11762" systemVersion="16C67" targetRuntime="MacOSX.Cocoa" propertyAccessControl="none" useAutolayout="YES" customObjectInstantitationMethod="direct">
+<document type="com.apple.InterfaceBuilder3.Cocoa.XIB" version="3.0" toolsVersion="12121" systemVersion="16G29" targetRuntime="MacOSX.Cocoa" propertyAccessControl="none" customObjectInstantitationMethod="direct">
     <dependencies>
         <deployment identifier="macosx"/>
-        <plugIn identifier="com.apple.InterfaceBuilder.CocoaPlugin" version="11762"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.CocoaPlugin" version="12121"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
     <objects>
-        <customObject id="-2" userLabel="File's Owner" customClass="PaneView" customModule="KPCSplitPanes"/>
+        <customObject id="-2" userLabel="File's Owner" customClass="PaneView" customModule="KPCSplitPanes">
+            <connections>
+                <outlet property="emptyPaneLabel" destination="fLb-oo-1J6" id="X93-4J-iDE"/>
+            </connections>
+        </customObject>
         <customObject id="-1" userLabel="First Responder" customClass="FirstResponder"/>
         <customObject id="-3" userLabel="Application" customClass="NSObject"/>
         <customView id="zqd-8h-Xfj" customClass="PaneView" customModule="KPCSplitPanes">
             <rect key="frame" x="0.0" y="0.0" width="200" height="200"/>
             <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
             <subviews>
-                <button verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="tK5-ax-UaU">
+                <button verticalHuggingPriority="750" id="tK5-ax-UaU">
                     <rect key="frame" x="176" y="176" width="24" height="24"/>
-                    <constraints>
-                        <constraint firstAttribute="height" constant="24" id="P6J-fd-SbS"/>
-                        <constraint firstAttribute="width" constant="24" id="YVj-oB-EsJ"/>
-                    </constraints>
+                    <autoresizingMask key="autoresizingMask" flexibleMinX="YES" flexibleMinY="YES"/>
                     <buttonCell key="cell" type="square" bezelStyle="shadowlessSquare" imagePosition="only" alignment="center" state="on" imageScaling="proportionallyDown" inset="2" id="VTT-by-TQB">
                         <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
                         <font key="font" metaFont="system"/>
                     </buttonCell>
                 </button>
-                <button verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="x0f-kM-jaf">
+                <button verticalHuggingPriority="750" id="x0f-kM-jaf">
                     <rect key="frame" x="152" y="176" width="24" height="24"/>
-                    <constraints>
-                        <constraint firstAttribute="width" constant="24" id="6oN-3z-5h1"/>
-                        <constraint firstAttribute="height" constant="24" id="iii-re-nDS"/>
-                    </constraints>
+                    <autoresizingMask key="autoresizingMask" flexibleMinX="YES" flexibleMinY="YES"/>
                     <buttonCell key="cell" type="square" bezelStyle="shadowlessSquare" imagePosition="only" alignment="center" state="on" imageScaling="proportionallyDown" inset="2" id="FbH-Pu-fx9">
                         <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
                         <font key="font" metaFont="system"/>
                     </buttonCell>
                 </button>
-                <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="fLb-oo-1J6">
+                <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" allowsCharacterPickerTouchBarItem="YES" id="fLb-oo-1J6">
                     <rect key="frame" x="18" y="91" width="164" height="17"/>
+                    <autoresizingMask key="autoresizingMask" widthSizable="YES" flexibleMinY="YES" flexibleMaxY="YES"/>
                     <textFieldCell key="cell" scrollable="YES" lineBreakMode="clipping" sendsActionOnEndEditing="YES" alignment="center" title="Label" id="eqv-3R-W5s">
                         <font key="font" metaFont="system"/>
                         <color key="textColor" name="secondaryLabelColor" catalog="System" colorSpace="catalog"/>
@@ -44,15 +43,6 @@
                     </textFieldCell>
                 </textField>
             </subviews>
-            <constraints>
-                <constraint firstItem="fLb-oo-1J6" firstAttribute="leading" secondItem="zqd-8h-Xfj" secondAttribute="leading" constant="20" id="5R3-Dl-yG8"/>
-                <constraint firstItem="tK5-ax-UaU" firstAttribute="top" secondItem="zqd-8h-Xfj" secondAttribute="top" id="76Z-05-LIO"/>
-                <constraint firstAttribute="trailing" secondItem="fLb-oo-1J6" secondAttribute="trailing" constant="20" id="EqU-Y4-KVY"/>
-                <constraint firstItem="tK5-ax-UaU" firstAttribute="leading" secondItem="x0f-kM-jaf" secondAttribute="trailing" id="Jew-Yk-iL0"/>
-                <constraint firstItem="fLb-oo-1J6" firstAttribute="centerY" secondItem="zqd-8h-Xfj" secondAttribute="centerY" id="TLS-s4-t5K"/>
-                <constraint firstAttribute="trailing" secondItem="tK5-ax-UaU" secondAttribute="trailing" id="Tcz-mz-XtT"/>
-                <constraint firstItem="x0f-kM-jaf" firstAttribute="top" secondItem="zqd-8h-Xfj" secondAttribute="top" id="u3Z-lV-GSq"/>
-            </constraints>
             <connections>
                 <outlet property="closeButton" destination="tK5-ax-UaU" id="CPg-gZ-H8V"/>
                 <outlet property="emptyPaneLabel" destination="fLb-oo-1J6" id="x7g-Bc-CRl"/>
