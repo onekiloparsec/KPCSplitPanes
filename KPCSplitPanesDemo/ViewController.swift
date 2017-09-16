@@ -12,7 +12,7 @@ import KPCSplitPanes
 class Factory: PaneViewFactory {
     func newPaneView() -> PaneView {
         var topLevels = NSArray()
-        Bundle(for: ViewController.self).loadNibNamed("PaneView", owner: self, topLevelObjects: &topLevels)
+        Bundle(for: ViewController.self).loadNibNamed("PaneView", owner: nil, topLevelObjects: &topLevels)
         // one should deal with failure at some point...
         let pv = topLevels.filter({ ($0 as AnyObject).isKind(of: PaneView.self) }).first as! PaneView
         return pv
