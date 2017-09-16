@@ -15,7 +15,13 @@ open class PaneView : NSView {
     @IBOutlet open weak var splitButton: NSButton?
     @IBOutlet open weak var emptyPaneLabel: NSTextField?
     
-    open internal(set) var indexPath: IndexPath? 
+    open internal(set) var indexPath: IndexPath? {
+        didSet {
+            #if DEBUG
+                self.emptyPaneLabel?.stringValue = String(describing: self.indexPath)
+            #endif
+        }
+    }
         
     override open var acceptsFirstResponder: Bool {
         return true
