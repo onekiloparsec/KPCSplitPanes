@@ -18,7 +18,9 @@ open class PaneView : NSView {
     open internal(set) var indexPath: IndexPath? {
         didSet {
             #if DEBUG
-                self.emptyPaneLabel?.stringValue = String(describing: self.indexPath)
+            if let label = self.emptyPaneLabel, let ip = self.indexPath {
+                label.stringValue = String(describing: ip)
+            }
             #endif
         }
     }
