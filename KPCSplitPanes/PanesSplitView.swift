@@ -266,7 +266,7 @@ open class PanesSplitView : NSSplitView {
         }
         
         let paneViewIndex = self.indexOfPaneView(paneView)!
-        let dividerPosition = self.dividerPosition(forPaneView: paneView)
+//        let dividerPosition = self.dividerPosition(forPaneView: paneView)
 
         let newPaneView = self.factory.newPaneView()
         var newSplitView: PanesSplitView!
@@ -304,7 +304,7 @@ open class PanesSplitView : NSSplitView {
             newSplitView.adjustSubviews()
             
             let newPaneViews = newSplitView.paneSubviews()
-            var paneViewSide = (self.isVertical == true) ? newSplitView.frame.width : newSplitView.frame.height
+            var paneViewSide = (self.isVertical) ? newSplitView.frame.width : newSplitView.frame.height
             paneViewSide = paneViewSide / CGFloat(newPaneViews.count) - newSplitView.dividerThickness*CGFloat(newPaneViews.count-1)
             
             for index in 0..<newPaneViews.count-1 {
@@ -318,19 +318,20 @@ open class PanesSplitView : NSSplitView {
             // First unselect any pane
             self.makeKey(nil)
             
-            //
-            let dividerIndex = max(0, paneViewIndex - 1)
-
             // Prepare newSplitView and add the newPaneView to it
             newSplitView.isVertical = vertically
             newSplitView.addSubview(newPaneView)
             
-            // Get side size before playing with pane views.
-            let paneViewSide = (vertically) ? paneView.frame.width : paneView.frame.height
+            // Compute newPaneView side size before playing with pane views.
+            var newPaneViewSide = (vertically) ? paneView.frame.width : paneView.frame.height
+            newPaneViewSide = newPaneViewSide / 2.0 - newSplitView.dividerThickness // It's new. Necessarily, subPaneViews.count = 2
 
             // Add the newSplitView after the triggering paneView
             self.insertArrangedSubview(newSplitView, at: paneViewIndex + 1)
             self.adjustSubviews()
+
+            // Store the actual paneView side size (used below, to be re-applied).
+            let paneViewSide = (self.isVertical) ? paneView.frame.width : paneView.frame.height
 
             // Remove that paneView
             paneView.removeFromSuperview()
@@ -346,10 +347,15 @@ open class PanesSplitView : NSSplitView {
 
             // Adjust the newSplitView subviews and set the position of the new divider to the middle
             newSplitView.adjustSubviews()
-            newSplitView.setPosition(paneViewSide/2.0, ofDividerAt: 0)
+            newSplitView.setPosition(newPaneViewSide, ofDividerAt: 0)
             
             // Re-adjust the position of our own divider that has certainly wiggled around...
-            self.setPosition(dividerPosition, ofDividerAt: dividerIndex)
+            for index in 0..<self.paneSubviews().count-1 {
+                self.setPosition(CGFloat(index+1)*paneViewSide, ofDividerAt: index)
+            }
+
+            // White magic
+            self.adjustSubviews()
         }
         
         newSplitView.makeKey(newPaneView)
