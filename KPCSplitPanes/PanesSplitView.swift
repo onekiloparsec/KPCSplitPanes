@@ -9,6 +9,7 @@
 import AppKit
 
 public let PanesSplitViewSplitSizeWarningShowAgainKey = "PanesSplitViewSplitSizeWarningShowAgainKey"
+public let PanesSplitViewUnmakeKeyNotification = Notification.Name("PanesSplitViewUnmakeKeyNotification")
 
 private var once = Int()
 
@@ -86,9 +87,17 @@ open class PanesSplitView : NSSplitView {
         let downPoint = self.convert(theEvent.locationInWindow, from:nil)
         let clickedSubviews = self.paneSubviews().filter({ NSPointInRect(downPoint, $0.frame) })
         if clickedSubviews.count == 1 && clickedSubviews.first!.isKind(of: PaneView.self) {
+            NotificationCenter.default.post(name: PanesSplitViewUnmakeKeyNotification, object: nil)
             self.makeKey(clickedSubviews.first! as PaneView)
         }
         super.mouseUp(with: theEvent)
+    }
+
+    open func unmakeKey() {
+        self.selectedPaneView = nil
+        for paneSubview in self.paneSubviews() {
+            paneSubview.makeKey(false)
+        }
     }
     
     open func makeKey(_ paneView: PaneView?) {
