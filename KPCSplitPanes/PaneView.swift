@@ -27,16 +27,16 @@ open class PaneView : NSView {
         return true
     }
 
-    override open class func requiresConstraintBasedLayout() -> Bool {
-        return true
-    }
+//    override open class func requiresConstraintBasedLayout() -> Bool {
+//        return false
+//    }
     
     override open func viewWillMove(toWindow newWindow: NSWindow?) {
         super.viewWillMove(toWindow: newWindow)
         
         if newWindow != nil {
             self.autoresizesSubviews = true
-            self.translatesAutoresizingMaskIntoConstraints = true
+//            self.translatesAutoresizingMaskIntoConstraints = true
             self.autoresizingMask = [.viewWidthSizable, .viewHeightSizable]
         }
     }

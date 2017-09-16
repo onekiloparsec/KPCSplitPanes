@@ -37,7 +37,12 @@ open class PanesSplitView : NSSplitView {
         self.dividerStyle = .thin
         self.autoresizesSubviews = true
         self.arrangesAllSubviews = true
-        self.translatesAutoresizingMaskIntoConstraints = true
+//        self.translatesAutoresizingMaskIntoConstraints = true
+        
+        NotificationCenter.default.addObserver(self,
+                                               selector: #selector(unmakeKey),
+                                               name: PanesSplitViewUnmakeKeyNotification,
+                                               object: nil)
         
         #if DEBUG
         dispatch_once(&once) {
@@ -267,7 +272,7 @@ open class PanesSplitView : NSSplitView {
         newSplitView.delegate = self.delegate
         newSplitView.isVertical = vertically
         newSplitView.autoresizingMask = self.autoresizingMask
-        newSplitView.translatesAutoresizingMaskIntoConstraints = self.translatesAutoresizingMaskIntoConstraints
+//        newSplitView.translatesAutoresizingMaskIntoConstraints = self.translatesAutoresizingMaskIntoConstraints
 
         if self.isVertical == vertically {
             // We are going into the same direction, just add a new pane.
