@@ -10,18 +10,18 @@ import Foundation
 import AppKit
 
 extension NSView {    
-    func parentSplitView() -> PanesSplitView? {
+    func parentStackView() -> PanesStackView? {
         var view: NSView? = self.superview
-        while view != nil && view?.isKind(of: PanesSplitView.self) == false {
+        while view != nil && view?.isKind(of: PanesStackView.self) == false {
             view = view!.superview
         }
-        return view as! PanesSplitView?
+        return view as! PanesStackView?
     }
 }
 
 extension NSEvent {
     func hasAltKeyPressed() -> Bool {
-        return NSEventModifierFlags(rawValue: self.modifierFlags.rawValue & NSEventModifierFlags.option.rawValue) == .option
+        return NSEvent.ModifierFlags(rawValue: self.modifierFlags.rawValue & NSEvent.ModifierFlags.option.rawValue) == .option
     }
 }
 

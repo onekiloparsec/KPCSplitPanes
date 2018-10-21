@@ -22,7 +22,7 @@ KPCSplitPanes
 [![Carthage compatible](https://img.shields.io/badge/Carthage-compatible-4BC51D.svg?style=flat)](https://github.com/Carthage/Carthage)
 
 
-A smart subclass of NSSplitView, that splits well and allows you to easily add new panes, and   
+A smart subclass of NSStackView, that splits well and allows you to easily add new panes, and   
 combine horizontal and vertical panes.
 
 ![Demo JumpBar](http://www.onekilopars.ec/s/KPCSplitPanesDemo.gif)
@@ -40,7 +40,7 @@ Usage
 -----
 
 KPCSplitPanes is a lot a work in progress right now. A demo is here to show how to use it. Basically, install
-a `NSSplitView` in your xib/storyboard, declare it as a `PressureSplitView`, build a dedicated delegate, and assign
+a `NSStackView` in your xib/storyboard, declare it as a `PressureStackView`, build a dedicated delegate, and assign
 it to the split view (see demo)
 
 The choice between horizontal and vertical split can be toggled by pressing `Alt` key.

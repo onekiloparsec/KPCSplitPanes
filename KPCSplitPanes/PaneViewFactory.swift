@@ -12,5 +12,5 @@ import AppKit
     func newPaneView() -> PaneView
 
     @objc optional
-    func newPaneSplitView() -> PanesSplitView
+    func newPaneStackView() -> PanesStackView
 }

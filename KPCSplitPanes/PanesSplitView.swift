@@ -1,5 +1,5 @@
 //
-//  PressureSplitView.swift
+//  PressureStackView.swift
 //  KPCSplitPanes
 //
 //  Created by Cédric Foellmi on 10/05/16.
@@ -8,13 +8,20 @@
 
 import AppKit
 
-public let PanesSplitViewSplitSizeWarningShowAgainKey = "PanesSplitViewSplitSizeWarningShowAgainKey"
-public let PanesSplitViewUnmakeKeyNotification = Notification.Name("PanesSplitViewUnmakeKeyNotification")
+public let PanesStackViewSplitSizeWarningShowAgainKey = "PanesStackViewSplitSizeWarningShowAgainKey"
+public let PanesStackViewUnmakeKeyNotification = Notification.Name("PanesStackViewUnmakeKeyNotification")
 
 private var once = Int()
 
+extension NSStackView {
+    public var isVertical: Bool {
+        get { return self.orientation == .vertical }
+        set { self.orientation = (newValue) ? .vertical : .horizontal }
+    }
+}
+
 @IBDesignable
-open class PanesSplitView : NSSplitView {
+open class PanesStackView : NSStackView {
     
     open var useHorizontalSplitAsDefault = true
     open fileprivate(set) var selectedPaneView: NSView?
@@ -35,20 +42,20 @@ open class PanesSplitView : NSSplitView {
     }
     
     fileprivate func setup() {
-        self.dividerStyle = .thin
+//        self.dividerStyle = .thin
         self.autoresizesSubviews = true
-        self.arrangesAllSubviews = true
+//        self.arrangesAllSubviews = true
 //        self.translatesAutoresizingMaskIntoConstraints = true
         
         NotificationCenter.default.addObserver(self,
                                                selector: #selector(unmakeKey),
-                                               name: PanesSplitViewUnmakeKeyNotification,
+                                               name: PanesStackViewUnmakeKeyNotification,
                                                object: nil)
         
         #if DEBUG
         dispatch_once(&once) {
             let sud = NSUserDefaults.standardUserDefaults()
-            sud.setBool(true, forKey: PressureSplitViewSplitSizeWarningShowAgainKey)
+            sud.setBool(true, forKey: PressureStackViewSplitSizeWarningShowAgainKey)
         }
         #endif
     }
@@ -64,7 +71,7 @@ open class PanesSplitView : NSSplitView {
         return true
     }
     
-    override open class func requiresConstraintBasedLayout() -> Bool {
+    override open class var requiresConstraintBasedLayout: Bool {
         return true
     }
     
@@ -72,10 +79,10 @@ open class PanesSplitView : NSSplitView {
         super.viewDidMoveToWindow()
         
         if self.window != nil && self.factory == nil {
-            Swift.print("[WARN] The PanesSplitView \(self) needs a Pane View Factory to work with. Next split will throw an exception.")
+            Swift.print("[WARN] The PanesStackView \(self) needs a Pane View Factory to work with. Next split will throw an exception.")
         }
         
-        self.masterSplitView().applyPanesIndexPaths(startingWithIndexPath: IndexPath(index: 0))
+        self.masterStackView().applyPanesIndexPaths(startingWithIndexPath: IndexPath(index: 0))
         if (self.selectedPaneView == nil) {
             self.makeKey(self.lastPaneSubview())
         }
@@ -87,13 +94,13 @@ open class PanesSplitView : NSSplitView {
         let downPoint = self.convert(theEvent.locationInWindow, from:nil)
         let clickedSubviews = self.paneSubviews().filter({ NSPointInRect(downPoint, $0.frame) })
         if clickedSubviews.count == 1 && clickedSubviews.first!.isKind(of: PaneView.self) {
-            NotificationCenter.default.post(name: PanesSplitViewUnmakeKeyNotification, object: nil)
+            NotificationCenter.default.post(name: PanesStackViewUnmakeKeyNotification, object: nil)
             self.makeKey(clickedSubviews.first! as PaneView)
         }
         super.mouseUp(with: theEvent)
     }
 
-    open func unmakeKey() {
+    @objc open func unmakeKey() {
         self.selectedPaneView = nil
         for paneSubview in self.paneSubviews() {
             paneSubview.makeKey(false)
@@ -117,7 +124,7 @@ open class PanesSplitView : NSSplitView {
     }
     
     fileprivate func minimumExtent(_ vertically: Bool) -> CGFloat {
-        guard self.delegate != nil, let delegate = self.delegate as! PanesSplitViewDelegate? else {
+        guard self.delegate != nil, let delegate = self.delegate as! PanesStackViewDelegate? else {
             return 1
         }
         return (vertically == true) ? delegate.minimumWidth : delegate.minimumHeight
@@ -139,9 +146,9 @@ open class PanesSplitView : NSSplitView {
     // MARK: - Close
 
     open func close(paneView pane: PaneView) -> Void {
-        if self.delegate is PanesSplitViewDelegateProtocol {
-            let paneDelegate = self.delegate as! PanesSplitViewDelegateProtocol
-            if paneDelegate.paneSplitView?(self, shouldRemove: pane) == false {
+        if self.delegate is PanesStackViewDelegateProtocol {
+            let paneDelegate = self.delegate as! PanesStackViewDelegateProtocol
+            if paneDelegate.paneStackView?(self, shouldRemove: pane) == false {
                 return
             }
         }
@@ -149,7 +156,7 @@ open class PanesSplitView : NSSplitView {
         if self.paneSubviews().count == 1 {
             let alert = NSAlert.alertForLastPane()
             alert.beginSheetModal(for: self.window!, completionHandler: { (returnCode) in
-                if (returnCode == NSAlertSecondButtonReturn) {
+                if (returnCode == NSApplication.ModalResponse.alertSecondButtonReturn) {
                     self.remove(paneView: pane)
                 }
             })
@@ -158,28 +165,27 @@ open class PanesSplitView : NSSplitView {
             self.remove(paneView: pane)
         }
         
-        self.masterSplitView().applyPanesIndexPaths(startingWithIndexPath: IndexPath(index: 0))
+        self.masterStackView().applyPanesIndexPaths(startingWithIndexPath: IndexPath(index: 0))
     }
     
     fileprivate func remove(paneView pane: PaneView) {
-        if self.delegate is PanesSplitViewDelegateProtocol {
-            let paneDelegate = self.delegate as! PanesSplitViewDelegateProtocol
-            paneDelegate.paneSplitView?(self, willRemove: pane)
+        if self.delegate is PanesStackViewDelegateProtocol {
+            let paneDelegate = self.delegate as! PanesStackViewDelegateProtocol
+            paneDelegate.paneStackView?(self, willRemove: pane)
         }
 
-        if pane.parentSplitView()?.paneSubviews().count == 1 {
-            pane.parentSplitView()?.removeFromSuperview()
+        if pane.parentStackView()?.paneSubviews().count == 1 {
+            pane.parentStackView()?.removeFromSuperview()
         }
         else {
             pane.removeFromSuperview()
-            self.adjustSubviews()
         }
         
-        self.masterSplitView().applyPanesIndexPaths(startingWithIndexPath: IndexPath(index: 0))
+        self.masterStackView().applyPanesIndexPaths(startingWithIndexPath: IndexPath(index: 0))
         
-        if self.delegate is PanesSplitViewDelegateProtocol {
-            let paneDelegate = self.delegate as! PanesSplitViewDelegateProtocol
-            paneDelegate.paneSplitView?(self, didRemove: pane)
+        if self.delegate is PanesStackViewDelegateProtocol {
+            let paneDelegate = self.delegate as! PanesStackViewDelegateProtocol
+            paneDelegate.paneStackView?(self, didRemove: pane)
         }
     }
     
@@ -196,11 +202,12 @@ open class PanesSplitView : NSSplitView {
     }
     
     open func split(paneView pane: PaneView) {
-        let mask = self.window?.styleMask;
-        if (mask ==  NSFullScreenWindowMask || mask == NSFullSizeContentViewWindowMask) {
-            NSBeep();
-            return;
-        }
+        // TODO: check this
+//        let mask = self.window?.styleMask;
+//        if (mask ==  NSFullScreenWindowMask || mask == NSFullSizeContentViewWindowMask) {
+//            NSBeep();
+//            return;
+//        }
         
         let vertical = self.splitShouldBeVertical()
         
@@ -209,10 +216,10 @@ open class PanesSplitView : NSSplitView {
         }
         else {
             let sud = UserDefaults.standard
-            if sud.value(forKey: PanesSplitViewSplitSizeWarningShowAgainKey) == nil {
-                sud.set(true, forKey: PanesSplitViewSplitSizeWarningShowAgainKey)
+            if sud.value(forKey: PanesStackViewSplitSizeWarningShowAgainKey) == nil {
+                sud.set(true, forKey: PanesStackViewSplitSizeWarningShowAgainKey)
             }
-            if sud.bool(forKey: PanesSplitViewSplitSizeWarningShowAgainKey) {
+            if sud.bool(forKey: PanesStackViewSplitSizeWarningShowAgainKey) {
                 self.showSplitSizeWarningAlert(pane, vertically: vertical)
             }
             else {
@@ -228,12 +235,12 @@ open class PanesSplitView : NSSplitView {
                                   vertical: self.isVertical)
     
         alert.beginSheetModal(for: self.window!, completionHandler: { (returnCode) in
-            if alert.suppressionButton?.state == NSOnState {
+            if alert.suppressionButton!.state == .on {
                 let defaults = UserDefaults.standard
-                defaults.set(false, forKey: PanesSplitViewSplitSizeWarningShowAgainKey)
+                defaults.set(false, forKey: PanesStackViewSplitSizeWarningShowAgainKey)
             }
             
-            if (returnCode == NSAlertSecondButtonReturn) {
+            if (returnCode == NSApplication.ModalResponse.alertSecondButtonReturn) {
                 self.expandWindowAndSplit(paneView: paneView, vertically: vertically)
             }
         })
@@ -252,7 +259,7 @@ open class PanesSplitView : NSSplitView {
             newWindowFrame.size.height += deltaExtension
         }
         
-        NSAnimationContext.current().completionHandler = {
+        NSAnimationContext.current.completionHandler = {
             self.splitPaneView(pane, vertically: vertically)
         }
         self.window!.setFrame(newWindowFrame, display:true, animate:true)
@@ -260,106 +267,104 @@ open class PanesSplitView : NSSplitView {
 
     fileprivate func splitPaneView(_ paneView: PaneView, vertically: Bool) {
         
-        let parentSplitView = paneView.parentSplitView()
-        guard parentSplitView === self else {
-            fatalError("Parent SplitView of \(paneView) should be \(self), and it seems it is not.")
+        let parentStackView = paneView.parentStackView()
+        guard parentStackView === self else {
+            fatalError("Parent StackView of \(paneView) should be \(self), and it seems it is not.")
         }
         
         let paneViewIndex = self.indexOfPaneView(paneView)!
 //        let dividerPosition = self.dividerPosition(forPaneView: paneView)
 
         let newPaneView = self.factory.newPaneView()
-        var newSplitView: PanesSplitView!
-        if let sv = self.factory.newPaneSplitView?() {
-            newSplitView = sv
+        var newStackView: PanesStackView!
+        if let sv = self.factory.newPaneStackView?() {
+            newStackView = sv
         }
         else {
-            newSplitView = PanesSplitView()
+            newStackView = PanesStackView()
         }
         
-        newSplitView.factory = self.factory
-        newSplitView.delegate = self.delegate
-        newSplitView.isVertical = vertically
-        newSplitView.autoresizingMask = self.autoresizingMask
-//        newSplitView.translatesAutoresizingMaskIntoConstraints = self.translatesAutoresizingMaskIntoConstraints
+        newStackView.factory = self.factory
+        newStackView.delegate = self.delegate
+        newStackView.isVertical = vertically
+        newStackView.autoresizingMask = self.autoresizingMask
+//        newStackView.translatesAutoresizingMaskIntoConstraints = self.translatesAutoresizingMaskIntoConstraints
 
         if self.isVertical == vertically {
             // We are going into the same direction, just add a new pane.
             
-            newSplitView.frame = self.frame
-            self.superview?.addSubview(newSplitView)
+            newStackView.frame = self.frame
+            self.superview?.addSubview(newStackView)
             self.removeFromSuperview()
             
-            if self.superview is NSSplitView {
-                let sv = self.superview as! NSSplitView
-                sv.adjustSubviews()
-            }
+//            if self.superview is NSStackView {
+//                let sv = self.superview as! NSStackView
+//            }
             
             for view in self.paneSubviews() {
                 view.removeFromSuperview()
-                newSplitView.addSubview(view)
+                newStackView.addSubview(view)
             }
             
-            newSplitView.insertArrangedSubview(newPaneView, at: paneViewIndex + 1)
-            newSplitView.adjustSubviews()
+            newStackView.insertArrangedSubview(newPaneView, at: paneViewIndex + 1)
             
-            let newPaneViews = newSplitView.paneSubviews()
-            var paneViewSide = (self.isVertical) ? newSplitView.frame.width : newSplitView.frame.height
-            paneViewSide = paneViewSide / CGFloat(newPaneViews.count) - newSplitView.dividerThickness*CGFloat(newPaneViews.count-1)
+//            let newPaneViews = newStackView.paneSubviews()
+//            var paneViewSide = (self.isVertical) ? newStackView.frame.width : newStackView.frame.height
+//            paneViewSide = paneViewSide / CGFloat(newPaneViews.count)
             
-            for index in 0..<newPaneViews.count-1 {
-                newSplitView.setPosition(CGFloat(index+1)*paneViewSide, ofDividerAt: index)
-            }
+//            for index in 0..<newPaneViews.count-1 {
+//                newStackView.setPosition(CGFloat(index+1)*paneViewSide, ofDividerAt: index)
+//            }
         }
         else {
             // We are going into the opposite direction, replace the original pane by a splitView, 
-            // put the original pane inside the newSplitView, and add a new one.
+            // put the original pane inside the newStackView, and add a new one.
 
             // First unselect any pane
             self.makeKey(nil)
             
-            // Prepare newSplitView and add the newPaneView to it
-            newSplitView.isVertical = vertically
-            newSplitView.addSubview(newPaneView)
+            // Prepare newStackView and add the newPaneView to it
+            newStackView.isVertical = vertically
+            newStackView.addSubview(newPaneView)
             
             // Compute newPaneView side size before playing with pane views.
-            var newPaneViewSide = (vertically) ? paneView.frame.width : paneView.frame.height
-            newPaneViewSide = newPaneViewSide / 2.0 - newSplitView.dividerThickness // It's new. Necessarily, subPaneViews.count = 2
+//            var newPaneViewSide = (vertically) ? paneView.frame.width : paneView.frame.height
+//            newPaneViewSide = newPaneViewSide / 2.0 - newStackView.dividerThickness // It's new. Necessarily, subPaneViews.count = 2
 
-            // Add the newSplitView after the triggering paneView
-            self.insertArrangedSubview(newSplitView, at: paneViewIndex + 1)
-            self.adjustSubviews()
+            // Add the newStackView after the triggering paneView
+            self.insertArrangedSubview(newStackView, at: paneViewIndex + 1)
+//            self.adjustSubviews()
 
             // Store the actual paneView side size (used below, to be re-applied).
-            let paneViewSide = (self.isVertical) ? paneView.frame.width : paneView.frame.height
+//            let paneViewSide = (self.isVertical) ? paneView.frame.width : paneView.frame.height
 
             // Remove that paneView
             paneView.removeFromSuperview()
-            self.adjustSubviews()
+//            self.adjustSubviews()
 
-            // Re-add that paneView as first member of the newly-inserted newSplitView
-            newSplitView.insertArrangedSubview(paneView, at: 0)
+            // Re-add that paneView as first member of the newly-inserted newStackView
+            newStackView.insertArrangedSubview(paneView, at: 0)
             
             // MUST be set before adjustSubviews
-            newSplitView.frame = (vertically == true) ?
-                paneView.frame.insetBy(dx: 0, dy: self.dividerThickness) :
-                paneView.frame.insetBy(dx: self.dividerThickness, dy: 0)
+//            newStackView.frame = (vertically == true) ?
+//                paneView.frame.insetBy(dx: 0, dy: self.dividerThickness) :
+//                paneView.frame.insetBy(dx: self.dividerThickness, dy: 0)
 
-            // Adjust the newSplitView subviews and set the position of the new divider to the middle
-            newSplitView.adjustSubviews()
-            newSplitView.setPosition(newPaneViewSide, ofDividerAt: 0)
+            // Adjust the newStackView subviews and set the position of the new divider to the middle
+//            newStackView.adjustSubviews()
+//            newStackView.setPosition(newPaneViewSide, ofDividerAt: 0)
             
             // Re-adjust the position of our own divider that has certainly wiggled around...
-            for index in 0..<self.paneSubviews().count-1 {
-                self.setPosition(CGFloat(index+1)*paneViewSide, ofDividerAt: index)
-            }
+//            for index in 0..<self.paneSubviews().count-1 {
+//                self.setPosition(CGFloat(index+1)*paneViewSide, ofDividerAt: index)
+//            }
 
             // White magic
-            self.adjustSubviews()
+//            self.adjustSubviews()
         }
         
-        newSplitView.makeKey(newPaneView)
-        newSplitView.masterSplitView().applyPanesIndexPaths(startingWithIndexPath: IndexPath(index: 0))
+        newStackView.makeKey(newPaneView)
+        newStackView.masterStackView().applyPanesIndexPaths(startingWithIndexPath: IndexPath(index: 0))
     }
     
     // MARK: - Helpers
@@ -393,20 +398,20 @@ open class PanesSplitView : NSSplitView {
         return self.paneSubviews().index(of: paneView)
     }
 
-    fileprivate func masterSplitView() -> PanesSplitView {
-        var splitView: PanesSplitView? = self
-        while splitView != nil && splitView?.parentSplitView() != nil {
-            splitView = splitView!.parentSplitView()
+    fileprivate func masterStackView() -> PanesStackView {
+        var splitView: PanesStackView? = self
+        while splitView != nil && splitView?.parentStackView() != nil {
+            splitView = splitView!.parentStackView()
         }
         return splitView!
     }
     
-    fileprivate func pressureSplitViewDepth() -> Int {
+    fileprivate func pressureStackViewDepth() -> Int {
         var count = 0
         
-        var splitView: PanesSplitView? = self
-        while splitView != nil && splitView?.parentSplitView() != nil {
-            splitView = splitView!.parentSplitView()
+        var splitView: PanesStackView? = self
+        while splitView != nil && splitView?.parentStackView() != nil {
+            splitView = splitView!.parentStackView()
             count += 1
         }
         
@@ -416,18 +421,23 @@ open class PanesSplitView : NSSplitView {
     fileprivate func applyPanesIndexPaths(startingWithIndexPath indexPath: IndexPath) {
         self.indexPath = indexPath
         
-        var enclosedSplitViewsCount = 0
+        var enclosedStackViewsCount = 0
         for (index, paneView) in self.paneSubviews().enumerated() {
             paneView.indexPath = indexPath.appending(index)
             
             // paneView has an enclosed split view.
-            if let enclosedSplitView = paneView.enclosedSplitView() {
-                let enclosedSplitViewsIndexPath = paneView.indexPath!.appending(enclosedSplitViewsCount)
-                enclosedSplitView.applyPanesIndexPaths(startingWithIndexPath: enclosedSplitViewsIndexPath)
-                enclosedSplitViewsCount += 1
+            if let enclosedStackView = paneView.enclosedStackView() {
+                let enclosedStackViewsIndexPath = paneView.indexPath!.appending(enclosedStackViewsCount)
+                enclosedStackView.applyPanesIndexPaths(startingWithIndexPath: enclosedStackViewsIndexPath)
+                enclosedStackViewsCount += 1
             }
         }
     }
 
 }
 
+
+// Helper function inserted by Swift 4.2 migrator.
+//fileprivate func convertFromNSControlStateValue(_ input: NSControl.StateValue) -> Int {
+//    return input.rawValue
+//}
