@@ -64,7 +64,7 @@ open class PanesSplitView : NSSplitView {
         return true
     }
     
-    override open class func requiresConstraintBasedLayout() -> Bool {
+    override open class var requiresConstraintBasedLayout: Bool {
         return true
     }
     
@@ -93,7 +93,7 @@ open class PanesSplitView : NSSplitView {
         super.mouseUp(with: theEvent)
     }
 
-    open func unmakeKey() {
+    @objc open func unmakeKey() {
         self.selectedPaneView = nil
         for paneSubview in self.paneSubviews() {
             paneSubview.makeKey(false)
@@ -149,7 +149,7 @@ open class PanesSplitView : NSSplitView {
         if self.paneSubviews().count == 1 {
             let alert = NSAlert.alertForLastPane()
             alert.beginSheetModal(for: self.window!, completionHandler: { (returnCode) in
-                if (returnCode == NSAlertSecondButtonReturn) {
+                if (returnCode == NSApplication.ModalResponse.alertSecondButtonReturn) {
                     self.remove(paneView: pane)
                 }
             })
@@ -197,8 +197,8 @@ open class PanesSplitView : NSSplitView {
     
     open func split(paneView pane: PaneView) {
         let mask = self.window?.styleMask;
-        if (mask ==  NSFullScreenWindowMask || mask == NSFullSizeContentViewWindowMask) {
-            NSBeep();
+        if (mask ==  .fullScreen || mask == .fullSizeContentView) {
+            NSSound.beep();
             return;
         }
         
@@ -228,12 +228,12 @@ open class PanesSplitView : NSSplitView {
                                   vertical: self.isVertical)
     
         alert.beginSheetModal(for: self.window!, completionHandler: { (returnCode) in
-            if alert.suppressionButton?.state == NSOnState {
+            if alert.suppressionButton?.state == .on {
                 let defaults = UserDefaults.standard
                 defaults.set(false, forKey: PanesSplitViewSplitSizeWarningShowAgainKey)
             }
             
-            if (returnCode == NSAlertSecondButtonReturn) {
+            if (returnCode == NSApplication.ModalResponse.alertSecondButtonReturn) {
                 self.expandWindowAndSplit(paneView: paneView, vertically: vertically)
             }
         })
@@ -252,7 +252,7 @@ open class PanesSplitView : NSSplitView {
             newWindowFrame.size.height += deltaExtension
         }
         
-        NSAnimationContext.current().completionHandler = {
+        NSAnimationContext.current.completionHandler = {
             self.splitPaneView(pane, vertically: vertically)
         }
         self.window!.setFrame(newWindowFrame, display:true, animate:true)
@@ -350,8 +350,11 @@ open class PanesSplitView : NSSplitView {
             newSplitView.setPosition(newPaneViewSide, ofDividerAt: 0)
             
             // Re-adjust the position of our own divider that has certainly wiggled around...
-            for index in 0..<self.paneSubviews().count-1 {
-                self.setPosition(CGFloat(index+1)*paneViewSide, ofDividerAt: index)
+            let paneSubviewsCount = self.paneSubviews().count
+            if (paneSubviewsCount > 1) {
+                for index in 0..<paneSubviewsCount-1 {
+                    self.setPosition(CGFloat(index+1)*paneViewSide, ofDividerAt: index)
+                }
             }
 
             // White magic
@@ -430,4 +433,3 @@ open class PanesSplitView : NSSplitView {
     }
 
 }
-

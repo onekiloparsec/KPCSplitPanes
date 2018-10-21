@@ -21,7 +21,7 @@ extension NSView {
 
 extension NSEvent {
     func hasAltKeyPressed() -> Bool {
-        return NSEventModifierFlags(rawValue: self.modifierFlags.rawValue & NSEventModifierFlags.option.rawValue) == .option
+        return NSEvent.ModifierFlags(rawValue: self.modifierFlags.rawValue & NSEvent.ModifierFlags.option.rawValue) == .option
     }
 }
 

@@ -39,7 +39,7 @@ open class PaneView : NSView {
         if newWindow != nil {
             self.autoresizesSubviews = true
 //            self.translatesAutoresizingMaskIntoConstraints = true
-            self.autoresizingMask = [.viewWidthSizable, .viewHeightSizable]
+            self.autoresizingMask = [NSView.AutoresizingMask.width, NSView.AutoresizingMask.height]
         }
     }
     
@@ -56,11 +56,11 @@ open class PaneView : NSView {
         self.splitButton?.action = #selector(PaneView.splitPane)
     }
     
-    func closePane() {
+    @objc func closePane() {
         self.parentSplitView()?.close(paneView: self)
     }
 
-    func splitPane() {
+    @objc func splitPane() {
         self.parentSplitView()?.split(paneView: self)
     }
     
@@ -96,19 +96,19 @@ open class PaneView : NSView {
         return img
     }
     
-    static open func closeIcon(selected: Bool) -> NSImage {
+    static public func closeIcon(selected: Bool) -> NSImage {
         return PaneView.icon(named: "Close", selected: selected)
     }
     
-    static open func splitHorizontalIcon(selected: Bool) -> NSImage {
+    static public func splitHorizontalIcon(selected: Bool) -> NSImage {
         return PaneView.icon(named: "SplitHorizontal", selected: selected)
     }
     
-    static open func splitVerticalIcon(selected: Bool) -> NSImage {
+    static public func splitVerticalIcon(selected: Bool) -> NSImage {
         return PaneView.icon(named: "SplitVertical", selected: selected)
     }
     
-    static open func splitIcon(_ horizontal: Bool, selected: Bool) -> NSImage {
+    static public func splitIcon(_ horizontal: Bool, selected: Bool) -> NSImage {
         return horizontal ? PaneView.splitHorizontalIcon(selected: selected) : PaneView.splitVerticalIcon(selected: selected)
     }
 }
