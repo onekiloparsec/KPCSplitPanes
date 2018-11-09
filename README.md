@@ -25,7 +25,7 @@ KPCSplitPanes
 A smart subclass of NSSplitView, that splits well and allows you to easily add new panes, and   
 combine horizontal and vertical panes.
 
-![Demo JumpBar](http://www.onekilopars.ec/s/KPCSplitPanesDemo.gif)
+![Demo JumpBar](http://onekilopars.ec/wp-content/uploads/2018/11/KPCSplitPanesDemo.gif)
 
 
 Installation
