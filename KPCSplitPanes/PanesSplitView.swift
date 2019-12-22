@@ -393,7 +393,7 @@ open class PanesSplitView : NSSplitView {
     }
     
     fileprivate func indexOfPaneView(_ paneView: PaneView) -> Int? {
-        return self.paneSubviews().index(of: paneView)
+        return self.paneSubviews().firstIndex(of: paneView)
     }
 
     fileprivate func masterSplitView() -> PanesSplitView {
